@@ -11,8 +11,8 @@ module.exports = {
         const embed = new RichEmbed()
         .setTitle("Error!")
         .setColor("RED")
-        .setDescription(text)
-        .setFooter(m.author.id)
+        .setDescription(text +" \n Try `$help`")
+        .setFooter("Krunker LFG |ID :"+m.author.id)
         .setTimestamp()
 
     m.channel.send(embed).then(mess=>
