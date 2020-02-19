@@ -17,7 +17,7 @@ module.exports.run = (client,message)=>{
             if(!link.includes('https://krunker.io/?game=')) {
                 message.channel.send('Error. Invalid game link. Please refer to `$help` for assistance.');
             }else {
-                const embedLfg = new Discord.RichEmbed()
+                const eb = new Discord.RichEmbed()
                     .setTitle(message.author.username + ' is looking for people.')
                     .setAuthor(message.author.username, message.author.displayAvatarURL)
                     .addField('Link:', link, false)
@@ -26,7 +26,7 @@ module.exports.run = (client,message)=>{
                 if(args.length >= 1) {
                     embedLfg.setDescription(args.join(' '));
                 }
-                message.channel.send(embedLfg);
+                message.channel.send(eb);
             }
         
         }
