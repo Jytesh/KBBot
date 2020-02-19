@@ -10,11 +10,6 @@ module.exports.run = (client,message)=>{
         .addField("Util", "> ***$info*** \r\n > ........ Provides bot info. " +
             "\r\n > ***$help*** \r\n > ........ Provides list of commands and how to use them.", false)
         .addField("General", "> ***$lfg** <link> <message (optional)>* \r\n > ........ Creates an LFG posting with <link> and <message>.", false)
-        .addField("Staff", "> ***$setAll*** \r\n > ........ Sets current channel as default LFG channel for all regions." +
-            "\r\n > ***$setNA*** \r\n > ........ Sets current channel as default LFG channel for NA." +
-            "\r\n > ***$setOCE*** \r\n > ........ Sets current channel as default LFG channel for OCE." +
-            "\r\n > ***$setEU*** \r\n > ........ Sets current channel as default LFG channel for EU." +
-            "\r\n > ***$setAS*** \r\n > ........ Sets current channel as default LFG channel for AS.", false)
         .setTimestamp()
         .setFooter("KrunkerLFG")
     message.channel.send(eb)
