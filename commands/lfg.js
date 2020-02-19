@@ -43,32 +43,32 @@ module.exports.help = {
     description : `To look for groups` //Description to come when you use config.prefix help <command name>
 }
 
-function randomMessage(username) {
+function randomMessage(tempUser) {
     var num = Math.floor(Math.random*8);
     switch(num) {
         case 0:
-            return username + ' is here to stomp some Guests.';
+            return tempUser + ' is here to stomp some Guests.';
             break;
         case 1:
-            return username + ' is here to flex their skins.';
+            return tempUser + ' is here to flex their skins.';
             break;
         case 2:
-            return 'Omg ' + username + ' Is UsIng hAcks. rEpOrtEd.';
+            return 'Omg ' + tempUser + ' Is UsIng hAcks. rEpOrtEd.';
             break;
         case 3:
             return 'Krunker? Never heard of it.';
             break;
         case 4:
-            return 'Knowledge is knowing a tomato is a fruit; Wisdom is not putting' + username + 'in a fruit salad.';
+            return 'Knowledge is knowing a tomato is a fruit; Wisdom is not putting' + tempUser + 'in a fruit salad.';
             break;
         case 5:
-            return 'If being ' + username + ' is a crime, then arrest me.'
+            return 'If being ' + tempUser + ' is a crime, then arrest me.'
             break;
         case 6:
-            return 'A bus station is where a bus stops. A train station is where a train stops. On ' + username + '\'s desk, I have a work station..';
+            return 'A bus station is where a bus stops. A train station is where a train stops. On ' + tempUser + '\'s desk, I have a work station..';
             break;
         case 7:
-            return 'Politicians and diapers have one thing in common. ' + username + ' should change them both regularly, and for the same reason.';
+            return 'Politicians and diapers have one thing in common. ' + tempUser + ' should change them both regularly, and for the same reason.';
             break;
     }
 }
