@@ -22,7 +22,7 @@ module.exports.run = (client,message)=>{
 
 module.exports.config = {
         name: "info",
-        aliases: ["i", "inf","?","information","gimmethefkinginfomate"],
+        aliases: ["i", "inf","?","information",],
     }
 module.exports.help = {
         usage : `\`${config.prefix}info\``, //Example usage of command
