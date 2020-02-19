@@ -3,7 +3,7 @@ const {Client,RichEmbed} = require("discord.js")
 const config = require("../config.json")
 module.exports.run = (client,message)=>{
     //DO STUFF HERE
-    const eb = new DynamicsCompressorNode.RichEmbed()
+    const eb = new RichEmbed()
         .setTitle("Help:")
         .setAuthor(client.user.tag, null, client.user.avatarURL)
         .setColor(0x49C4EF)
