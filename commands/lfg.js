@@ -24,7 +24,7 @@ module.exports.run = (client,message)=>{
                     .setTimestamp()
                     .setFooter('KrunkerLFG');
                 if(args.length >= 1) {
-                    embedLfg.setDescription(args.join(' '));
+                    eb.setDescription(args.join(' '));
                 }
                 message.channel.send(eb);
             }
