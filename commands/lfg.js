@@ -48,27 +48,19 @@ function randomMessage(tempUser) {
     switch(num) {
         case 0:
             return tempUser + ' is here to stomp some Guests.';
-            break;
         case 1:
             return tempUser + ' is here to flex their skins.';
-            break;
         case 2:
             return 'Omg ' + tempUser + ' Is UsIng hAcks. rEpOrtEd.';
-            break;
         case 3:
             return 'Krunker? Never heard of it.';
-            break;
         case 4:
             return 'Knowledge is knowing a tomato is a fruit; Wisdom is not putting' + tempUser + 'in a fruit salad.';
-            break;
         case 5:
-            return 'If being ' + tempUser + ' is a crime, then arrest me.'
-            break;
+            return 'If being ' + tempUser + ' is a crime, then arrest me.';
         case 6:
             return 'A bus station is where a bus stops. A train station is where a train stops. On ' + tempUser + '\'s desk, I have a work station..';
-            break;
         case 7:
             return 'Politicians and diapers have one thing in common. ' + tempUser + ' should change them both regularly, and for the same reason.';
-            break;
     }
 }
