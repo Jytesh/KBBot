@@ -6,10 +6,10 @@ const {Client,RichEmbed} = require("discord.js")
 const config = require("../config.json")
 
 module.exports.run = (client,message)=>{
-        const eb = new RichEmbed()
-        .setColor(0x49C4EF)
+    const eb = new RichEmbed()
 		.setTitle('Info:')
-		.setAuthor(client.user.username, null, client.user.displayAvatarURL)
+		.setAuthor(client.user.tag, null, client.user.displayAvatarURL)
+        .setColor(0x49C4EF)
 		.setDescription('KrunkerLFG is an LFG bot designed for the online FPS game, krunker.io.')
 		.addField('Version:', `**${config.version}**`, true)
 		.addField('Creator:', '**JJ_G4M3R & Jytesh**', true)

@@ -3,22 +3,20 @@ const {Client,RichEmbed} = require("discord.js")
 const config = require("../config.json")
 module.exports.run = (client,message)=>{
     //DO STUFF HERE
-    eb = new RichEmbed()
-        eb.setTitle("Help:");
-        eb.setColor("0x49C4EF");
-        eb.setTimestamp();
-        eb.setFooter("KrunkerLFG");
-
-        eb.setAuthor(client.user.tag, null, client.user.avatarURL);
-
-        eb.addField("Util", "> ***$info*** \r\n > ........ Provides bot info. " +
-                "\r\n > ***$help*** \r\n > ........ Provides list of commands and how to use them.", false);
-        eb.addField("General", "> ***$lfg** <link> <message (optional)>* \r\n > ........ Creates an LFG posting with <link> and <message>.", false);
-        eb.addField("Staff", "> ***$setAll*** \r\n > ........ Sets current channel as default LFG channel for all regions." +
-                "\r\n > ***$setNA*** \r\n > ........ Sets current channel as default LFG channel for NA." +
-                "\r\n > ***$setOCE*** \r\n > ........ Sets current channel as default LFG channel for OCE." +
-                "\r\n > ***$setEU*** \r\n > ........ Sets current channel as default LFG channel for EU." +
-                "\r\n > ***$setAS*** \r\n > ........ Sets current channel as default LFG channel for AS.", false);
+    const eb = new DynamicsCompressorNode.RichEmbed()
+        .setTitle("Help:")
+        .setAuthor(client.user.tag, null, client.user.avatarURL)
+        .setColor(0x49C4EF)
+        .addField("Util", "> ***$info*** \r\n > ........ Provides bot info. " +
+            "\r\n > ***$help*** \r\n > ........ Provides list of commands and how to use them.", false)
+        .addField("General", "> ***$lfg** <link> <message (optional)>* \r\n > ........ Creates an LFG posting with <link> and <message>.", false)
+        .addField("Staff", "> ***$setAll*** \r\n > ........ Sets current channel as default LFG channel for all regions." +
+            "\r\n > ***$setNA*** \r\n > ........ Sets current channel as default LFG channel for NA." +
+            "\r\n > ***$setOCE*** \r\n > ........ Sets current channel as default LFG channel for OCE." +
+            "\r\n > ***$setEU*** \r\n > ........ Sets current channel as default LFG channel for EU." +
+            "\r\n > ***$setAS*** \r\n > ........ Sets current channel as default LFG channel for AS.", false)
+        .setTimestamp()
+        .setFooter("KrunkerLFG")
     message.channel.send(eb)
 }
 module.exports.config = {
