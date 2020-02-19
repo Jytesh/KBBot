@@ -1,9 +1,10 @@
 // Load dependencies
 const Discord = require('discord.js');
-const client = new Discord.Client();
 const config = require("./config.json");
+const client = new Discord.Client();
 const fs = require("fs");
 const path = require("path");
+
 //Loading Events from /events directory
 fs.readdir("./events/", (err, files) => { //Getting all files from directory
   if (err) return console.error(err);
@@ -18,6 +19,7 @@ fs.readdir("./events/", (err, files) => { //Getting all files from directory
     delete require.cache[require.resolve(`./events/${file}`)];
   });
 });
+
 //Loading commands from /commands directory, to client
 client.commands = new Discord.Collection(); //Discord's Collection Class, extends map.
 client.aliases = new Discord.Collection();
