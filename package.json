@@ -1,0 +1,15 @@
+{
+  "name": "krunkerlfgbot",
+  "version": "0.3.0",
+  "description": "KrunkerLFG is an LFG bot desgined for the online FPS game, krunker.io.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "JJ_G4M3R & Jytesh",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "eslint": "^6.8.0"
+  }
+}
