@@ -23,7 +23,7 @@ module.exports.run = (client,message)=>{
 }
 module.exports.config = {
     name: "help",
-    aliases: ["h", "hlp","wlp","welp"],
+    aliases: ["h", "hlp","wlp","welp","ifkingforgothowthebotworks"],
 }
 module.exports.help = {
     usage : `\`${config.prefix}help <module>\``, //Example usage of command
