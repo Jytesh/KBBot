@@ -1,5 +1,5 @@
 const {Client,RichEmbed} = require("discord.js")
-const client = require("../app.js").client
+const client = require("../index.js").client
 
 module.exports = (client)=>{ 
     console.log("[Krunker Bunker Bot] Ready!")
