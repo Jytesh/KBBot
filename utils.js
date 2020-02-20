@@ -1,4 +1,5 @@
 const {RichEmbed} = require("discord.js")
+const Discord = require("discord.js")
 channels = {
     NA : "678830555764228125",
     EU : "678830571547262976",
@@ -13,6 +14,20 @@ gamemodes = {
     party: '#3611ba',
     other: '#a8114b'
 }
+const errors = new Discord.Collection()
+//Error Loading
+require("fs").readdir("./errors", (err, files) => { 
+    if(err) console.error(err);
+    let jsfile = files.filter(f => f.split(".").pop() === "js");
+    if(jsfile.length <= 0){
+        return console.log("[KB Bot] There aren't any commands!"); //JJ has fucked up
+    }
+    jsfile.forEach((f, i) => {
+      let pull = require(`./errors/${f}`)
+      errors.set(pull.id,pull)
+      })
+    });
+var autodel = false;
 module.exports = {
     channels,
     ErrorMsg : function(m,text){
@@ -23,9 +38,7 @@ module.exports = {
             .setFooter("Krunker LFG |ID :"+m.author.id)
             .setTimestamp()
 
-        m.channel.send(embed).then(mess=>
-            mess.delete(10000)
-        )
+        m.channel.send(embed)
     },
     embed : function(m,text,color){
         if(!color) color = "BLURPLE"
@@ -38,6 +51,10 @@ module.exports = {
 
         m.channel.send(embed)
     },
+    Error : function(m,id){
+        let error = errors.get(id)
+        if(!error) return
+        this.ErrorMsg(m,error.text,error.id,"RED")
+    },
     gamemodes
 }
-var autodel = false;
