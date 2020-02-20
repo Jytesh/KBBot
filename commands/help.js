@@ -6,10 +6,11 @@ module.exports.run = (client,message)=>{
     
     const eb = new RichEmbed()
         .setTitle("Help:")
+		.setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
         .setColor(0x49C4EF)
         .addField("Utility", "> **-info** \r\n > • Provides bot info. " +
             "\r\n > **-help** \r\n > • Provides list of commands and how to use them.", false)
-        .addField("General", "> **-lfg <link> <message (optional)>** \r\n > • Creates an LFG posting with <link> and <message>.", false)
+        .addField("General", "> **-lfg <link> <optional message>** \r\n > • Creates an LFG posting with <link> and <message>.", false)
         .setTimestamp()
         .setFooter("KrunkerLFG")
     message.channel.send(eb)

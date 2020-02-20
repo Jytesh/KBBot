@@ -6,12 +6,12 @@ channels = {
     AS : "678830592946602002"
 }
 gamemodes = {
-    ffa: 0x66de5b,
-    tdm: 0x45e6e3,
-    ctf: 0xd13c2e,
-    point: 0xba4911,
-    party: 0x3611ba,
-    other: 0xa8114b
+    ffa: '#66de5b',
+    tdm: '#45e6e3',
+    ctf: '#d13c2e',
+    point: '#ba4911',
+    party: '#3611ba',
+    other: '#a8114b'
 }
 module.exports = {
     channels,
