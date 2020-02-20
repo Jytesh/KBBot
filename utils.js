@@ -17,11 +17,11 @@ module.exports = {
     channels,
     ErrorMsg : function(m,text){
         const embed = new RichEmbed()
-        .setTitle("Error!")
-        .setColor("RED")
-        .setDescription(text +" \n Try `$help`")
-        .setFooter("Krunker LFG |ID :"+m.author.id)
-        .setTimestamp()
+            .setTitle("Error!")
+            .setColor("RED")
+            .setDescription(text +" \n Try `$help`")
+            .setFooter("Krunker LFG |ID :"+m.author.id)
+            .setTimestamp()
 
         m.channel.send(embed).then(mess=>
             mess.delete(10000)
