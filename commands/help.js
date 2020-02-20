@@ -2,14 +2,14 @@
 const {Client,RichEmbed} = require("discord.js")
 const config = require("../config.json")
 module.exports.run = (client,message)=>{
-    //DO STUFF HERE
+    command = message.content.split(" ").shift()
+    
     const eb = new RichEmbed()
         .setTitle("Help:")
-        .setAuthor(client.user.tag, null, client.user.avatarURL)
         .setColor(0x49C4EF)
-        .addField("Util", "> **-info** \r\n > • Provides bot info. " +
+        .addField("Utility", "> **-info** \r\n > • Provides bot info. " +
             "\r\n > **-help** \r\n > • Provides list of commands and how to use them.", false)
-        .addField("General", "> **-lfg** <link> <message (optional)> \r\n > • Creates an LFG posting with <link> and <message>.", false)
+        .addField("General", "> **-lfg <link> <message (optional)>** \r\n > • Creates an LFG posting with <link> and <message>.", false)
         .setTimestamp()
         .setFooter("KrunkerLFG")
     message.channel.send(eb)

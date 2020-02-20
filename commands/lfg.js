@@ -158,7 +158,7 @@ function getLinkInfo(link){
                 }else {
                     let tempMode = json[4].i.split("_")[0];
                     let tempColour
-                    const {ffa, tdm, ctf, point, party, other} = requires("../utils").gamemodes
+                    const {ffa, tdm, ctf, point, party, other} = require("../utils").gamemodes
                     switch(tempMode) {
                         case "ffa":
                             tempColour = ffa;

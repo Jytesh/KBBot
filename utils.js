@@ -26,6 +26,18 @@ module.exports = {
         m.channel.send(embed).then(mess=>
             mess.delete(10000)
         )
-    }
+    },
+    embed : function(m,text,color){
+        if(!color) color = "BLURPLE"
+        let embed = new RichEmbed()
+
+        .setDescription(text)
+        .setColor(color)
+        .setTimestamp()
+        .setFooter("Krunker LFG|")
+
+        m.channel.send(embed)
+    },
+    gamemodes
 }
 var autodel = false;

@@ -3,6 +3,6 @@ const client = require("../app.js").client
 
 module.exports = (client)=>{ 
     console.log("[Krunker Bunker Bot] Ready!")
-    client.user.setActivity("Jytesh make me",{type: "WATCHING"})
+    client.user.setActivity("-help for commands",{type: "WATCHING"})
     
 }
