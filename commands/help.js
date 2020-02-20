@@ -2,8 +2,9 @@
 const {Client,RichEmbed} = require("discord.js")
 const config = require("../config.json")
 module.exports.run = (client,message)=>{
+    if()
     command = message.content.split(" ").shift()
-    
+
     const eb = new RichEmbed()
         .setTitle("Help:")
 		.setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')

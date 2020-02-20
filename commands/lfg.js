@@ -19,7 +19,7 @@ module.exports.run = async(client,message)=>{
         }else {
             var channel
             if(!link.includes('?party=')) {
-                channel = getChannel(link)
+                channel = getChannel(link,true)
             }
             const eb = new Discord.RichEmbed()
                 .setTitle(message.member.displayName + ' is looking to party! :tada:')
@@ -46,8 +46,9 @@ module.exports.run = async(client,message)=>{
                 if(args.length == 0 || (!(args[0] == "NA" || args[0] == "OCE" || args[0] == "AS" || args[0] == "EU" || args[0] == "SV" || args[0] == "MIA" || args[0] == "NY" || args[0] != "FRA" || args[0] == "SYD" || args[0] == "SIN" || args[0] == "TOK"))) {
                     utils.ErrorMsg(message,"Invalid Region/Link\nError Code: 102")
                 }else {
+                    console.log(args[0])
                     channel = getChannel(args[0]);
-                    const {ffa, tdm, ctf, point, party, other} = require("../utils").gamemodes
+                    const {party} = require("../utils").gamemodes
                     eb.setColor(party)
                         .addField('Link: ', link, false)
                         .addField('Region: ', args[0], false)
@@ -70,7 +71,8 @@ function getChannel(id,val){
     const client = require("../app.js").client
     const {NA,EU,OCE,AS} = require("../utils").channels
     if(val){
-        link = id.split("=")[1]
+        
+        link = id.split("=")
         region = link.split(":")[0]
         id = region
     }
