@@ -3,15 +3,18 @@ const {Client,RichEmbed} = require("discord.js")
 const config = require("../config.json")
 module.exports.run = (client,message)=>{
     ms = client.uptime
-    seconds = ms/1000
-    minutes = seconds/60
-    hours = minutes/60
+    seconds = Math.floor(ms/1000)
+    minutes = Math.floor(seconds/60)
+    hours = Math.floor(minutes/60)
+    n_minutes = minutes%60
+    n_sec = seconds%60
     let embed = new RichEmbed()
     .setTitle("I have been awake for: ")
     .addField("Milliseconds: ",ms)
     .addField("Seconds: ",seconds)
     .addField("Minutes: ",minutes)
     .addField("Hours: ",hours)
+    .addField("Total uptime:", `${hours} Hours ${n_minutes} Minutes ${n_sec} Seconds`)
     .setFooter("Krunker LFG|")
     .setTimestamp()
     message.channel.send(embed)
