@@ -1,5 +1,5 @@
 //This is how a command's structure should be, else JJ has fucked up.
-
+//stfu Jyt
 
 //Require basic classes
 const {Client,RichEmbed} = require("discord.js")

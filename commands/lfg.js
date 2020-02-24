@@ -3,65 +3,8 @@ const config = require("../config.json")
 const utils = require("../utils")
 
 const {NA,EU,OCE,AS} = require("../utils.js").channels
-module.exports.old = async(client,message)=>{
-        var args = message.content.substring(1).split(' ');
-    
-        if(args.length < 2) {
-            message.channel.send('Error. Invalid use of command. Please refer to `$help` for assistance.');
-        }else {
-            var cmd = args.shift()
-            args.shift();
-            var link = args[0];
-            args.shift();
-    
-            if(!link.includes('https://krunker.io/?game=')) {
-                if(link == "NA" || link == "OCE" || link == "AS" || link == "EU"){
-                    channel = getChannel(link)
-                    if(channel === false){
-                        utils.ErrorMsg(message,"Invalid Region\nError Code: 101")
-                    }else{
-                    const embedLfg = new Discord.RichEmbed()
-                    .setTitle(message.author.username + ' is looking for people.')
-                    .setAuthor(message.author.username, message.author.displayAvatarURL)
-                    .addField('Region:',link)
-                    .setTimestamp()
-                    .setFooter('KrunkerLFG');
-                if(args.length >= 1) {
-                    embedLfg.setDescription(args.join(' '));
-                }
-                channel.send(embedLfg);
-                }}else{
-                    utils.ErrorMsg(message,"Invalid Region/Link\nError Code: 100")
-                }
-            }else {
-                channel = getChannel(link,true)
-                if(channel === false){
-                    utils.ErrorMsg(message,"Invalid Region/Link\nError Code: 100")
-                    return;
-                }else{
-                    getLinkInfo(link).then(game =>{
-                    
-                const embedLfg = new Discord.RichEmbed()
-                    .setTitle("LFG")
-                    .setAuthor(message.author.tag, message.author.displayAvatarURL)
-                    .addField('Link: ', link,)
-                    .addField('Map: ',game.map)
-                    .addField("Players: ",game.players)
-                    .addField("Custom?: ",game.custom)
-                    .setTimestamp()
-                    .setFooter('KrunkerLFG');
-                if(args.length >= 1) {
-                    embedLfg.setDescription(args.join(' '));
-                }
-                channel.send(embedLfg);
-            }).catch(e =>{
-                    utils.ErrorMsg(message,"Invalid server link provided\nError Code : 404")
-            }
-            )}
-            }
-        
-        }
-    }
+const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
+
 module.exports.run = async(client,m)=>{
     let args = m.content.substring(config.prefix.length).split(' ')
     command = args.shift()
@@ -73,51 +16,67 @@ module.exports.run = async(client,m)=>{
             description = args.join(" ")
         }
         
-        if(link.includes("https://krunker.io/?")){ //Checks if its a krunker game link
+        if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
             let templink = link
-            channel = getChannel(templink,true)
-            let embed = new Discord.RichEmbed()
-            .setTitle(m.author.tag + "is looking for a group")
-            .setDescription(description)
-            .setAuthor(m.author.tag,m.author.displayAvatarURL)
-            .addField("Link: ",link,true)
-            .setFooter("Krunker LFG|")
-            .setTimestamp()
-            if(link.includes("https://krunker.io/?game=")){
+            let eb = new Discord.RichEmbed()
+                .setTitle(message.member.getDisplayName + ' is looking to party! :tata:')
+                .setDescription(description)
+                .setAuthor(message.member.getDisplayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
+                .setField('Link: ', link)
+                .setFooter('KrunkerLFG')
+                .setTimestamp()
+            if(link.indexOf("https://krunker.io/?game=") == 0){
                 let game = await getLinkInfo(link).catch(e=>utils.Error(m,"404"))
-                if(game){
-                embed.addField('Map: ',game.map)
-                embed.addField("Players: ",game.players)
-                embed.addField("Custom?: ",game.party)
+                    if(game){
+                        channel = getChannel(link)
+                        eb.setColor(game.color)
+                            .addField('Region: ', game.region, false)
+                            .addField('Mode: ', game.mode, true)
+                            .addField('Map: ', game.map, true)
+                            .addField('Players: ', game.players, false)
+                        if(game.custom) {
+                            eb.addField('Custom? ', 'Yes', true)
+                        }else {
+                            eb.addField('Custom? ', 'No', true)
+                        }
+                        channel.send(eb)
+                    }
+            }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
+                if(getChannel(link) > 0) {
+                    channel = getChannel(args[0])
+
+                    eb.setColor(party)
+                        .addField('Region: ' + args[0], false)
+
+                    channel.message(eb);
+                }else {
+                    utils.Error(m, '102')
                 }
             }
-            channel.send(embed)
+            
         }else{
             utils.Error(m,"101") // Error for non-krunker links
             return
         }
     }
 }
-function getChannel(id,val){
-    const client = require("../app.js").client
-    const {NA,EU,OCE,AS} = require("../utils").channels
-    if(val){
-        
-        let link1 = id.split("=")[1]
-        region = link1.split(":")[0]
-        id = region
+function getChannel(link) {
+    if(link.includes('https://')) {
+        link = link.substring(link.indexOf('='), link.lastIndexOf(':'))
     }
-    if(id == "NA" || id == "NY" || id == "MIA" || id == "SV"){
-        id = NA
-    }else if(id == "EU" || id == "FRA"){
-        id = EU
-    }else if(id == "OCE"|| id == "SYD"){
-        id = OCE
-    }else if(id == "AS" ||id == "SIN" || id == "TOK"){
-        id = AS
-    }else return false
-    return client.channels.get(id)
+    if(link.equals('NA') || link.equals('SV') || link.equals('MIA') || link.equals('NY')) {
+        return NA
+    }else if(link == 'EU' || link == 'FRA') {
+        return EU
+    }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+        return AS
+    }else if(link == 'OCE' || link == 'SYD') {
+        return OCE
+    }else {
+        return -1
+    }
 }
+
 function getLinkInfo(link){
     return new Promise((resolve, reject) =>{
     link = link.split("=")[1]
@@ -131,13 +90,31 @@ function getLinkInfo(link){
             return reject("404",err)
         }
         else{
-            
-            
+        let colour
+        switch(json[0].split(':')[0]) {
+            case "ffa":
+                colour = ffa
+                break
+            case "tdm":
+                colour = tdm
+                break
+            case "ctf":
+                colour = ctf
+                break
+            case "point":
+                colour = point
+                break
+            default:
+                colour = other
+                break;
+        }
         const game = {
             region : json[0].split(":")[0],
             players: `${json[2]}/${json[3]}`,
+            mode: json[4].i.split('_')[0],
             map: json[4].i.split("_")[1],
-            party :json[4].cs,
+            party: json[4].cs,
+            color: colour
         }
         return resolve(game)
         }})
