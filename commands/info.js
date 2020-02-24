@@ -14,7 +14,7 @@ module.exports.run = (client,message)=>{
 		.addField('Version:', `**${config.version}**`, true)
 		.addField('Creator:', '**JJ_G4M3R & Jytesh**', true)
 		.addField('Invite:', '[https://krunker.io/lfgbot](https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot)')
-		.addField('Support Server:', '[https://discord.gg/lfg_bot](https://discord.gg/yzEKS2X)', false)
+		.addField('Support Server:', '[https://discord.gg/lfg_bot](https://discord.gg/myHnhfD)', false)
 		.setTimestamp()
 		.setFooter('KrunkerLFG');
     message.channel.send(eb)
@@ -26,6 +26,6 @@ module.exports.config = {
     }
 module.exports.help = {
         usage : `\`${config.prefix}info\``, //Example usage of command
-        User : 0, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
+        User : 1, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
         description : `info lists all the info about the bot.` //Description to come when you use config.prefix help <command name>
     }
