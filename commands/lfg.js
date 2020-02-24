@@ -18,31 +18,30 @@ module.exports.run = async(client,m)=>{
         }
         
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
-            let templink = link
             let eb = new Discord.RichEmbed()
-                .setTitle(message.member.getDisplayName + ' is looking to party! :tata:')
+                .setTitle(m.member.getDisplayName + ' is looking to party! :tata:')
                 .setDescription(description)
-                .setAuthor(message.member.getDisplayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
+                .setAuthor(m.member.getDisplayName + ' (' + m.author.tag + ')', m.author.displayAvatarURL)
                 .setField('Link: ', link)
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
-            if(link.indexOf("https://krunker.io/?game=") == 0){
-
-                let game = await getLinkInfo(link).catch(e=>utils.Error(m,"404"))
-                    if(game){
-                        channel = getChannel(link)
-                        eb.setColor(game.color)
-                            .addField('Region: ', game.region, false)
-                            .addField('Mode: ', game.mode, true)
-                            .addField('Map: ', game.map, true)
-                            .addField('Players: ', game.players, false)
-                        if(game.custom) {
-                            eb.addField('Custom? ', 'Yes', true)
-                        }else {
-                            eb.addField('Custom? ', 'No', true)
-                        }
-                        channel.send(eb)
+            if(link.indexOf("https://krunker.io/?game=") == 0) {
+                await getLinkInfo(link).then(game => {
+                    channel = getChannel(link)
+                    eb.setColor(game.color)
+                        .addField('Region: ', game.region, false)
+                        .addField('Mode: ', game.mode, true)
+                        .addField('Map: ', game.map, true)
+                        .addField('Players: ', game.players, false)
+                    if(game.custom) {
+                        eb.addField('Custom? ', 'Yes', true)
+                    }else {
+                        eb.addField('Custom? ', 'No', true)
                     }
+                    channel.send(eb)
+                }).catch(error => {
+                    utils.Error(m, '404')
+                })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
                 if(getChannel(link) > 0) {
                     channel = getChannel(args[0])
@@ -81,45 +80,47 @@ function getChannel(link) {
 
 function getLinkInfo(link){
     return new Promise((resolve, reject) =>{
-    link = link.split("=")[1]
-    if(!link) return false;
-    else{
-        const request = require("request")
-        request({uri:`https://matchmaker.krunker.io/game-info?game=${link}`}, (err, res, json) =>{
-            json = JSON.parse(json)
-        if(err || json.error){
-            return reject("404",err)
-        }
+        link = link.split("=")[1]
+        if(!link) throw new Error(false);
         else{
-        let colour
-        switch(json[0].split(':')[0]) {
-            case "ffa":
-                colour = ffa
-                break
-            case "tdm":
-                colour = tdm
-                break
-            case "ctf":
-                colour = ctf
-                break
-            case "point":
-                colour = point
-                break
-            default:
-                colour = other
-                break;
+            const request = require("request")
+            request({uri:`https://matchmaker.krunker.io/game-info?game=${link}`}, (err, res, json) =>{
+                json = JSON.parse(json)
+                if(err || json.error){
+                    throw new Error('404', err)
+                }
+                else{
+                let colour
+                switch(json[0].split(':')[0]) {
+                    case "ffa":
+                        colour = ffa
+                        break
+                    case "tdm":
+                        colour = tdm
+                        break
+                    case "ctf":
+                        colour = ctf
+                        break
+                    case "point":
+                        colour = point
+                        break
+                    default:
+                        colour = other
+                        break;
+                }
+                const game = {
+                    region : json[0].split(":")[0],
+                    players: `${json[2]}/${json[3]}`,
+                    mode: json[4].i.split('_')[0],
+                    map: json[4].i.split("_")[1],
+                    party: json[4].cs,
+                    color: colour
+                }
+                return resolve(game)
+                }
+            })
         }
-        const game = {
-            region : json[0].split(":")[0],
-            players: `${json[2]}/${json[3]}`,
-            mode: json[4].i.split('_')[0],
-            map: json[4].i.split("_")[1],
-            party: json[4].cs,
-            color: colour
-        }
-        return resolve(game)
-        }})
-    }})
+    })
 }
 module.exports.config = {
     name : "lfg",
