@@ -1,10 +1,12 @@
 const {RichEmbed} = require("discord.js")
 const Discord = require("discord.js")
+const config = require("./config.json")
 channels = {
     NA : "678830555764228125",
     EU : "678830571547262976",
     OCE : "678830581512929331",
-    AS : "678830592946602002"
+    AS : "678830592946602002",
+    RNK : "681049997885833239"
 }
 gamemodes = {
     ffa: '#66de5b',
@@ -34,7 +36,7 @@ module.exports = {
         const embed = new RichEmbed()
             .setTitle("Error!")
             .setColor("RED")
-            .setDescription(text +" \n Try `$help`")
+            .setDescription(text +` \n Try \`${config.prefix}help\``)
             .setFooter("Krunker LFG |ID :"+m.author.id)
             .setTimestamp()
 
@@ -51,10 +53,24 @@ module.exports = {
 
         m.channel.send(embed)
     },
+    getuser : (id)=>{
+        if(id == "0") return "Everyone"
+        if(id == "1") return "Selected Roles"
+        if(id == "2") return "Moderators"
+        if(id == "3") return "Admins"
+    },
     Error : function(m,id){
-        let error = errors.get(id)
+        console.log("Error: "+id)
+        let error = errors.find(e => e.id == id)
         if(!error) return
         this.ErrorMsg(m,error.text,error.id,"RED")
+    },
+    CheckRole(member,roles){
+        let ret = false
+        for(role in roles){
+            ret = member.roles.has(role.id)
+        }
+        return ret
     },
     gamemodes
 }

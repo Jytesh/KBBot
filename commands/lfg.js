@@ -7,6 +7,7 @@ const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
 module.exports.run = async(client,m)=>{
     let args = m.content.substring(config.prefix.length).split(' ')
+    let channel
     command = args.shift()
     if(args.length < 2){
         utils.Error(m,"100")
@@ -26,6 +27,7 @@ module.exports.run = async(client,m)=>{
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0){
+
                 let game = await getLinkInfo(link).catch(e=>utils.Error(m,"404"))
                     if(game){
                         channel = getChannel(link)
@@ -53,13 +55,13 @@ module.exports.run = async(client,m)=>{
                     utils.Error(m, '102')
                 }
             }
-            
         }else{
             utils.Error(m,"101") // Error for non-krunker links
             return
         }
     }
 }
+
 function getChannel(link) {
     if(link.includes('https://')) {
         link = link.substring(link.indexOf('='), link.lastIndexOf(':'))
@@ -83,7 +85,6 @@ function getLinkInfo(link){
     if(!link) return false;
     else{
         const request = require("request")
-        console.log(`https://matchmaker.krunker.io/game-info?game=${link}`)
         request({uri:`https://matchmaker.krunker.io/game-info?game=${link}`}, (err, res, json) =>{
             json = JSON.parse(json)
         if(err || json.error){
@@ -126,7 +127,7 @@ module.exports.config = {
 }
 module.exports.help = {
     usage : `\`${config.prefix}lfg NA\``, //Example usage of command
-    User : 1, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
+    User : 2, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
     Roles : ["678830128968499220"], //Guest role, the only role which can use this command
     description : `To look for groups` //Description to come when you use config.prefix help <command name>
 }
