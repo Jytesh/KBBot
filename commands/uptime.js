@@ -25,6 +25,7 @@ module.exports.run = (client,message)=>{
     }else {
         eb.setDescription('I\'ve been up for ' + time + 'ms')
     }
+    message.channel.send(eb)
 }
 module.exports.config = {
     name: "uptime",
