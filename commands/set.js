@@ -23,26 +23,31 @@ module.exports.run = (client,message)=>{
             return
         }
 
-        console.log(region)
-        console.log(id)
-
         region = region.toUpperCase()
+
+        let eb = new Discord.RichEmbed()
+            .setTitle('Sucessfully set ')
+            .setFooter('KrunkerLFG')
+            .setTimestamp()
+            .setColor(0x49C4EF)
+            .setDescription('<#' + id + '> as LFG channel for ' + region)
+        
         switch(region) {
             case 'NA':
-                utils.region.NA = id
+                utils.setNA(id)
                 break
             case 'OCE':
-                utils.region.OCE = id
-                message.channel.send('poopoo')
+                utils.setOCE(id)
                 break
             case 'EU':
-                utils.region.EU = id
+                utils.setEU(id)
                 break
             case 'AS':
-                utils.region.AS = id
+                utils.setAS(id)
                 break
-
         }
+        
+        message.channel.send(eb)
     }
 }
 module.exports.config = {
