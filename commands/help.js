@@ -17,15 +17,15 @@ module.exports.run = (client,message)=>{
             .setDescription('Note: *<>* signify required fields and *[]* signify optional fields.')
             .addField("Server Prefix", `**${config.prefix}**`)
             .addField("Utility", 
-                `> **${config.prefix}` + client.commands.get(help).help.usage + `** \r\n > • ` + client.commands.get(help).help.description + ` \r\n` +
-                `> **${config.prefix}` + client.commands.get(info).help.usage + `** \r\n > • ` + client.commands.get(info).help.description + ` \r\n` +
-                `> **${config.prefix}` + client.commands.get(ping).help.usage + `** \r\n > • ` + client.commands.get(ping).help.description + ` \r\n` +
-                `> **${config.prefix}` + client.commands.get(uptime).help.usage + `** \r\n > • ` + client.commands.get(uptime).help.description + ` \r\n`, false)
+                `> **${config.prefix}` + client.commands.get('help').help.usage + `** \r\n > • ` + client.commands.get('help').help.description + ` \r\n` +
+                `> **${config.prefix}` + client.commands.get('info').help.usage + `** \r\n > • ` + client.commands.get('info').help.description + ` \r\n` +
+                `> **${config.prefix}` + client.commands.get('ping').help.usage + `** \r\n > • ` + client.commands.get('ping').help.description + ` \r\n` +
+                `> **${config.prefix}` + client.commands.get('uptime').help.usage + `** \r\n > • ` + client.commands.get('uptime').help.description + ` \r\n`, false)
             .addField("General", 
-                `> **${config.prefix}` + client.commands.get(lfg).help.usage + `** \r\n > • ` + client.commands.get(lfg).help.description + ` \r\n`, false)
+                `> **${config.prefix}` + client.commands.get('lfg').help.usage + `** \r\n > • ` + client.commands.get('lfg').help.description + ` \r\n`, false)
             .addField("Staff",
-                `> **${config.prefix}` + client.commands.get(prefix).help.usage + `** \r\n > • ` + client.commands.get(prefix).help.description + ` \r\n` +
-                `> **${config.prefix}` + client.commands.get(set).help.usage + `** \r\n > • ` + client.commands.get(set).help.description + ` \r\n`, false)
+                `> **${config.prefix}` + client.commands.get('prefix').help.usage + `** \r\n > • ` + client.commands.get('prefix').help.description + ` \r\n` +
+                `> **${config.prefix}` + client.commands.get('set').help.usage + `** \r\n > • ` + client.commands.get('set').help.description + ` \r\n`, false)
             .setTimestamp()
             .setFooter("KrunkerLFG")
         message.channel.send(eb)
