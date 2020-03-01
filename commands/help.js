@@ -28,16 +28,16 @@ module.exports.run = (client,message)=>{
             command = client.commands.get(client.aliases.get(arg))
         }
         if(command){
-            let embed = new RichEmbed()
-            .setTitle(command.config.name)
-            .setDescription(command.help.description)
-            .addField('Usage:', "`"+command.help.usage+"`")
-            .addField('Can be used by:',utils.getuser(command.help.User))
-            .setTimestamp()
-            .setColor("BLURPLE")
-            .setFooter("Coded by Jytesh#3241")
+            let eb = new RichEmbed()
+                .setTitle(command.config.name)
+                .setDescription(command.help.description)
+                .addField('Usage:', "`"+command.help.usage+"`")
+                .addField('Can be used by:',utils.getuser(command.help.User))
+                .setTimestamp()
+                .setColor("BLURPLE")
+                .setFooter("Created by Jytesh")
             
-            message.channel.send(embed)
+            message.channel.send(eb)
         }else{
             utils.ErrorMsg(m,`Module not found.Try ${config.prefix}help for list of all modules`)
         }
