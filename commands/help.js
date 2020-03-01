@@ -59,7 +59,7 @@ module.exports.config = {
     aliases: ["h", "hlp","wlp","welp","ifkingforgothowthebotworks"],
 }
 module.exports.help = {
-    usage : `\`${config.prefix}help <module>\``, //Example usage of command
+    usage : `${config.prefix}help <module>`, //Example usage of command
     User : 1, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
     description : `${config.prefix}help lists all available modules.\n \`${config.prefix}help <module-name>\`\nLists the module help` //Description to come when you use config.prefix help <command name>
 }
