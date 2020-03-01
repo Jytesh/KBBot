@@ -1,3 +1,4 @@
+const {Client,RichEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
@@ -7,35 +8,40 @@ module.exports.run = (client,message)=>{
     command = args.shift()
     
     if(args.length != 2) {
-        //throw error: not enough parameters
+        utils.Error(message,"100")
     }else {
-        var channelID
+        var id
         var region
-        if(isChannel(args[0]) && isRegion(args[1])) {
-            channelID = args[0].substring(args[0].indexOf('<#') + 2, args[0].indexOf('>'))
+        if(isChannel(args[0], message) && isRegion(args[1])) {
+            id = args[0].substring(args[0].indexOf('<#') + 2, args[0].indexOf('>'))
             region = args[1]
-        }else if(isChannel(args[1]) && isRegion(args[0])) {
-            channelID = args[0].substring(args[0].indexOf('<#') + 2, args[0].indexOf('>'))
+        }else if(isChannel(args[1], message) && isRegion(args[0])) {
+            id = args[0].substring(args[0].indexOf('<#') + 2, args[0].indexOf('>'))
             region = args[1]
         }else {
-            //throw error: invalid channel or region
+            utils.Error(message,"100")
+            return
         }
 
-        if(channelID != null && region != null) {
-            switch(region) {
-                case 'NA':
-                    utils.region.NA = channelID
-                    break
-                case 'OCE':
-                    utils.region.OCE = channelID
-                    break
-                case 'EU':
-                    utils.region.EU = channelID
-                    break
-                case 'AS':
-                    utils.region.AS = channelID
-                    break
-            }
+        console.log(region)
+        console.log(id)
+
+        region = region.toUpperCase()
+        switch(region) {
+            case 'NA':
+                utils.region.NA = id
+                break
+            case 'OCE':
+                utils.region.OCE = id
+                message.channel.send('poopoo')
+                break
+            case 'EU':
+                utils.region.EU = id
+                break
+            case 'AS':
+                utils.region.AS = id
+                break
+
         }
     }
 }
@@ -45,17 +51,18 @@ module.exports.config = {
 }
 module.exports.help = {
     usage : `${config.prefix}set`, //Example usage of command
-    User : 1, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
+    User : 3, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
     description : `**${config.prefix}set** sets given channel as default LFG channel for given region.\n` //Description to come when you use config.prefix help <command name>
 }
 
-function isChannel(arg) {
+function isChannel(arg, message) {
     if(arg.includes('<#') && arg.includes('>') && arg.indexOf('<#') < arg.indexOf('>')) {
         let id = arg.substring(arg.indexOf('<#') + 2, arg.indexOf('>'))
         if(message.guild.channels.has(id)) {
             return true
+        }else {
+            return false
         }
-        return false
     }else {
         return false
     }
