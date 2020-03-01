@@ -33,25 +33,25 @@ var autodel = false;
 module.exports = {
     channels,
     ErrorMsg : function(m,text){
-        const embed = new RichEmbed()
+        const eb = new RichEmbed()
             .setTitle("Error!")
             .setColor("RED")
             .setDescription(text +` \n Try \`${config.prefix}help\``)
-            .setFooter("Krunker LFG |ID :"+m.author.id)
+            .setFooter("Krunker LFG | ID :"+m.author.id)
             .setTimestamp()
 
-        m.channel.send(embed)
+        m.channel.send(eb)
     },
     embed : function(m,text,color){
         if(!color) color = "BLURPLE"
-        let embed = new RichEmbed()
+        let eb = new RichEmbed()
 
         .setDescription(text)
         .setColor(color)
         .setTimestamp()
-        .setFooter("Krunker LFG|")
+        .setFooter("Krunker LFG")
 
-        m.channel.send(embed)
+        m.channel.send(eb)
     },
     getuser : (id)=>{
         if(id == "0") return "Everyone"
