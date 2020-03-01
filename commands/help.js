@@ -1,7 +1,8 @@
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
+const Discord = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
+
 module.exports.run = (client,message)=>{
     let fullCommand = message.content.substr(config.prefix.length) // Remove the leading exclamation mark
     let splitCommand = fullCommand.split(" ") // Split the message up in to pieces for each space
@@ -35,7 +36,7 @@ module.exports.run = (client,message)=>{
                 .addField('Can be used by:',utils.getuser(command.help.User))
                 .setTimestamp()
                 .setColor("BLURPLE")
-                .setFooter("Created by Jytesh")
+                .setFooter("KrunkerLFG")
             
             message.channel.send(eb)
         }else{

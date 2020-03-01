@@ -1,6 +1,7 @@
 const {RichEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("./config.json")
+
 channels = {
     NA : "678830555764228125",
     EU : "678830571547262976",

@@ -1,8 +1,10 @@
 //This is how a command's structure should be, else JJ has fucked up.
-
+//stfu Jyt
 
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
+const Discord = require("discord.js")
+const utils = require("../utils")
+
 module.exports.run = (client,message)=>{
     //DO STUFF HERE
 }
