@@ -11,19 +11,19 @@ module.exports.run = (client,message)=>{
     time = client.uptime
     let eb = new RichEmbed()
         .setTitle("I have been awake for: ")
+        .setColor(0x49C4EF)
         .setFooter("KrunkerLFG")
         .setTimestamp()
-    message.channel.send(eb)
     if(time/day > 1) {
-        eb.setDescription('I\'ve been up for ' + (time/day).toFixed(2) + 'd')
+        eb.setDescription((time/day).toFixed(2) + 'd')
     }else if(time/hour > 1) {
-        eb.setDescription('I\'ve been up for ' + (time/hour).toFixed(2) + 'h')
+        eb.setDescription((time/hour).toFixed(2) + 'h')
     }else if(time/minute > 1) {
-        eb.setDescription('I\'ve been up for ' + (time/minute).toFixed(2) + 'm')
+        eb.setDescription((time/minute).toFixed(2) + 'm')
     }else if(time/second > 1) {
-        eb.setDescription('I\'ve been up for ' + (time/second).toFixed(2) + 's')
+        eb.setDescription((time/second).toFixed(2) + 's')
     }else {
-        eb.setDescription('I\'ve been up for ' + time + 'ms')
+        eb.setDescription(time + 'ms')
     }
     message.channel.send(eb)
 }

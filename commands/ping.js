@@ -5,7 +5,7 @@ module.exports.run = (client,message)=>{
    ping = client.ping
     let eb = new RichEmbed()
         .setTitle("Ping!")
-        .setDescription(ping + " ms")
+        .setDescription(Math.round(ping) + " ms")
         .setColor(0x49C4EF)
     message.channel.send(eb)
 }
