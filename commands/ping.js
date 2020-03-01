@@ -9,6 +9,8 @@ module.exports.run = (client,message)=>{
     let eb = new RichEmbed()
         .setTitle("Pong!")
         .setDescription(Math.round(ping) + " ms")
+        .setFooter('KrunkerLFG')
+        .setTimestamp()
         .setColor(0x49C4EF)
     message.channel.send(eb)
 }

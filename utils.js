@@ -9,6 +9,7 @@ channels = {
     AS : "678830592946602002",
     RNK : "681049997885833239"
 }
+
 gamemodes = {
     ffa: '#66de5b',
     tdm: '#45e6e3',
@@ -17,6 +18,7 @@ gamemodes = {
     party: '#3611ba',
     other: '#a8114b'
 }
+
 const errors = new Discord.Collection()
 //Error Loading
 require("fs").readdir("./errors", (err, files) => { 
@@ -33,6 +35,7 @@ require("fs").readdir("./errors", (err, files) => {
 var autodel = false;
 module.exports = {
     channels,
+    gamemodes,
     ErrorMsg : function(message,text){
         const eb = new RichEmbed()
             .setTitle("Error!")
@@ -73,5 +76,16 @@ module.exports = {
         }
         return ret
     },
-    gamemodes
+    setNA(id) {
+        this.channels.NA = id
+    },
+    setOCE(id) {
+        this.channels.OCE = id
+    },
+    setEU(id) {
+        this.channels.EU = id
+    },
+    setAS(id) {
+        this.channels.AS = id
+    }
 }
