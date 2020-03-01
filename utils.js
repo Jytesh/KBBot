@@ -33,15 +33,15 @@ require("fs").readdir("./errors", (err, files) => {
 var autodel = false;
 module.exports = {
     channels,
-    ErrorMsg : function(m,text){
+    ErrorMsg : function(message,text){
         const eb = new RichEmbed()
             .setTitle("Error!")
             .setColor("RED")
             .setDescription(text +` \n Try \`${config.prefix}help\``)
-            .setFooter("Krunker LFG • ID :"+m.author.id)
+            .setFooter("Krunker LFG • ID :"+message.author.id)
             .setTimestamp()
 
-        m.channel.send(eb)
+        message.channel.send(eb)
     },
     embed : function(m,text,color){
         if(!color) color = "BLURPLE"
@@ -52,11 +52,11 @@ module.exports = {
         .setTimestamp()
         .setFooter("Krunker LFG")
 
-        m.channel.send(eb)
+        message.channel.send(eb)
     },
     getuser : (id)=>{
         if(id == "0") return "Everyone"
-        if(id == "1") return "Selected Roles"
+        if(id == "1") return "Select Roles"
         if(id == "2") return "Moderators"
         if(id == "3") return "Admins"
     },
