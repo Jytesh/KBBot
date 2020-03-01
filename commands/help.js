@@ -13,7 +13,7 @@ module.exports.run = (client,message)=>{
     const eb = new RichEmbed()
         .setTitle("Help:")
 		.setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
-        .setColor(0x49C4EF)
+        .setColor("BLURPLE")
         .setDescription('Note: *<>* signify required fields and *[]* signify optional fields.')
         .addField("Server Prefix", `**${config.prefix}**`)
         .addField("Utility", 
@@ -24,6 +24,7 @@ module.exports.run = (client,message)=>{
         .addField("General", 
             `> **${config.prefix}lfg <link> [message]** \r\n > • Creates an LFG posting with <link> and [message].`, false)
         .addField("Staff",
+            `> **${config.prefix}prefix <prefix>** \r\n > • Sets <prefix> as the new bot prefix for the server.` +
             `> **${config.prefix}set <channel> <region>** \r\n > • Sets <channel> as the default LFG channel for <region>`)
         .setTimestamp()
         .setFooter("KrunkerLFG")
