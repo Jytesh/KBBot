@@ -27,7 +27,7 @@ module.exports.config = {
     aliases: ["setPrefix"],
 }
 module.exports.help = {
-    usage : `${config.prefix}prefix`, //Example usage of command
+    usage : `prefix`, //Example usage of command
     User : 3, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : 'use when sidney has kidnapped you' //Description to come when you use config.prefix help <command name>
+    description : 'Sets <prefix> as the new bot prefix for the server.' //Description to come when you use config.prefix help <command name>
 }

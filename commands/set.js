@@ -55,9 +55,9 @@ module.exports.config = {
     aliases: ["setChannel"],
 }
 module.exports.help = {
-    usage : `${config.prefix}set`, //Example usage of command
+    usage : `set <channel> <region>`, //Example usage of command
     User : 3, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : `**${config.prefix}set** sets given channel as default LFG channel for given region.\n` //Description to come when you use config.prefix help <command name>
+    description : `Sets <channel> as the default LFG channel for <region>.` //Description to come when you use config.prefix help <command name>
 }
 
 function isChannel(arg, message) {

@@ -34,8 +34,8 @@ module.exports.config = {
     aliases: ["u", "up","HOWLONGUAWAKE"],
 }
 module.exports.help = {
-    usage : `\`${config.prefix}uptime\``, //Example usage of command
+    usage : `uptime`, //Example usage of command
     User : 2, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
     Roles : ["679261891587080202"], //Bot dev role
-    description : `${config.prefix}uptime lists the number of seconds, minutes and hours the bot has been up for.\n` //Description to come when you use config.prefix help <command name>
+    description : `Provides uptime of bot.` //Description to come when you use config.prefix help <command name>
 }

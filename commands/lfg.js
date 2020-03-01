@@ -128,8 +128,7 @@ module.exports.config = {
     aliases : ["looking", "lf", "lfm"]
 }
 module.exports.help = {
-    usage : `${config.prefix}lfg NA`, //Example usage of command
+    usage : `lfg <link> [message]`, //Example usage of command
     User : 2, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    Roles : ["678830128968499220"], //Guest role, the only role which can use this command
-    description : `To look for groups` //Description to come when you use config.prefix help <command name>
+    description : `Creates an LFG posting with <link> and [message].` //Description to come when you use config.prefix help <command name>
 }
