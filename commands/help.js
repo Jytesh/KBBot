@@ -14,9 +14,17 @@ module.exports.run = (client,message)=>{
         .setTitle("Help:")
 		.setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
         .setColor(0x49C4EF)
-        .addField("Utility", `> **${config.prefix}info** \r\n > • Provides bot info. ` +
-            `\r\n > **${config.prefix}help** \r\n > • Provides list of commands and how to use them.\r\n > **${config.prefix}uptime**\r\n > •Provides uptime of bot.`, false)
-        .addField("General", "> **-lfg <link> <optional message>** \r\n > • Creates an LFG posting with <link> and <message>.", false)
+        .setDescription('Note: *<>* signify required fields and *[]* signify optional fields.')
+        .addField("Server Prefix", `**${config.prefix}**`)
+        .addField("Utility", 
+            `> **${config.prefix}help** \r\n > • Provides list of commands and how to use them.\r\n` +
+            `> **${config.prefix}info** \r\n > • Provides bot info. \r\n` +
+            `> **${config.prefix}ping** \r\n > • Provides ping of bot. \r\n` +
+            `> **${config.prefix}uptime**\r\n > • Provides uptime of bot.`, false)
+        .addField("General", 
+            `> **${config.prefix}lfg <link> [message]** \r\n > • Creates an LFG posting with <link> and [message].`, false)
+        .addField("Staff",
+            `> **${config.prefix}set <channel> <region>** \r\n > • Sets <channel> as the default LFG channel for <region>`)
         .setTimestamp()
         .setFooter("KrunkerLFG")
     message.channel.send(eb)
