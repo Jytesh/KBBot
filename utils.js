@@ -37,7 +37,7 @@ module.exports = {
             .setTitle("Error!")
             .setColor("RED")
             .setDescription(text +` \n Try \`${config.prefix}help\``)
-            .setFooter("Krunker LFG | ID :"+m.author.id)
+            .setFooter("Krunker LFG • ID :"+m.author.id)
             .setTimestamp()
 
         m.channel.send(eb)
