@@ -30,10 +30,10 @@ module.exports.run = async(client,message)=>{
                 await getLinkInfo(link).then(game => {
                     channel = getChannel(link)
                     eb.setColor(game.color)
-                        .addField('Region: ', game.region, false)
-                        .addField('Mode: ', game.mode, true)
-                        .addField('Map: ', game.map, true)
+                        .addField('Region: ', game.region, true)
                         .addField('Players: ', game.players, false)
+                        .addField('Mode: ', game.mode, false)
+                        .addField('Map: ', game.map, true)
                     if(game.custom) {
                         eb.addField('Custom? ', 'Yes', true)
                     }else {
