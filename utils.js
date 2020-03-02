@@ -1,4 +1,4 @@
-const {RichEmbed} = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("./config.json")
 
@@ -37,7 +37,7 @@ module.exports = {
     channels,
     gamemodes,
     ErrorMsg : function(message,text){
-        const eb = new RichEmbed()
+        const eb = new MessageEmbed()
             .setTitle("Error!")
             .setColor("RED")
             .setDescription(text +` \n Try \`${config.prefix}help\``)
@@ -48,7 +48,7 @@ module.exports = {
     },
     embed : function(m,text,color){
         if(!color) color = "BLURPLE"
-        let eb = new RichEmbed()
+        let eb = new MessageEmbed()
 
         .setDescription(text)
         .setColor(color)

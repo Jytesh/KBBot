@@ -1,6 +1,5 @@
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {Client,MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
@@ -11,7 +10,7 @@ const second = 1000
 
 module.exports.run = (client,message)=>{
     time = client.uptime
-    let eb = new RichEmbed()
+    let eb = new MessageEmbed()
         .setTitle("I have been awake for: ")
         .setColor(0x49C4EF)
         .setFooter("KrunkerLFG")

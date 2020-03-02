@@ -9,7 +9,7 @@
   "author": "JJ_G4M3R & Jytesh",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1",
+    "discord.js": "^12.0.0",
     "node-fetch": "^2.6.0"
   },
   "repository": {

@@ -1,6 +1,5 @@
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {Client,MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
@@ -10,7 +9,7 @@ module.exports.run = (client,message)=>{
     let primaryCommand = splitCommand[0] // The first word directly after the exclamation is the command
     let arguments = splitCommand.slice(1) // All other words are arguments/parameters/options for the com
     if(arguments.length == 0){
-        const eb = new RichEmbed()
+        const eb = new MessageEmbed()
             .setTitle("Help:")
             .setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
             .setColor("BLURPLE")
