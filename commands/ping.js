@@ -9,6 +9,8 @@ module.exports.run = (client,message)=>{
     let eb = new RichEmbed()
         .setTitle("Pong!")
         .setDescription(Math.round(ping) + " ms")
+        .setFooter('KrunkerLFG')
+        .setTimestamp()
         .setColor(0x49C4EF)
     message.channel.send(eb)
 }
@@ -17,7 +19,7 @@ module.exports.config = {
     aliases: ["p", "pong","HOWUDELAY"],
 }
 module.exports.help = {
-    usage : `\`${config.prefix}ping\``, //Example usage of command
+    usage : `ping`, //Example usage of command
     User : 1, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : `**${config.prefix}ping** lists the ping of bot in ms.\n` //Description to come when you use config.prefix help <command name>
+    description : `Provides ping of bot.` //Description to come when you use config.prefix help <command name>
 }
