@@ -1,5 +1,4 @@
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
@@ -19,7 +18,7 @@ module.exports.run = async(client,message)=>{
         }
         
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
-            let eb = new Discord.RichEmbed()
+            let eb = new MessageEmbed()
                 .setTitle(message.author.username + ' is looking to party! :tada:')
                 .setDescription(description)
                 .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.displayAvatarURL)

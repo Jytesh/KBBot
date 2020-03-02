@@ -1,6 +1,6 @@
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {MessageEmbed} = require("discord.js")
+
 const config = require("../config.json")
 const utils = require("../utils")
 
@@ -13,7 +13,7 @@ module.exports.run = (client,message)=>{
     }else {
         let oldPrefix = config.prefix
         config.prefix = args[0]
-        let eb = new Discord.RichEmbed()
+        let eb = new MessageEmbed()
             .setTitle('Success!')
             .setFooter('KrunkerLFG')
             .setTimestamp()
