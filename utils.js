@@ -76,16 +76,4 @@ module.exports = {
         }
         return ret
     },
-    setNA(id) {
-        this.channels.NA = id
-    },
-    setOCE(id) {
-        this.channels.OCE = id
-    },
-    setEU(id) {
-        this.channels.EU = id
-    },
-    setAS(id) {
-        this.channels.AS = id
-    }
 }

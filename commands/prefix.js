@@ -1,18 +1,19 @@
 //Require basic classes
 const {MessageEmbed} = require("discord.js")
-
+const db = require("../json.db")
 const config = require("../config.json")
 const utils = require("../utils")
 
-module.exports.run = (client,message)=>{
-    let args = message.content.substring(config.prefix.length).split(' ')
+module.exports.run = async (client,message)=>{
+    let prefix = await db.prefix(message.guild.id)
+    let args = message.content.substring(prefix.length).split(' ')
     command = args.shift()
-
+    
     if(args.length != 1) {
         utils.Error(message,"100")
     }else {
-        let oldPrefix = config.prefix
-        config.prefix = args[0]
+        oldPrefix = prefix
+        prefix = await db.set(message.guild.id,{"PREFIX" : args[0]}).PREFIX
         let eb = new MessageEmbed()
             .setTitle('Success!')
             .setFooter('KrunkerLFG')
@@ -27,7 +28,7 @@ module.exports.config = {
     aliases: ["setPrefix"],
 }
 module.exports.help = {
-    usage : `prefix`, //Example usage of command
+    usage : `prefix <prefix>`, //Example usage of command
     User : 3, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
     description : 'Sets <prefix> as the new bot prefix for the server.' //Description to come when you use config.prefix help <command name>
 }

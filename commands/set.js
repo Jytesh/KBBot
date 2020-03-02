@@ -3,7 +3,7 @@ const config = require("../config.json")
 const utils = require("../utils")
 
 module.exports.run = (client,message)=>{
-    let args = message.content.substring(config.prefix.length).split(' ')
+    let args = message.content.split(' ')
     command = args.shift()
     
     if(args.length != 2) {
@@ -49,20 +49,12 @@ module.exports.run = (client,message)=>{
         message.channel.send(eb)
     }
 }
-module.exports.config = {
-    name: "set",
-    aliases: ["setChannel"],
-}
-module.exports.help = {
-    usage : `set <channel> <region>`, //Example usage of command
-    User : 3, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : `Sets <channel> as the default LFG channel for <region>.` //Description to come when you use config.prefix help <command name>
-}
+
 
 function isChannel(arg, message) {
     if(arg.includes('<#') && arg.includes('>') && arg.indexOf('<#') < arg.indexOf('>')) {
         let id = arg.substring(arg.indexOf('<#') + 2, arg.indexOf('>'))
-        if(message.guild.channels.has(id)) {
+        if(message.guild.channels.cache.has(id)) {
             return true
         }else {
             return false
@@ -86,4 +78,13 @@ function isRegion(arg) {
         default:
             return false
     }
+}
+module.exports.config = {
+    name: "set",
+    aliases: ["setChannel"],
+}
+module.exports.help = {
+    usage : `set <channel> <region>`, //Example usage of command
+    User : 3, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
+    description : `Sets <channel> as the default LFG channel for <region>.` //Description to come when you use config.prefix help <command name>
 }
