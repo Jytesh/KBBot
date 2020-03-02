@@ -41,16 +41,16 @@ module.exports.run = async(client,message)=>{
                     channel.send(eb)
                 }).catch(error => {
                 console.log(error)
+                utils.Error(message,"404")
                 })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                channel = await getChannel(args[0])
+                channel = await getChannel(true)
             if(channel != -1) {
-                    
 
                     eb.setColor(party)
-                        .addField('Region: ' + args[0], false)
-
-                    channel.message(eb);
+                    if(args[0])eb.addField('Region: ' , args.shift())
+                    if(args)eb.setDescription(args.join(" "))
+                    channel.send(eb);
                 }else {
                     utils.Error(message, '102')
                 }
@@ -64,6 +64,7 @@ module.exports.run = async(client,message)=>{
 
 async function getChannel(link) {
     const client = require("../app").client
+    if(link !== true){
     if(link.includes('https://')) {
         link = link.split("=")[1].split(":")[0]
 
@@ -82,7 +83,10 @@ async function getChannel(link) {
     }
     return channel
     //return await client.channels.resolve(channel)
-
+    }else{
+        channel = require("../utils").channels.RNK
+        return await client.channels.resolve(channel)
+    }
 }
 
 function getLinkInfo(link){
@@ -95,6 +99,8 @@ function getLinkInfo(link){
             const fetch = require("node-fetch")
             fetch(`https://matchmaker.krunker.io/game-info?game=${link}`).then(res => res.json())
             .then(json => {
+                if(!json.error){
+                    
                 //json = JSON.parse(body)
                 let colour
                 switch(json[0].split(':')[0]) {
@@ -125,9 +131,11 @@ function getLinkInfo(link){
                 
                 return resolve(game)
                 
+            }else{
+                return reject(new Error('404',json))}
             }).catch(error => {
                 console.log(error)
-            return reject(utils.Error('404', err))})
+            return reject(new Error('404', error))})
         }
     })
 }
