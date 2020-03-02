@@ -1,3 +1,4 @@
+const {Client,RichEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
@@ -5,12 +6,12 @@ const utils = require("../utils")
 const {NA,EU,OCE,AS} = require("../utils.js").channels
 const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
-module.exports.run = async(client,m)=>{
-    let args = m.content.substring(config.prefix.length).split(' ')
+module.exports.run = async(client,message)=>{
+    let args = message.content.substring(config.prefix.length).split(' ')
     let channel
     command = args.shift()
     if(args.length < 2){
-        utils.Error(m,"100")
+        utils.Error(message,"100")
     }else{
         link = args.shift()
         if(args.length != 0){
@@ -19,10 +20,10 @@ module.exports.run = async(client,m)=>{
         
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
             let eb = new Discord.RichEmbed()
-                .setTitle(m.member.getDisplayName + ' is looking to party! :tata:')
+                .setTitle(message.member.getDisplayName + ' is looking to party! :tata:')
                 .setDescription(description)
-                .setAuthor(m.member.getDisplayName + ' (' + m.author.tag + ')', m.author.displayAvatarURL)
-                .addField('Link: ', link)
+                .setAuthor(message.member.getDisplayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
+                .setField('Link: ', link)
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
@@ -40,7 +41,7 @@ module.exports.run = async(client,m)=>{
                     }
                     channel.send(eb)
                 }).catch(error => {
-                    utils.Error(m, '404')
+                    utils.Error(message, '404')
                 })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
                 if(getChannel(link) > 0) {
@@ -51,11 +52,11 @@ module.exports.run = async(client,m)=>{
 
                     channel.message(eb);
                 }else {
-                    utils.Error(m, '102')
+                    utils.Error(message, '102')
                 }
             }
         }else{
-            utils.Error(m,"101") // Error for non-krunker links
+            utils.Error(message,"101") // Error for non-krunker links
             return
         }
     }
@@ -127,8 +128,7 @@ module.exports.config = {
     aliases : ["looking", "lf", "lfm"]
 }
 module.exports.help = {
-    usage : `\`${config.prefix}lfg NA\``, //Example usage of command
+    usage : `lfg <link> [message]`, //Example usage of command
     User : 2, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    Roles : ["678830128968499220"], //Guest role, the only role which can use this command
-    description : `To look for groups` //Description to come when you use config.prefix help <command name>
+    description : `Creates an LFG posting with <link> and [message].` //Description to come when you use config.prefix help <command name>
 }
