@@ -31,8 +31,8 @@ module.exports.run = async(client,message)=>{
                     channel = getChannel(link)
                     eb.setColor(game.color)
                         .addField('Region: ', game.region, true)
-                        .addField('Players: ', game.players, false)
-                        .addField('Mode: ', game.mode, false)
+                        .addField('Players: ', game.players, true)
+                        .addField('Mode: ', game.mode.toUpperCase(), true)
                         .addField('Map: ', game.map, true)
                     if(game.custom) {
                         eb.addField('Custom? ', 'Yes', true)
@@ -88,16 +88,10 @@ function getLinkInfo(link){
         if(!link)  return reject(new Error(false))
         else{
             
-            const request = require("request")
-            request({uri:`https://matchmaker.krunker.io/game-info?game=${link}`}, (err, res, body) =>{
-                json = JSON.parse(body)
-                
-                if(err || json.error){
-                    
-                    console.log(json)
-                    return reject(utils.Error('404', err))
-                }
-                else{
+            const fetch = require("node-fetch")
+            fetch(`https://matchmaker.krunker.io/game-info?game=${link}`).then(res => res.json())
+            .then(json => {
+                //json = JSON.parse(body)
                 let colour
                 switch(json[0].split(':')[0]) {
                     case "ffa":
@@ -126,8 +120,10 @@ function getLinkInfo(link){
                 }
                 
                 return resolve(game)
-                }
-            })
+                
+            }).catch(error => {
+                console.log(error)
+            return reject(utils.Error('404', err))})
         }
     })
 }
