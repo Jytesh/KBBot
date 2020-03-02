@@ -55,7 +55,7 @@ module.exports = {
         .setTimestamp()
         .setFooter("Krunker LFG")
 
-        message.channel.send(eb)
+        m.channel.send(eb)
     },
     getuser : (id)=>{
         if(id == "0") return "Everyone"

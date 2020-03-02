@@ -26,8 +26,8 @@ module.exports.run = async(client,message)=>{
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
-                await getLinkInfo(link).then(game => {
-                    channel = getChannel(link)
+                await getLinkInfo(link).then(async game => {
+                    channel = await getChannel(link)
                     eb.setColor(game.color)
                         .addField('Region: ', game.region, true)
                         .addField('Players: ', game.players, true)
@@ -43,8 +43,9 @@ module.exports.run = async(client,message)=>{
                 console.log(error)
                 })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                if(getChannel(link) > 0) {
-                    channel = getChannel(args[0])
+                channel = await getChannel(args[0])
+            if(channel != -1) {
+                    
 
                     eb.setColor(party)
                         .addField('Region: ' + args[0], false)
@@ -61,23 +62,27 @@ module.exports.run = async(client,message)=>{
     }
 }
 
-function getChannel(link) {
+async function getChannel(link) {
     const client = require("../app").client
     if(link.includes('https://')) {
         link = link.split("=")[1].split(":")[0]
 
     }
+    let channel
     if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
-        return client.channels.get(NA)
+        channel = await client.channels.fetch(NA)
     }else if(link == 'EU' || link == 'FRA') {
-        return client.channels.get(EU)
+        channel = await client.channels.fetch(EU)
     }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-        return client.channels.get(AS)
+        channel = await client.channels.fetch(AS)
     }else if(link == 'OCE' || link == 'SYD') {
-        return client.channels.get(OCE)
+        channel = await client.channels.fetch(OCE)
     }else {
-        return -1
+        return void 0
     }
+    return channel
+    //return await client.channels.resolve(channel)
+
 }
 
 function getLinkInfo(link){
