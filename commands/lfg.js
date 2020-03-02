@@ -1,12 +1,13 @@
 const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
-
+const db =require("../json.db")
 const {NA,EU,OCE,AS} = require("../utils.js").channels
 const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
 module.exports.run = async(client,message)=>{
-    let args = message.content.substring(config.prefix.length).split(' ')
+    let prefix = await db.prefix(message.guild.id)
+    let args = message.content.substring(prefix.length).split(' ')
     let channel
     command = args.shift()
     if(args.length < 2){
@@ -146,5 +147,5 @@ module.exports.config = {
 module.exports.help = {
     usage : `lfg <link> [message]`, //Example usage of command
     User : 2, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : `Creates an LFG posting with <link> and [message].` //Description to come when you use config.prefix help <command name>
+    description : `Creates an LFG posting with <link> and [message].` //Description to come when you use prefix help <command name>
 }
