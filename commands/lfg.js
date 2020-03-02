@@ -20,10 +20,10 @@ module.exports.run = async(client,message)=>{
         
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
             let eb = new Discord.RichEmbed()
-                .setTitle(message.member.getDisplayName + ' is looking to party! :tata:')
+                .setTitle(message.author.username + ' is looking to party! :tada:')
                 .setDescription(description)
-                .setAuthor(message.member.getDisplayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
-                .setField('Link: ', link)
+                .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
+                .addField('Link: ', link)
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
@@ -41,7 +41,7 @@ module.exports.run = async(client,message)=>{
                     }
                     channel.send(eb)
                 }).catch(error => {
-                    utils.Error(message, '404')
+                console.log(error)
                 })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
                 if(getChannel(link) > 0) {
@@ -63,17 +63,19 @@ module.exports.run = async(client,message)=>{
 }
 
 function getChannel(link) {
+    const client = require("../app").client
     if(link.includes('https://')) {
-        link = link.substring(link.indexOf('='), link.lastIndexOf(':'))
+        link = link.split("=")[1].split(":")[0]
+
     }
-    if(link.equals('NA') || link.equals('SV') || link.equals('MIA') || link.equals('NY')) {
-        return NA
+    if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
+        return client.channels.get(NA)
     }else if(link == 'EU' || link == 'FRA') {
-        return EU
+        return client.channels.get(EU)
     }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-        return AS
+        return client.channels.get(AS)
     }else if(link == 'OCE' || link == 'SYD') {
-        return OCE
+        return client.channels.get(OCE)
     }else {
         return -1
     }
@@ -82,13 +84,18 @@ function getChannel(link) {
 function getLinkInfo(link){
     return new Promise((resolve, reject) =>{
         link = link.split("=")[1]
-        if(!link) throw new Error(false);
+        
+        if(!link)  return reject(new Error(false))
         else{
+            
             const request = require("request")
-            request({uri:`https://matchmaker.krunker.io/game-info?game=${link}`}, (err, res, json) =>{
-                json = JSON.parse(json)
+            request({uri:`https://matchmaker.krunker.io/game-info?game=${link}`}, (err, res, body) =>{
+                json = JSON.parse(body)
+                
                 if(err || json.error){
-                    throw new Error('404', err)
+                    
+                    console.log(json)
+                    return reject(utils.Error('404', err))
                 }
                 else{
                 let colour
@@ -117,6 +124,7 @@ function getLinkInfo(link){
                     party: json[4].cs,
                     color: colour
                 }
+                
                 return resolve(game)
                 }
             })
