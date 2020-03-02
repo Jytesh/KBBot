@@ -22,7 +22,7 @@ module.exports.run = async(client,m)=>{
                 .setTitle(m.member.getDisplayName + ' is looking to party! :tata:')
                 .setDescription(description)
                 .setAuthor(m.member.getDisplayName + ' (' + m.author.tag + ')', m.author.displayAvatarURL)
-                .setField('Link: ', link)
+                .addField('Link: ', link)
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
