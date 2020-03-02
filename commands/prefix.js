@@ -17,7 +17,7 @@ module.exports.run = (client,message)=>{
             .setTitle('Success!')
             .setFooter('KrunkerLFG')
             .setTimestamp()
-            .setColor(0x49C4EF)
+            .setColor("GREEN")
             .setDescription('Changed prefix from **' + oldPrefix + '** to **' + args[0] + '**')
         message.channel.send(eb)
     }
