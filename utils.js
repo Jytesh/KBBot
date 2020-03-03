@@ -54,8 +54,8 @@ module.exports = {
         .setColor(color)
         .setTimestamp()
         .setFooter("Krunker LFG")
-
-        m.channel.send(eb)
+        if(m.channel)m.channel.send(eb)
+        else return eb
     },
     getuser : (id)=>{
         if(id == "0") return "Everyone"
