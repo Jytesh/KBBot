@@ -1,5 +1,5 @@
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
@@ -22,21 +22,25 @@ module.exports.run = async(client,message)=>{
         return;
     }
     switch(c){
-        case 1: //Prefix
-        {
-            if(args.length != 1) {
+        case "1": //Prefix
+        {   
+            if(args.length == 0) {
                 utils.Error(message,"100")
             }else {
                 oldPrefix = prefix
-                prefix = await db.set(message.guild.id,{"PREFIX" : args[0]}).PREFIX
+                newPrefix = prefixParse(args.join(" "))
+                if(!args.join(" ").includes("`")){
+                prefix = await db.set(message.guild.id,{"PREFIX" : newPrefix}).PREFIX
                 let eb = new MessageEmbed()
                     .setTitle('Success!')
                     .setFooter('KrunkerLFG')
                     .setTimestamp()
                     .setColor("GREEN")
-                    .setDescription('Changed prefix from **' + oldPrefix + '** to **' + args[0] + '**')
+                    .setDescription('Changed prefix from **' + oldPrefix + '** to **' + newPrefix + '**')
                 message.channel.send(eb)
-            } 
+            }else{
+                let eb = await utils.ErrorMsg(message,"Prefix can't contain \\\``\`")
+            }} 
             break;
         }
         default:{
@@ -44,6 +48,10 @@ module.exports.run = async(client,message)=>{
         }
         
     }
+}
+function prefixParse(text){
+    if(text.includes("`")) return "-"
+    else return text
 }
 module.exports.config = {
     name: "config",
