@@ -1,14 +1,14 @@
 const {MessageEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("./config.json")
-
-channels = {
+const db = require("./json.db")
+/*channels = {
     NA : "678830555764228125",
     EU : "678830571547262976",
     OCE : "678830581512929331",
     AS : "678830592946602002",
     RNK : "681049997885833239"
-}
+}*/
 
 gamemodes = {
     ffa: '#66de5b',
@@ -34,7 +34,7 @@ require("fs").readdir("./errors", (err, files) => {
     });
 var autodel = false;
 module.exports = {
-    channels,
+    //channels,
     gamemodes,
     ErrorMsg : async function(message,text){
         const eb = new MessageEmbed()
@@ -76,4 +76,16 @@ module.exports = {
         }
         return ret
     },
+    setNA(g,id) {
+        db.set(g,{NA : id})
+    },
+    setOCE(g,id) {
+        db.set(g,{OCE : id})
+    },
+    setEU(g,id) {
+        db.set(g,{EU : id})
+    },
+    setAS(g,id) {
+        db.set(g,{AS : id})
+    }
 }

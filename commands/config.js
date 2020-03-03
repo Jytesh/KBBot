@@ -15,7 +15,7 @@ module.exports.run = async(client,message)=>{
     if(!c) {
         embed = utils.embed("Config Window","`config [config-id] [arguments]`","GOLD")
         embed.addField("Prefix","Config ID: `1`\n*1 Argument taken\n*Used to change prefix")
-        embed.addField("Channel","Config ID: `2`\n*2 Arguments taken\n*Used to change the LFG Channel\n`config 1 <#Channel_Mention> <REGION>`\n*Valid regions are \n> `NA`\n> `EU`\n> `OCE`\n> `AS`\n> `RNK` for ranked-channel")
+        embed.addField("Channel","Config ID: `2`\n*2 Arguments taken\n*Used to change the LFG Channel\n`config 2 <#Channel_Mention> <REGION>`\n*Valid regions are \n> `NA`\n> `EU`\n> `OCE`\n> `AS`\n> `RNK` for ranked-channel")
         embed.addField("Role","Config ID: `3`\n*Upto 10 arguments\n*All arguments should be role mentions, or role IDs.\n*Used to add roles to bot-commander(Can use config command)")
 
         message.channel.send(embed)
@@ -39,14 +39,93 @@ module.exports.run = async(client,message)=>{
                     .setDescription('Changed prefix from **' + oldPrefix + '** to **' + newPrefix + '**')
                 message.channel.send(eb)
             }else{
-                let eb = await utils.ErrorMsg(message,"Prefix can't contain \\\``\`")
+                utils.ErrorMsg(message,"Prefix can't contain \\\``\`")
             }} 
             break;
         }
+        case "2":{
+            let args = message.content.split(' ')
+            command = args.shift()
+            c = args.shift()
+            if(args.length != 2) {
+                utils.Error(message,"100")
+                return
+            }else {
+                var id
+                var region
+                if(isChannel(args[0], message) && isRegion(args[1])) {
+                    id = args[0].substring(args[0].indexOf('<#') + 2, args[0].indexOf('>'))
+                    region = args[1]
+                }else if(isChannel(args[1], message) && isRegion(args[0])) {
+                    id = args[0].substring(args[0].indexOf('<#') + 2, args[0].indexOf('>'))
+                    region = args[1]
+                }else {
+                    utils.Error(message,"100")
+                    return
+                }
+
+                region = region.toUpperCase()
+
+                let eb = new MessageEmbed()
+                    .setTitle('Sucessfully set ')
+                    .setFooter('KrunkerLFG')
+                    .setTimestamp()
+                    .setColor(0x49C4EF)
+                    .setDescription('<#' + id + '> as LFG channel for ' + region)
+                
+                switch(region) {
+                    case 'NA':
+                        utils.setNA(message.guild.id,id)
+                        break
+                    case 'OCE':
+                        utils.setOCE(message.guild.id,id)
+                        break
+                    case 'EU':
+                        utils.setEU(message.guild.id,id)
+                        break
+                    case 'AS':
+                        utils.setAS(message.guild.id,id)
+                        break
+                }
+                
+                message.channel.send(eb)
+                return
+            }
+                }
+
         default:{
+            console.log("Invalid Confog")
             return utils.Error(message,100)
         }
         
+    }
+}
+function isChannel(arg, message) {
+    if(arg.includes('<#') && arg.includes('>') && arg.indexOf('<#') < arg.indexOf('>')) {
+        let id = arg.substring(arg.indexOf('<#') + 2, arg.indexOf('>'))
+        if(message.guild.channels.cache.has(id)) {
+            return true
+        }else {
+            return false
+        }
+    }else {
+        return false
+    }
+}
+
+function isRegion(arg) {
+    arg = arg.toUpperCase()
+    switch(arg) {
+        case 'NA':
+            return true
+        case 'OCE':
+            return true
+        case 'EU':
+            return true
+        case 'AS': 
+            return true
+        default:
+            return false
     }
 }
 function prefixParse(text){
