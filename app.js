@@ -39,5 +39,6 @@ fs.readdir("./commands/", (err, files) => {
       })
     });
 });
-//Loggin In
 
+client.login(config.token);
+module.exports.client = client;
