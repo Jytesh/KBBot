@@ -39,6 +39,13 @@ fs.readdir("./commands/", (err, files) => {
       })
     });
 });
-
-client.login(config.token);
+//Logging In
+require("dotenv").config()
+if(process.argv[2] === 'dev'){
+    config.token = process.env.TOKEN
+}else if(process.argv[2] === 'test' || !process.argv[2]){
+    config.token = process.env.TEST_TOKEN
+    
+}
+client.login(config.token)
 module.exports.client = client;
