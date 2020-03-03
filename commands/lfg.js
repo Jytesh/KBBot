@@ -2,7 +2,7 @@ const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
-const {NA,EU,OCE,AS} = require("../utils.js").channels
+const {NA,EU,OCE,AS,RNK} = require("../utils.js").channels
 const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
 module.exports.run = async(client,message)=>{
@@ -13,7 +13,7 @@ module.exports.run = async(client,message)=>{
         utils.Error(message,"100")
     }else{
         link = args.shift()
-        if(args.length != 0){
+        if(args.length > 0){
             description = args.join(" ")
         }
         
@@ -21,39 +21,37 @@ module.exports.run = async(client,message)=>{
             let eb = new MessageEmbed()
                 .setTitle(message.author.username + ' is looking to party! :tada:')
                 .setDescription(description)
-                .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
+                .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
                 .addField('Link: ', link)
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
-                await getLinkInfo(link).then(async game => {
-                    channel = await getChannel(link)
-                    eb.setColor(game.color)
-                        .addField('Region: ', game.region, true)
-                        .addField('Players: ', game.players, true)
-                        .addField('Mode: ', game.mode.toUpperCase(), true)
-                        .addField('Map: ', game.map, true)
-                    if(game.custom) {
-                        eb.addField('Custom? ', 'Yes', true)
-                    }else {
-                        eb.addField('Custom? ', 'No', true)
-                    }
-                    channel.send(eb)
-                }).catch(error => {
-                console.log(error)
-                utils.Error(message,"404")
-                })
-            }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                channel = await getChannel(true)
-            if(channel != -1) {
-
-                    eb.setColor(party)
-                    if(args[0])eb.addField('Region: ' , args.shift())
-                    if(args)eb.setDescription(args.join(" "))
-                    channel.send(eb);
+                channel = getChannel(link)
+                if(channel != -1) {
+                    await getLinkInfo(link,message).then(game => {
+                        eb.setColor(game.color)
+                            .addField('Region: ', game.region, true)
+                            .addField('Players: ', game.players, true)
+                            if(game.custom) {
+                                eb.addField('Custom? ', 'Yes', true)
+                            }else {
+                                eb.addField('Custom? ', 'No', true)
+                            }
+                        eb.addField('Mode: ', game.mode.toUpperCase(), true)
+                            .addField('Map: ', game.map, true)
+                        channel.send(eb)
+                    }).catch(error => {
+                        console.log(error)
+                    })
                 }else {
-                    utils.Error(message, '102')
+                    utils.Error(message, '103')
                 }
+            }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
+                channel = client.channels.get(RNK)
+
+                eb.setColor(party)
+
+                channel.send(eb)
             }
         }else{
             utils.Error(message,"101") // Error for non-krunker links
@@ -64,32 +62,28 @@ module.exports.run = async(client,message)=>{
 
 async function getChannel(link) {
     const client = require("../app").client
-    if(link !== true){
-    if(link.includes('https://')) {
-        link = link.split("=")[1].split(":")[0]
-
-    }
-    let channel
-    if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
-        channel = await client.channels.fetch(NA)
-    }else if(link == 'EU' || link == 'FRA') {
-        channel = await client.channels.fetch(EU)
-    }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-        channel = await client.channels.fetch(AS)
-    }else if(link == 'OCE' || link == 'SYD') {
-        channel = await client.channels.fetch(OCE)
-    }else {
-        return void 0
-    }
-    return channel
-    //return await client.channels.resolve(channel)
-    }else{
-        channel = require("../utils").channels.RNK
-        return await client.channels.resolve(channel)
+    if(link.includes('https://krunker.io/')) {
+        if(link.split('=')[1].includes(':')) {
+            link = link.split("=")[1].split(":")[0]
+            
+        let channel
+        if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
+             channel = await client.channels.fetch(NA)
+        }else if(link == 'EU' || link == 'FRA') {
+           channel = await client.channels.fetch(EU)
+        }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+            channel = await client.channels.fetch(AS)
+        }else if(link == 'OCE' || link == 'SYD') {
+            channel = await client.channels.fetch(OCE)
+        }else {
+             return void 0
+        }
+        return channel
+        }
     }
 }
 
-function getLinkInfo(link){
+function getLinkInfo(link,message){
     return new Promise((resolve, reject) =>{
         link = link.split("=")[1]
         
