@@ -1,5 +1,4 @@
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {Client,MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
@@ -25,7 +24,7 @@ module.exports.run = (client,message)=>{
 
         region = region.toUpperCase()
 
-        let eb = new Discord.RichEmbed()
+        let eb = new MessageEmbed()
             .setTitle('Sucessfully set ')
             .setFooter('KrunkerLFG')
             .setTimestamp()

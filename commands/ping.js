@@ -1,17 +1,17 @@
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
 module.exports.run = (client,message)=>{
-    ping = client.ping
-    let eb = new RichEmbed()
+    ping = client.ws.ping
+    let eb = new MessageEmbed()
         .setTitle("Pong!")
         .setDescription(Math.round(ping) + " ms")
         .setFooter('KrunkerLFG')
         .setTimestamp()
-        .setColor(0x49C4EF)
+        .setColor("BLURPLE")
     message.channel.send(eb)
 }
 module.exports.config = {

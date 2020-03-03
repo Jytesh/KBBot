@@ -1,5 +1,4 @@
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
@@ -19,7 +18,7 @@ module.exports.run = async(client,message)=>{
         }
         
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
-            let eb = new Discord.RichEmbed()
+            let eb = new MessageEmbed()
                 .setTitle(message.author.username + ' is looking to party! :tada:')
                 .setDescription(description)
                 .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
@@ -27,7 +26,6 @@ module.exports.run = async(client,message)=>{
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
-                
                 channel = getChannel(link)
                 if(channel != -1) {
                     await getLinkInfo(link,message).then(game => {
@@ -62,24 +60,26 @@ module.exports.run = async(client,message)=>{
     }
 }
 
-function getChannel(link) {
+async function getChannel(link) {
     const client = require("../app").client
     if(link.includes('https://krunker.io/')) {
         if(link.split('=')[1].includes(':')) {
             link = link.split("=")[1].split(":")[0]
             
-            if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
-                return client.channels.get(NA)
-            }else if(link == 'EU' || link == 'FRA') {
-                return client.channels.get(EU)
-            }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-                return client.channels.get(AS)
-            }else if(link == 'OCE' || link == 'SYD') {
-                return client.channels.get(OCE)
-            }
-            return -1
+        let channel
+        if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
+             channel = await client.channels.fetch(NA)
+        }else if(link == 'EU' || link == 'FRA') {
+           channel = await client.channels.fetch(EU)
+        }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+            channel = await client.channels.fetch(AS)
+        }else if(link == 'OCE' || link == 'SYD') {
+            channel = await client.channels.fetch(OCE)
+        }else {
+             return void 0
         }
-        return -1
+        return channel
+        }
     }
 }
 
@@ -93,41 +93,43 @@ function getLinkInfo(link,message){
             const fetch = require("node-fetch")
             fetch(`https://matchmaker.krunker.io/game-info?game=${link}`).then(res => res.json())
             .then(json => {
-                if(json[0]) {
-                    let colour
-                    switch(json[0].split(':')[0]) {
-                        case "ffa":
-                            colour = ffa
-                            break
-                        case "tdm":
-                            colour = tdm
-                            break
-                        case "ctf":
-                            colour = ctf
-                            break
-                        case "point":
-                            colour = point
-                            break
-                        default:
-                            colour = other
-                            break;
-                    }
-                    const game = {
-                        region : json[0].split(":")[0],
-                        players: `${json[2]}/${json[3]}`,
-                        mode: json[4].i.split('_')[0],
-                        map: json[4].i.split("_")[1],
-                        party: json[4].cs,
-                        color: colour
-                    }
+                if(!json.error){
                     
-                    return resolve(game)
+                //json = JSON.parse(body)
+                let colour
+                switch(json[0].split(':')[0]) {
+                    case "ffa":
+                        colour = ffa
+                        break
+                    case "tdm":
+                        colour = tdm
+                        break
+                    case "ctf":
+                        colour = ctf
+                        break
+                    case "point":
+                        colour = point
+                        break
+                    default:
+                        colour = other
+                        break;
                 }
-                return reject(utils.Error(message, '404'))
+                const game = {
+                    region : json[0].split(":")[0],
+                    players: `${json[2]}/${json[3]}`,
+                    mode: json[4].i.split('_')[0],
+                    map: json[4].i.split("_")[1],
+                    party: json[4].cs,
+                    color: colour
+                }
+                
+                return resolve(game)
+                
+            }else{
+                return reject(new Error('404',json))}
             }).catch(error => {
                 console.log(error)
-                return reject(utils.Error(message, '404'))
-            })
+            return reject(new Error('404', error))})
         }
     })
 }
