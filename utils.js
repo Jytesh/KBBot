@@ -36,11 +36,11 @@ var autodel = false;
 module.exports = {
     channels,
     gamemodes,
-    ErrorMsg : function(message,text){
+    ErrorMsg : async function(message,text){
         const eb = new MessageEmbed()
             .setTitle("Error!")
             .setColor("RED")
-            .setDescription(text +` \n Try \`${config.prefix}help\``)
+            .setDescription(text +` \n Try \`${await require("./json.db").prefix(message.guild.id)}help\``)
             .setFooter("Krunker LFG • ID :"+message.author.id)
             .setTimestamp()
 
