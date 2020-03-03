@@ -1,4 +1,4 @@
-const {Client,RichEmbed} = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const client = require("../app.js").client
 
 module.exports = (client)=>{ 

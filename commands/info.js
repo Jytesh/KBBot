@@ -2,13 +2,12 @@
 //stfu Jyt
 
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
 module.exports.run = (client,message)=>{
-    const eb = new RichEmbed()
+    const eb = new MessageEmbed()
 		.setTitle('Info:')
 		.setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
         .setColor(0x49C4EF)
