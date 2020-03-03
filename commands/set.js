@@ -62,7 +62,7 @@ module.exports.help = {
 function isChannel(arg, message) {
     if(arg.includes('<#') && arg.includes('>') && arg.indexOf('<#') < arg.indexOf('>')) {
         let id = arg.substring(arg.indexOf('<#') + 2, arg.indexOf('>'))
-        if(message.guild.channels.has(id)) {
+        if(message.guild.channels.cache.has(id)) {
             return true
         }else {
             return false

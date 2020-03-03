@@ -26,7 +26,7 @@ module.exports.run = async(client,message)=>{
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
-                channel = getChannel(link)
+                channel = await getChannel(link)
                 if(channel != -1) {
                     await getLinkInfo(link,message).then(game => {
                         eb.setColor(game.color)
@@ -39,6 +39,7 @@ module.exports.run = async(client,message)=>{
                             }
                         eb.addField('Mode: ', game.mode.toUpperCase(), true)
                             .addField('Map: ', game.map, true)
+                            
                         channel.send(eb)
                     }).catch(error => {
                         console.log(error)
