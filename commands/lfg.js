@@ -3,7 +3,7 @@ const Discord = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 
-const {NA,EU,OCE,AS} = require("../utils.js").channels
+const {NA,EU,OCE,AS,RNK} = require("../utils.js").channels
 const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
 module.exports.run = async(client,message)=>{
@@ -14,7 +14,7 @@ module.exports.run = async(client,message)=>{
         utils.Error(message,"100")
     }else{
         link = args.shift()
-        if(args.length != 0){
+        if(args.length > 0){
             description = args.join(" ")
         }
         
@@ -22,7 +22,7 @@ module.exports.run = async(client,message)=>{
             let eb = new Discord.RichEmbed()
                 .setTitle(message.author.username + ' is looking to party! :tada:')
                 .setDescription(description)
-                .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
+                .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.displayAvatarURL)
                 .addField('Link: ', link)
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
@@ -32,28 +32,23 @@ module.exports.run = async(client,message)=>{
                     eb.setColor(game.color)
                         .addField('Region: ', game.region, true)
                         .addField('Players: ', game.players, true)
-                        .addField('Mode: ', game.mode.toUpperCase(), true)
+                        if(game.custom) {
+                            eb.addField('Custom? ', 'Yes', true)
+                        }else {
+                            eb.addField('Custom? ', 'No', true)
+                        }
+                    eb.addField('Mode: ', game.mode.toUpperCase(), true)
                         .addField('Map: ', game.map, true)
-                    if(game.custom) {
-                        eb.addField('Custom? ', 'Yes', true)
-                    }else {
-                        eb.addField('Custom? ', 'No', true)
-                    }
                     channel.send(eb)
                 }).catch(error => {
                 console.log(error)
                 })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                if(getChannel(link) > 0) {
-                    channel = getChannel(args[0])
+                channel = client.channels.get(RNK)
 
-                    eb.setColor(party)
-                        .addField('Region: ' + args[0], false)
+                eb.setColor(party)
 
-                    channel.message(eb);
-                }else {
-                    utils.Error(message, '102')
-                }
+                channel.send(eb)
             }
         }else{
             utils.Error(message,"101") // Error for non-krunker links
@@ -66,7 +61,6 @@ function getChannel(link) {
     const client = require("../app").client
     if(link.includes('https://')) {
         link = link.split("=")[1].split(":")[0]
-
     }
     if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
         return client.channels.get(NA)
