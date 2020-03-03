@@ -2,7 +2,7 @@ const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 const db =require("../json.db")
-const {NA,EU,OCE,AS} = require("../utils.js").channels
+//const {NA,EU,OCE,AS} = require("../utils.js").channels
 const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
 module.exports.run = async(client,message)=>{
@@ -17,7 +17,9 @@ module.exports.run = async(client,message)=>{
         if(args.length != 0){
             description = args.join(" ")
         }
-        
+        ch = await VerifyChannel(link,message)
+        //console.log(ch)
+        if(ch === true){ //Checks whether set command has been used, and all channels have been declared
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
             let eb = new MessageEmbed()
                 .setTitle(message.author.username + ' is looking to party! :tada:')
@@ -28,7 +30,7 @@ module.exports.run = async(client,message)=>{
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
                 await getLinkInfo(link).then(async game => {
-                    channel = await getChannel(link)
+                    channel = await getChannel(link,message)
                     eb.setColor(game.color)
                         .addField('Region: ', game.region, true)
                         .addField('Players: ', game.players, true)
@@ -45,7 +47,7 @@ module.exports.run = async(client,message)=>{
                 utils.Error(message,"404")
                 })
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                channel = await getChannel(true)
+                channel = await getChannel(true,message)
             if(channel != -1) {
 
                     eb.setColor(party)
@@ -60,10 +62,12 @@ module.exports.run = async(client,message)=>{
             utils.Error(message,"101") // Error for non-krunker links
             return
         }
+    }else{
+        utils.Error(message,104)
     }
-}
+}}
 
-async function getChannel(link) {
+async function getChannel(link,message) {
     const client = require("../app").client
     if(link !== true){
     if(link.includes('https://')) {
@@ -72,13 +76,13 @@ async function getChannel(link) {
     }
     let channel
     if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
-        channel = await client.channels.fetch(NA)
+        channel = await client.channels.fetch(await db.get(message.guild.id,NA))
     }else if(link == 'EU' || link == 'FRA') {
-        channel = await client.channels.fetch(EU)
+        channel = await client.channels.fetch(await db.get(message.guild.id,EU))
     }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-        channel = await client.channels.fetch(AS)
+        channel = await client.channels.fetch(await db.get(message.guild.id,AS))
     }else if(link == 'OCE' || link == 'SYD') {
-        channel = await client.channels.fetch(OCE)
+        channel = await client.channels.fetch(await db.get(message.guild.id,OCE))
     }else {
         return void 0
     }
@@ -139,6 +143,54 @@ function getLinkInfo(link){
             return reject(new Error('404', error))})
         }
     })
+}
+async function VerifyChannel(link,message){
+    let region = link.split("=")
+    if(region[1]){
+        region = region[1].split(":")
+        if(region[0]){
+            region = region[0]
+            if(isRegion(region)){
+                link = region
+                if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
+                    region = "NA"
+                }else if(link == 'EU' || link == 'FRA') {
+                    region = "EU"
+                }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+                    region = "AS"
+                }else if(link == 'OCE' || link == 'SYD') {
+                    region = "OCE"
+                }
+                c = await db.get(message.guild.id,region)
+                if(c){
+                    return true
+                }else{
+                    return false
+                }
+            }else{
+
+            }
+        }else{
+            return 1
+        }
+    }else{
+        return 1
+    }
+}
+function isRegion(arg) {
+    arg = arg.toUpperCase()
+    switch(arg) {
+        case 'NA':
+            return true
+        case 'OCE':
+            return true
+        case 'EU':
+            return true
+        case 'AS': 
+            return true
+        default:
+            return false
+    }
 }
 module.exports.config = {
     name : "lfg",
