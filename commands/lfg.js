@@ -27,22 +27,27 @@ module.exports.run = async(client,message)=>{
                 .setFooter('KrunkerLFG')
                 .setTimestamp()
             if(link.indexOf("https://krunker.io/?game=") == 0) {
-                await getLinkInfo(link).then(game => {
-                    channel = getChannel(link)
-                    eb.setColor(game.color)
-                        .addField('Region: ', game.region, true)
-                        .addField('Players: ', game.players, true)
-                        if(game.custom) {
-                            eb.addField('Custom? ', 'Yes', true)
-                        }else {
-                            eb.addField('Custom? ', 'No', true)
-                        }
-                    eb.addField('Mode: ', game.mode.toUpperCase(), true)
-                        .addField('Map: ', game.map, true)
-                    channel.send(eb)
-                }).catch(error => {
-                console.log(error)
-                })
+                
+                channel = getChannel(link)
+                if(channel != -1) {
+                    await getLinkInfo(link,message).then(game => {
+                        eb.setColor(game.color)
+                            .addField('Region: ', game.region, true)
+                            .addField('Players: ', game.players, true)
+                            if(game.custom) {
+                                eb.addField('Custom? ', 'Yes', true)
+                            }else {
+                                eb.addField('Custom? ', 'No', true)
+                            }
+                        eb.addField('Mode: ', game.mode.toUpperCase(), true)
+                            .addField('Map: ', game.map, true)
+                        channel.send(eb)
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                }else {
+                    utils.Error(message, '103')
+                }
             }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
                 channel = client.channels.get(RNK)
 
@@ -59,23 +64,26 @@ module.exports.run = async(client,message)=>{
 
 function getChannel(link) {
     const client = require("../app").client
-    if(link.includes('https://')) {
-        link = link.split("=")[1].split(":")[0]
-    }
-    if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
-        return client.channels.get(NA)
-    }else if(link == 'EU' || link == 'FRA') {
-        return client.channels.get(EU)
-    }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-        return client.channels.get(AS)
-    }else if(link == 'OCE' || link == 'SYD') {
-        return client.channels.get(OCE)
-    }else {
+    if(link.includes('https://krunker.io/')) {
+        if(link.split('=')[1].includes(':')) {
+            link = link.split("=")[1].split(":")[0]
+            
+            if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
+                return client.channels.get(NA)
+            }else if(link == 'EU' || link == 'FRA') {
+                return client.channels.get(EU)
+            }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+                return client.channels.get(AS)
+            }else if(link == 'OCE' || link == 'SYD') {
+                return client.channels.get(OCE)
+            }
+            return -1
+        }
         return -1
     }
 }
 
-function getLinkInfo(link){
+function getLinkInfo(link,message){
     return new Promise((resolve, reject) =>{
         link = link.split("=")[1]
         
@@ -85,39 +93,41 @@ function getLinkInfo(link){
             const fetch = require("node-fetch")
             fetch(`https://matchmaker.krunker.io/game-info?game=${link}`).then(res => res.json())
             .then(json => {
-                //json = JSON.parse(body)
-                let colour
-                switch(json[0].split(':')[0]) {
-                    case "ffa":
-                        colour = ffa
-                        break
-                    case "tdm":
-                        colour = tdm
-                        break
-                    case "ctf":
-                        colour = ctf
-                        break
-                    case "point":
-                        colour = point
-                        break
-                    default:
-                        colour = other
-                        break;
+                if(json[0]) {
+                    let colour
+                    switch(json[0].split(':')[0]) {
+                        case "ffa":
+                            colour = ffa
+                            break
+                        case "tdm":
+                            colour = tdm
+                            break
+                        case "ctf":
+                            colour = ctf
+                            break
+                        case "point":
+                            colour = point
+                            break
+                        default:
+                            colour = other
+                            break;
+                    }
+                    const game = {
+                        region : json[0].split(":")[0],
+                        players: `${json[2]}/${json[3]}`,
+                        mode: json[4].i.split('_')[0],
+                        map: json[4].i.split("_")[1],
+                        party: json[4].cs,
+                        color: colour
+                    }
+                    
+                    return resolve(game)
                 }
-                const game = {
-                    region : json[0].split(":")[0],
-                    players: `${json[2]}/${json[3]}`,
-                    mode: json[4].i.split('_')[0],
-                    map: json[4].i.split("_")[1],
-                    party: json[4].cs,
-                    color: colour
-                }
-                
-                return resolve(game)
-                
+                return reject(utils.Error(message, '404'))
             }).catch(error => {
                 console.log(error)
-            return reject(utils.Error('404', err))})
+                return reject(utils.Error(message, '404'))
+            })
         }
     })
 }
