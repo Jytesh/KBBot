@@ -5,7 +5,7 @@ const config = require("../config.json")
 const utils = require("../utils")
 const db = require("../json.db")
 module.exports.run = async(client,message)=>{
-    if(rolecheck(message.member.roles,message.guild.id)){ //message.member.permissions.flags === "ADMINISTRATOR" || 
+    if(message.member.permissions.has("MANAGE_SERVER")|| await rolecheck(message.member.roles,message.guild.id)){ 
     let prefix = await db.prefix(message.guild.id)
     fullcommand = message.content.substring(prefix.length)
     splitCommand = fullcommand.split(" ")
@@ -101,19 +101,30 @@ module.exports.run = async(client,message)=>{
             roles___ = await db.get(message.guild.id,"C_ROLES")
             roles__ = new Set(roles.concat(roles_)) //Prevents duplication
             arr =Array.from(roles__)
-            roles___.filter(value => arr.includes(value))
+            arr_=roles___.filter(value => arr.includes(value))
+            arr.concat(roles___)
+            if(arr_){for(el in arr_){
+                delete arr[el]
+            }}
             array = await db.set(message.guild.id,{"C_ROLES":arr})
-            console.log(array)
-            let eb = new MessageEmbed()
+            let eb
+            if(typeof array.key.C_ROLES[0] === "string"){eb = new MessageEmbed()
                     .setTitle('Sucessfully set ')
                     .setFooter('KrunkerLFG')
                     .setTimestamp()
                     .setColor(0x49C4EF)
-                    .setDescription()
+                    .setDescription("New list of roles allowed to use `config`\n> <@&"+array.key.C_ROLES.join(">\n> <@&")+">")
+            
 
-        }
+            }else{
+            eb = new MessageEmbed()
+                .setTitle('Sucessfully removed all roles from using config command.**Anyone can use the config commands now**')
+                .setFooter('KrunkerLFG')
+                .setTimestamp()
+                .setColor("RED")
+            }return message.channel.send(eb)}
         default:{   
-            console.log("Invalid Confog")
+            console.log("Invalid Config")
             return utils.Error(message,100)
         }
         
@@ -157,12 +168,12 @@ function prefixParse(text){
 }
 async function rolecheck(roles,id){
     roles_ = await db.get(id,"C_ROLES")
-    console.log(roles_)
     if(!roles_) return true
-    if(roles_){
+    else if(roles_){
         roles = roles.cache.keyArray()
-        for(role in roles){
-            for(role_ in roles_){
+        for(role of roles){
+            for(role_ of roles_){
+                
                 if(role == role_) return true
             }
         }
