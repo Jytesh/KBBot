@@ -18,7 +18,6 @@ module.exports.run = async(client,message)=>{
             description = args.join(" ")
         }
         ch = await VerifyChannel(link,message)
-        //console.log(ch)
         if(ch === true){ //Checks whether set command has been used, and all channels have been declared
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
             let eb = new MessageEmbed()
@@ -57,6 +56,9 @@ module.exports.run = async(client,message)=>{
                 }else {
                     utils.Error(message, '102')
                 }
+            }else{
+                utils.Error(message,"101") // Error for non-krunker links
+                return
             }
         }else{
             utils.Error(message,"101") // Error for non-krunker links
@@ -76,22 +78,24 @@ async function getChannel(link,message) {
     }
     let channel
     if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
-        channel = await client.channels.fetch(await db.get(message.guild.id,NA))
+        channel = await client.channels.fetch(await db.get(message.guild.id,"NA"))
     }else if(link == 'EU' || link == 'FRA') {
-        channel = await client.channels.fetch(await db.get(message.guild.id,EU))
+        channel = await client.channels.fetch(await db.get(message.guild.id,"EU"))
     }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
-        channel = await client.channels.fetch(await db.get(message.guild.id,AS))
+        channel = await client.channels.fetch(await db.get(message.guild.id,"AS"))
     }else if(link == 'OCE' || link == 'SYD') {
-        channel = await client.channels.fetch(await db.get(message.guild.id,OCE))
-    }else {
+        channel = await client.channels.fetch(await db.get(message.guild.id,"OCE"))
+    }
+    else {
         return void 0
     }
     return channel
     //return await client.channels.resolve(channel)
     }else{
-        channel = require("../utils").channels.RNK
-        return await client.channels.resolve(channel)
+        channel = client.channels.fetch(await db.get(message.guild.id,"RNK"))
+        return channel//await client.channels.resolve(channel)
     }
+    
 }
 
 function getLinkInfo(link){
@@ -145,13 +149,14 @@ function getLinkInfo(link){
     })
 }
 async function VerifyChannel(link,message){
+    if(link.includes("game")){
     let region = link.split("=")
     if(region[1]){
         region = region[1].split(":")
+        
         if(region[0]){
             region = region[0]
-            if(isRegion(region)){
-                link = region
+            link = region
                 if(link=='NA' || link=='SV' || link=='MIA' || link=='NY') {
                     region = "NA"
                 }else if(link == 'EU' || link == 'FRA') {
@@ -161,6 +166,9 @@ async function VerifyChannel(link,message){
                 }else if(link == 'OCE' || link == 'SYD') {
                     region = "OCE"
                 }
+            if(isRegion(region)){
+                
+                console.log(c)
                 c = await db.get(message.guild.id,region)
                 if(c){
                     return true
@@ -176,9 +184,14 @@ async function VerifyChannel(link,message){
     }else{
         return 1
     }
-}
+}else if(link.includes("party=")){
+    c = await db.get(message.guild.id,"RNK")
+    if(c)return true
+    else return false
+}}
 function isRegion(arg) {
     arg = arg.toUpperCase()
+    console.log(arg)
     switch(arg) {
         case 'NA':
             return true
@@ -187,6 +200,8 @@ function isRegion(arg) {
         case 'EU':
             return true
         case 'AS': 
+            return true
+        case "RNK":
             return true
         default:
             return false
