@@ -5,6 +5,7 @@ const config = require("../config.json")
 const utils = require("../utils")
 const db = require("../json.db")
 module.exports.run = async(client,message)=>{
+    if(rolecheck(message.member.roles,message.guild.id)){ //message.member.permissions.flags === "ADMINISTRATOR" || 
     let prefix = await db.prefix(message.guild.id)
     fullcommand = message.content.substring(prefix.length)
     splitCommand = fullcommand.split(" ")
@@ -72,7 +73,7 @@ module.exports.run = async(client,message)=>{
                     .setTimestamp()
                     .setColor(0x49C4EF)
                     .setDescription('<#' + id + '> as LFG channel for ' + region)
-                
+
                 switch(region) {
                     case 'NA':
                         utils.setNA(message.guild.id,id)
@@ -86,20 +87,40 @@ module.exports.run = async(client,message)=>{
                     case 'AS':
                         utils.setAS(message.guild.id,id)
                         break
+                    case 'RNK':
+                        db.set(message.guild.id,{"RNK" : id})
                 }
                 
                 message.channel.send(eb)
                 return
             }
                 }
+        case "3":{
+            let roles = message.mentions.roles.keyArray()
+            roles_ = args.join(" ").replace("<@&","").replace(">","").split(" ")
+            roles___ = await db.get(message.guild.id,"C_ROLES")
+            roles__ = new Set(roles.concat(roles_)) //Prevents duplication
+            arr =Array.from(roles__)
+            roles___.filter(value => arr.includes(value))
+            array = await db.set(message.guild.id,{"C_ROLES":arr})
+            console.log(array)
+            let eb = new MessageEmbed()
+                    .setTitle('Sucessfully set ')
+                    .setFooter('KrunkerLFG')
+                    .setTimestamp()
+                    .setColor(0x49C4EF)
+                    .setDescription()
 
-        default:{
+        }
+        default:{   
             console.log("Invalid Confog")
             return utils.Error(message,100)
         }
         
     }
-}
+}else{
+    return utils.Error(message,200)
+}}
 function isChannel(arg, message) {
     if(arg.includes('<#') && arg.includes('>') && arg.indexOf('<#') < arg.indexOf('>')) {
         let id = arg.substring(arg.indexOf('<#') + 2, arg.indexOf('>'))
@@ -124,6 +145,8 @@ function isRegion(arg) {
             return true
         case 'AS': 
             return true
+        case 'RNK':
+            return true
         default:
             return false
     }
@@ -131,6 +154,20 @@ function isRegion(arg) {
 function prefixParse(text){
     if(text.includes("`")) return "-"
     else return text
+}
+async function rolecheck(roles,id){
+    roles_ = await db.get(id,"C_ROLES")
+    console.log(roles_)
+    if(!roles_) return true
+    if(roles_){
+        roles = roles.cache.keyArray()
+        for(role in roles){
+            for(role_ in roles_){
+                if(role == role_) return true
+            }
+        }
+        return false
+    }
 }
 module.exports.config = {
     name: "config",
