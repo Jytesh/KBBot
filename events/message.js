@@ -13,6 +13,8 @@ module.exports = async (client, message) => {
         if(commandfile) commandfile.run(client, message, args); // And if it finds the command, it will run it.
     }
     if(message.mentions.users.first() == client.user){
-        require("../utils").embed(message,`\`${prefix}\` is my prefix, try \`${prefix}help\`.`)
+        console.log(message.cleanContent)
+        if(message.cleanContent.startsWith("@"+client.user.username)) require("../utils").embed(message,`\`${prefix}\` is my prefix, try \`${prefix}help\`.`)
+        
     }
 };
