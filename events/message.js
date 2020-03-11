@@ -14,8 +14,7 @@ module.exports = async (client, message) => {
             }
             if(message.mentions.users.first() == client.user){
                 console.log(message.cleanContent)
-                if(message.cleanContent.startsWith("@"+client.user.username)) require("../utils").embed(message,`\`${prefix}\` is my prefix, try \`${prefix}help\`.`)
-                
+                if(message.cleanContent.startsWith("@"+client.user.username)) require("../utils").embed(message,`\`${prefix}\` is my prefix, try \`${prefix}help\`.`) 
             }
                             }
     }, 1*1000);
