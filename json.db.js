@@ -13,8 +13,6 @@ let exp = {
                 return key
             }
         }else return false//There is no JSON[key]
-        
-        
     },
     prefix: async function(id){ //Just checks if the guild has a prefix, return default prefix if it doesn't
         let guild = require("./.data/sqlite.json")[id]
