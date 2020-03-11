@@ -1,14 +1,14 @@
 const {MessageEmbed} = require("discord.js")
 const Discord = require("discord.js")
 const config = require("./config.json")
-
-channels = {
+const db = require("./json.db")
+/*channels = {
     NA : "678830555764228125",
     EU : "678830571547262976",
     OCE : "678830581512929331",
     AS : "678830592946602002",
     RNK : "681049997885833239"
-}
+}*/
 
 gamemodes = {
     ffa: '#66de5b',
@@ -34,13 +34,13 @@ require("fs").readdir("./errors", (err, files) => {
     });
 var autodel = false;
 module.exports = {
-    channels,
+    //channels,
     gamemodes,
-    ErrorMsg : function(message,text){
+    ErrorMsg : async function(message,text){
         const eb = new MessageEmbed()
             .setTitle("Error!")
             .setColor("RED")
-            .setDescription(text +` \n Try \`${config.prefix}help\``)
+            .setDescription(text +` \n Try \`${await require("./json.db").prefix(message.guild.id)}help\``)
             .setFooter("Krunker LFG • ID :"+message.author.id)
             .setTimestamp()
 
@@ -54,8 +54,8 @@ module.exports = {
         .setColor(color)
         .setTimestamp()
         .setFooter("Krunker LFG")
-
-        m.channel.send(eb)
+        if(m.channel)m.channel.send(eb)
+        else return eb
     },
     getuser : (id)=>{
         if(id == "0") return "Everyone"
@@ -76,16 +76,16 @@ module.exports = {
         }
         return ret
     },
-    setNA(id) {
-        this.channels.NA = id
+    setNA(g,id) {
+        db.set(g,{NA : id})
     },
-    setOCE(id) {
-        this.channels.OCE = id
+    setOCE(g,id) {
+        db.set(g,{OCE : id})
     },
-    setEU(id) {
-        this.channels.EU = id
+    setEU(g,id) {
+        db.set(g,{EU : id})
     },
-    setAS(id) {
-        this.channels.AS = id
+    setAS(g,id) {
+        db.set(g,{AS : id})
     }
 }
