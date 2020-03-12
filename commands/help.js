@@ -1,17 +1,10 @@
+"use strict"
 //Require basic classes
 const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
 const db = require("../json.db")
 module.exports.run = async (client,message)=>{
-<<<<<<< HEAD
-    let fullCommand = message.content.substr(prefix.length) // Remove the leading exclamation mark
-    let splitCommand = fullCommand.split(" ") // Split the message up in to pieces for each space
-    let primaryCommand = splitCommand[0] // The first word directly after the exclamation is the command
-    let arguments = splitCommand.slice(1) // All other words are arguments/parameters/options for the com
-    prefix = await db.prefix(message.guild.id)
-    if(arguments.length == 0){
-=======
     let prefix = await db.prefix(message.guild.id)
     let fullCommand = message.content.substr(prefix.length) // Remove the leading exclamation mark
     let splitCommand = fullCommand.split(" ") // Split the message up in to pieces for each space
@@ -19,15 +12,32 @@ module.exports.run = async (client,message)=>{
     let argument = splitCommand.slice(1) // All other words are arguments/parameters/options for the com
     
     if(argument.length == 0){
->>>>>>> 53ade41229d49abbb3254b40955a78cf74047e14
-        
+        let commands = client.commands.array()
+        let Utility = commands.filter(e => e.config.type === "Utility")
+        let General = commands.filter(e => e.config.type === "General")
+        let Staff = commands.filter(e => e.config.type === "Staff")
+        let U_String = ""
+        Utility.forEach(e =>{
+            U_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
+        });
+        let G_String = ""
+        General.forEach(e =>{
+            G_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
+        });
+        let S_String = ""
+        Staff.forEach(e =>{
+            S_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
+        });
         const eb = new MessageEmbed()
             .setTitle("Help:")
             .setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
             .setColor("BLURPLE")
             .setDescription('Note: *<>* signify required fields and *[]* signify optional fields.')
-            .addField("Server Prefix", `**${prefix}**`)
-            .addField("Utility", 
+            .addField("defenitelyServer Prefix", `**${prefix}**`)
+            .addField("Utility",U_String)
+            .addField("General",G_String)
+            .addField("Staff",S_String)
+            /*.addField("Utility", 
                 `> **${prefix}` + client.commands.get('help').help.usage + `** \r\n > • ` + client.commands.get('help').help.description + ` \r\n` +
                 `> **${prefix}` + client.commands.get('info').help.usage + `** \r\n > • ` + client.commands.get('info').help.description + ` \r\n` +
                 `> **${prefix}` + client.commands.get('ping').help.usage + `** \r\n > • ` + client.commands.get('ping').help.description + ` \r\n` +
@@ -37,7 +47,8 @@ module.exports.run = async (client,message)=>{
             .addField("Staff",`> **${prefix}` + client.commands.get('config').help.usage + `** \r\n > • ` + client.commands.get('config').help.description + ` \r\n`, false)
                 //`> **${prefix}` + client.commands.get('prefix').help.usage + `** \r\n > • ` + client.commands.get('prefix').help.description + ` \r\n` +
                 //`> **${prefix}` + client.commands.get('set').help.usage + `** \r\n > • ` + client.commands.get('set').help.description + ` \r\n`
-                
+             */
+
             .setTimestamp()
             .setFooter("KrunkerLFG")
         message.channel.send(eb)
@@ -63,11 +74,7 @@ module.exports.run = async (client,message)=>{
             
             message.channel.send(eb)
         }else{
-<<<<<<< HEAD
-            utils.ErrorMsg(m,`Module not found.Try ${prefix}help for list of all modules`)
-=======
             utils.ErrorMsg(message,`Module not found.Try ${prefix}help for list of all modules`)
->>>>>>> 53ade41229d49abbb3254b40955a78cf74047e14
         }
 
     }
@@ -75,6 +82,7 @@ module.exports.run = async (client,message)=>{
 module.exports.config = {
     name: "help",
     aliases: ["h", "hlp","wlp","welp","ifkingforgothowthebotworks"],
+    type: "Utility"
 }
 module.exports.help = {
     usage : `help [module]`, //Example usage of command
