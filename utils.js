@@ -20,6 +20,7 @@ gamemodes = {
 }
 
 const errors = new Discord.Collection()
+
 //Error Loading
 require("fs").readdir("./errors", (err, files) => { 
     if(err) console.error(err);
@@ -30,9 +31,9 @@ require("fs").readdir("./errors", (err, files) => {
     jsfile.forEach((f, i) => {
       let pull = require(`./errors/${f}`)
       errors.set(pull.id,pull)
-      })
-    });
-var autodel = false;
+    })
+});
+
 module.exports = {
     //channels,
     gamemodes,
@@ -76,6 +77,9 @@ module.exports = {
         }
         return ret
     },
+    setPrefix(g,prefix) {
+        db.set(g,{"PREFIX" : prefix})
+    },
     setNA(g,id) {
         db.set(g,{NA : id})
     },
@@ -87,5 +91,8 @@ module.exports = {
     },
     setAS(g,id) {
         db.set(g,{AS : id})
+    },
+    setRNK(g,id) {
+        db.set(g,{RNK : id})
     }
 }
