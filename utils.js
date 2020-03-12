@@ -77,19 +77,6 @@ module.exports = {
         }
         return ret
     },
-<<<<<<< HEAD
-    setNA(g,id) {
-        db.set(g,{NA : id})
-    },
-    setOCE(g,id) {
-        db.set(g,{OCE : id})
-    },
-    setEU(g,id) {
-        db.set(g,{EU : id})
-    },
-    setAS(g,id) {
-        db.set(g,{AS : id})
-=======
     setPrefix(g,prefix) {
         db.set(g,{"PREFIX" : prefix})
     },
@@ -107,6 +94,5 @@ module.exports = {
     },
     setRNK(g,id) {
         db.set(g,{RNK : id})
->>>>>>> 53ade41229d49abbb3254b40955a78cf74047e14
     }
 }
