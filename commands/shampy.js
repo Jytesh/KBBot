@@ -9,7 +9,7 @@ module.exports.run = (client,message)=>{
 
 module.exports.config = {
     name: "shampy",
-    aliases: ["shamps",],
+    aliases: ["shamps"],
 }
 
 module.exports.help = {

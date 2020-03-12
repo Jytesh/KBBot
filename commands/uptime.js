@@ -31,6 +31,7 @@ module.exports.run = (client,message)=>{
 module.exports.config = {
     name: "uptime",
     aliases: ["u", "up","HOWLONGUAWAKE"],
+    type: "Utility"
 }
 module.exports.help = {
     usage : `uptime`, //Example usage of command
