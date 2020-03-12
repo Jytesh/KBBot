@@ -4,12 +4,22 @@ const config = require("../config.json")
 const utils = require("../utils")
 const db = require("../json.db")
 module.exports.run = async (client,message)=>{
+<<<<<<< HEAD
     let fullCommand = message.content.substr(prefix.length) // Remove the leading exclamation mark
     let splitCommand = fullCommand.split(" ") // Split the message up in to pieces for each space
     let primaryCommand = splitCommand[0] // The first word directly after the exclamation is the command
     let arguments = splitCommand.slice(1) // All other words are arguments/parameters/options for the com
     prefix = await db.prefix(message.guild.id)
     if(arguments.length == 0){
+=======
+    let prefix = await db.prefix(message.guild.id)
+    let fullCommand = message.content.substr(prefix.length) // Remove the leading exclamation mark
+    let splitCommand = fullCommand.split(" ") // Split the message up in to pieces for each space
+    let primaryCommand = splitCommand[0] // The first word directly after the exclamation is the command
+    let argument = splitCommand.slice(1) // All other words are arguments/parameters/options for the com
+    
+    if(argument.length == 0){
+>>>>>>> 53ade41229d49abbb3254b40955a78cf74047e14
         
         const eb = new MessageEmbed()
             .setTitle("Help:")
@@ -31,8 +41,9 @@ module.exports.run = async (client,message)=>{
             .setTimestamp()
             .setFooter("KrunkerLFG")
         message.channel.send(eb)
-    }else if(arguments.length == 1){
-        let arg = arguments[0]
+    }else if(argument.length == 1){
+        let arg = argument[0]
+        let command
         if(client.commands.has(arg)){
             
             command = client.commands.get(arg)
@@ -52,7 +63,11 @@ module.exports.run = async (client,message)=>{
             
             message.channel.send(eb)
         }else{
+<<<<<<< HEAD
             utils.ErrorMsg(m,`Module not found.Try ${prefix}help for list of all modules`)
+=======
+            utils.ErrorMsg(message,`Module not found.Try ${prefix}help for list of all modules`)
+>>>>>>> 53ade41229d49abbb3254b40955a78cf74047e14
         }
 
     }

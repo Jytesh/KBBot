@@ -5,14 +5,14 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js dev"
   },
   "author": "JJ_G4M3R & Jytesh",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.0.0",
     "node-fetch": "^2.6.0",
-    "dotenv" : "^8"
+    "dotenv": "^8"
   },
   "repository": {
     "type": "git",
@@ -21,8 +21,8 @@
   "bugs": {
     "url": "https://github.com/JJ-G4M3R/KrunkerLFG/issues"
   },
-  "engines":{
-    "node" : "12"
+  "engines": {
+    "node": "12.16.1"
   },
   "homepage": "https://github.com/JJ-G4M3R/KrunkerLFG#readme"
 }
