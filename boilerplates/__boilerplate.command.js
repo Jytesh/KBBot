@@ -2,11 +2,10 @@
 //stfu Jyt
 
 //Require basic classes
-const {Client,RichEmbed} = require("discord.js")
-const Discord = require("discord.js")
+const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
 const utils = require("../utils")
-
+const db = require("../json.db")
 module.exports.run = (client,message)=>{
     //DO STUFF HERE
 }
