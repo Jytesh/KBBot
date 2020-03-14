@@ -10,7 +10,7 @@ module.exports.run = (client,message)=>{
     const eb = new MessageEmbed()
 		.setTitle('Info:')
 		.setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
-        .setColor(0x49C4EF)
+        .setColor("BLURPLE")
 		.setDescription('KrunkerLFG is an LFG bot designed for the online FPS game, krunker.io.')
 		.addField('Version:', `**${config.version}**`, true)
 		.addField('Creator:', '**JJ_G4M3R & Jytesh**', true)
