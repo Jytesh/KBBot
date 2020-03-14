@@ -7,10 +7,11 @@ const db = require("../json.db")
 
 module.exports.run = async(client,message)=>{
     const gid = message.guild.id
-    const checkIfCanManageServer = message.member.permissions.has("MANAGE_SERVER")
+    const checkIfCanManageServer = message.member.guild.me.hasPermission("MANAGE_SERVER")
     const checkIfWhiteListed = await roleCheck(message.member.roles, gid)
     const checkIfJJ = message.author.id == "235418753335033857"
     const newLocal_3 = message.author.id == "518097896365752338"
+
     if(checkIfCanManageServer || checkIfWhiteListed || checkIfJJ || newLocal_3){ 
         let prefix = await db.prefix(gid)
         fullcommand = message.content.substring(prefix.length)
