@@ -10,9 +10,9 @@ module.exports.run = async(client,message)=>{
     const checkIfAdmin = message.member.hasPermission('ADMINISTRATOR')
     const checkIfWhiteListed = await roleCheck(message.member.roles, gid)
     const checkIfJJ = message.author.id == "235418753335033857"
-    const newLocal_3 = message.author.id == "518097896365752338"
+    const checkIfJyt = message.author.id == "518097896365752338"
 
-    if(checkIfAdmin || checkIfWhiteListed || checkIfJJ || newLocal_3){ 
+    if(checkIfAdmin || checkIfWhiteListed || checkIfJJ || checkIfJyt){ 
         let prefix = await db.prefix(gid)
         fullcommand = message.content.substring(prefix.length)
         args = fullcommand.split(" ")
