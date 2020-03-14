@@ -37,18 +37,6 @@ module.exports.run = async (client,message)=>{
             .addField("Utility",U_String)
             .addField("General",G_String)
             .addField("Staff",S_String)
-            /*.addField("Utility", 
-                `> **${prefix}` + client.commands.get('help').help.usage + `** \r\n > • ` + client.commands.get('help').help.description + ` \r\n` +
-                `> **${prefix}` + client.commands.get('info').help.usage + `** \r\n > • ` + client.commands.get('info').help.description + ` \r\n` +
-                `> **${prefix}` + client.commands.get('ping').help.usage + `** \r\n > • ` + client.commands.get('ping').help.description + ` \r\n` +
-                `> **${prefix}` + client.commands.get('uptime').help.usage + `** \r\n > • ` + client.commands.get('uptime').help.description + ` \r\n`, false)
-            .addField("General", 
-                `> **${prefix}` + client.commands.get('lfg').help.usage + `** \r\n > • ` + client.commands.get('lfg').help.description + ` \r\n`, false)
-            .addField("Staff",`> **${prefix}` + client.commands.get('config').help.usage + `** \r\n > • ` + client.commands.get('config').help.description + ` \r\n`, false)
-                //`> **${prefix}` + client.commands.get('prefix').help.usage + `** \r\n > • ` + client.commands.get('prefix').help.description + ` \r\n` +
-                //`> **${prefix}` + client.commands.get('set').help.usage + `** \r\n > • ` + client.commands.get('set').help.description + ` \r\n`
-             */
-
             .setTimestamp()
             .setFooter("KrunkerLFG")
         message.channel.send(eb)
