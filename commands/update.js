@@ -4,16 +4,16 @@ const config = require("../config.json")
 const utils = require("../utils")
 
 module.exports.run = (client,message)=>{
-    message.channel.send("haiii");
+    message.channel.send("No");
 }
 
 module.exports.config = {
-    name: "shampy",
-    aliases: ["shamps"],
+    name: "update?",
+    aliases: ["update"],
 }
 
 module.exports.help = {
-    usage : `\`shampy\``, //Example usage of command
+    usage : `\`update\``, //Example usage of command
     User : 0, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
     description : `Shhh you found a hidden command` //Description to come when you use prefix help <command name>
 }
