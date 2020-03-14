@@ -16,10 +16,28 @@ module.exports.run = async(client,message)=>{
         args = splitCommand
         
         if(!c) {
-            embed = utils.embed("Config Window","`config [config-id] [arguments]`","GOLD")
-            embed.addField("Prefix","Config ID: `1`\n*1 Argument taken\n*Used to change prefix")
-            embed.addField("Channel","Config ID: `2`\n*2 Arguments taken\n*Used to change the LFG Channel\n`config 2 <#Channel_Mention> <REGION>`\n*Valid regions are \n> `NA`\n> `EU`\n> `OCE`\n> `AS`\n> `RNK` for ranked-channel")
-            embed.addField("Role","Config ID: `3`\n*Upto 10 arguments\n*All arguments should be role mentions, or role IDs.\n*Used to add roles to bot-commander(Can use config command)")
+            embed = utils.embed("Config Window","`config <config-id> [arguments]`","GOLD")
+            embed.addField("Prefix",
+                "**Config ID:** `1` \n" +
+                "• `[arguments]` => `<prefix>` \n" +
+                "• Changes bot prefix for server to `<prefix>`\n" + 
+                "• *Note:* Prefix cannot contain `\\``")
+            embed.addField("Channel",
+                "**Config ID:** `2` \n" + 
+                "`[arguments]` => `<channel> <region>` \n" + 
+                "• Sets `<channel>` as the LFG channel for `<region>` \n" + 
+                "• Valid regions are \n" +
+                "> `NA` \n" +
+                "> `EU` \n" +
+                "> `OCE` \n" +
+                "> `AS` \n" +
+                "> `RNK` *(for ranked)*")
+            embed.addField("Role",
+                "**Config ID:** `3` \n" +
+                "`[arguments]` => `<role> <role> . . .` \n" +
+                "• Adds `<role>`s to whitelisted roles for access to `config` command \n" +
+                "• *Note:* All arguments should be role mentions, or role IDs \n" +
+                "• *Note:* Up to 10 unique roles can be saved per server")
 
             message.channel.send(embed)
             return;
