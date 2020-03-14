@@ -1,3 +1,4 @@
+"use strict"
 //Require basic classes
 const {MessageEmbed} = require("discord.js")
 const config = require("../config.json")
@@ -11,24 +12,31 @@ module.exports.run = async (client,message)=>{
     let argument = splitCommand.slice(1) // All other words are arguments/parameters/options for the com
     
     if(argument.length == 0){
-        
+        let commands = client.commands.array()
+        let Utility = commands.filter(e => e.config.type === "Utility")
+        let General = commands.filter(e => e.config.type === "General")
+        let Staff = commands.filter(e => e.config.type === "Staff")
+        let U_String = ""
+        Utility.forEach(e =>{
+            U_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
+        });
+        let G_String = ""
+        General.forEach(e =>{
+            G_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
+        });
+        let S_String = ""
+        Staff.forEach(e =>{
+            S_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
+        });
         const eb = new MessageEmbed()
             .setTitle("Help:")
             .setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
             .setColor("BLURPLE")
             .setDescription('Note: *<>* signify required fields and *[]* signify optional fields.')
             .addField("Server Prefix", `**${prefix}**`)
-            .addField("Utility", 
-                `> **${prefix}` + client.commands.get('help').help.usage + `** \r\n > • ` + client.commands.get('help').help.description + ` \r\n` +
-                `> **${prefix}` + client.commands.get('info').help.usage + `** \r\n > • ` + client.commands.get('info').help.description + ` \r\n` +
-                `> **${prefix}` + client.commands.get('ping').help.usage + `** \r\n > • ` + client.commands.get('ping').help.description + ` \r\n` +
-                `> **${prefix}` + client.commands.get('uptime').help.usage + `** \r\n > • ` + client.commands.get('uptime').help.description + ` \r\n`, false)
-            .addField("General", 
-                `> **${prefix}` + client.commands.get('lfg').help.usage + `** \r\n > • ` + client.commands.get('lfg').help.description + ` \r\n`, false)
-            .addField("Staff",`> **${prefix}` + client.commands.get('config').help.usage + `** \r\n > • ` + client.commands.get('config').help.description + ` \r\n`, false)
-                //`> **${prefix}` + client.commands.get('prefix').help.usage + `** \r\n > • ` + client.commands.get('prefix').help.description + ` \r\n` +
-                //`> **${prefix}` + client.commands.get('set').help.usage + `** \r\n > • ` + client.commands.get('set').help.description + ` \r\n`
-                
+            .addField("Utility",U_String)
+            .addField("General",G_String)
+            .addField("Staff",S_String)
             .setTimestamp()
             .setFooter("KrunkerLFG")
         message.channel.send(eb)
@@ -62,6 +70,7 @@ module.exports.run = async (client,message)=>{
 module.exports.config = {
     name: "help",
     aliases: ["h", "hlp","wlp","welp","ifkingforgothowthebotworks"],
+    type: "Utility"
 }
 module.exports.help = {
     usage : `help [module]`, //Example usage of command

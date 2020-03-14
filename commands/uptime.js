@@ -12,7 +12,7 @@ module.exports.run = (client,message)=>{
     time = client.uptime
     let eb = new MessageEmbed()
         .setTitle("I have been awake for: ")
-        .setColor(0x49C4EF)
+        .setColor("BLURPLE")
         .setFooter("KrunkerLFG")
         .setTimestamp()
     if(time/day > 1) {
@@ -31,6 +31,7 @@ module.exports.run = (client,message)=>{
 module.exports.config = {
     name: "uptime",
     aliases: ["u", "up","HOWLONGUAWAKE"],
+    type: "Utility"
 }
 module.exports.help = {
     usage : `uptime`, //Example usage of command
