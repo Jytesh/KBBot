@@ -16,10 +16,28 @@ module.exports.run = async(client,message)=>{
         args = splitCommand
         
         if(!c) {
-            embed = utils.embed("Config Window","`config [config-id] [arguments]`","GOLD")
-            embed.addField("Prefix","Config ID: `1`\n*1 Argument taken\n*Used to change prefix")
-            embed.addField("Channel","Config ID: `2`\n*2 Arguments taken\n*Used to change the LFG Channel\n`config 2 <#Channel_Mention> <REGION>`\n*Valid regions are \n> `NA`\n> `EU`\n> `OCE`\n> `AS`\n> `RNK` for ranked-channel")
-            embed.addField("Role","Config ID: `3`\n*Upto 10 arguments\n*All arguments should be role mentions, or role IDs.\n*Used to add roles to bot-commander(Can use config command)")
+            embed = utils.embed("Config Window","`config <config-id> [arguments]`","GOLD")
+            embed.addField("Prefix",
+                "**Config ID:** `1` \n" +
+                "• `[arguments]` => `<prefix>` \n" +
+                "• Changes bot prefix for server to `<prefix>`\n" + 
+                "• *Note:* Prefix cannot contain `\\``")
+            embed.addField("Channel",
+                "**Config ID:** `2` \n" + 
+                "`[arguments]` => `<channel> <region>` \n" + 
+                "• Sets `<channel>` as the LFG channel for `<region>` \n" + 
+                "• Valid regions are \n" +
+                "> `NA` \n" +
+                "> `EU` \n" +
+                "> `OCE` \n" +
+                "> `AS` \n" +
+                "> `RNK` *(for ranked)*")
+            embed.addField("Role",
+                "**Config ID:** `3` \n" +
+                "`[arguments]` => `<role> <role> . . .` \n" +
+                "• Adds `<role>`s to whitelisted roles for access to `config` command \n" +
+                "• *Note:* All arguments should be role mentions, or role IDs \n" +
+                "• *Note:* Up to 10 unique roles can be saved per server")
 
             message.channel.send(embed)
             return;
@@ -186,9 +204,10 @@ async function roleCheck(roles,id){
 module.exports.config = {
     name: "config",
     aliases: ["cnfg", "cnf"],
+    type: "Staff"
 }
 module.exports.help = {
     usage : `config 1`, //Example usage of command
     User : 0, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : 'use when sidney has kidnapped you' //Description to come when you use config.prefix help <command name>
+    description : 'Use for changing settings of bot such as prefix. Do config with no arguments to get detailed guide.' //Description to come when you use config.prefix help <command name>
 }

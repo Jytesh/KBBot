@@ -210,7 +210,8 @@ function isRegion(arg) {
 }
 module.exports.config = {
     name : "lfg",
-    aliases : ["looking", "lf", "lfm"]
+    aliases : ["looking", "lf", "lfm"],
+    type: "General"
 }
 module.exports.help = {
     usage : `lfg <link> [message]`, //Example usage of command

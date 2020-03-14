@@ -2,9 +2,9 @@ const Discord = require("discord.js");
 const config = require("../config.json");
 const db = require("../json.db")
 module.exports = async (client, message) => {
-    client.setTimeout(async()=> {
+    client.setTimeout(async() => {
         if(!message.deleted){
-            let prefix = await db.prefix(message.guild.id)
+            prefix = await db.prefix(message.guild.id)
             if (!message.guild || message.author.bot) return; // This will prevent bots from using the bot (and will also disable DMs). Lovely!
                 const args = message.content.split(/\s+/g); // This will return the message content and split the prefix.
                 const command = message.content.startsWith(prefix) && args.shift().slice(prefix.length).toLowerCase(); // This is the name of the command itself.
