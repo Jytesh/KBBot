@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const config = require("../config.json");
 const db = require("../json.db")
-module.exports = async (client, message) => {
-    console.log(message.content)
+module.exports = async (client, message) => { 
     client.setTimeout(async() => {
         if(!message.deleted){
             prefix = await db.prefix(message.guild.id)
