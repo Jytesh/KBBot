@@ -204,9 +204,10 @@ async function roleCheck(roles,id){
 module.exports.config = {
     name: "config",
     aliases: ["cnfg", "cnf"],
+    type: "Staff"
 }
 module.exports.help = {
     usage : `config 1`, //Example usage of command
     User : 0, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description : 'use when sidney has kidnapped you' //Description to come when you use config.prefix help <command name>
+    description : 'Use for changing settings of bot such as prefix. Do config with no arguments to get detailed guide.' //Description to come when you use config.prefix help <command name>
 }
