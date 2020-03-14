@@ -15,10 +15,9 @@ module.exports.run = async(client,message)=>{
     if(checkIfAdmin || checkIfWhiteListed || checkIfJJ || newLocal_3){ 
         let prefix = await db.prefix(gid)
         fullcommand = message.content.substring(prefix.length)
-        splitCommand = fullcommand.split(" ")
-        command = splitCommand.shift()
-        c = splitCommand.shift()
-        args = splitCommand
+        args = fullcommand.split(" ")
+        command = args.shift()
+        c = args.shift()
         
         if(!c) {
             embed = utils.embed("Config Window","`config <config-id> [arguments]`","GOLD")
