@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const config = require("../config.json");
 const db = require("../json.db")
 module.exports = async (client, message) => {
-    client.setTimeout(() => {
+    client.setTimeout(async() => {
         if(!message.deleted){
             prefix = await db.prefix(message.guild.id)
             if (!message.guild || message.author.bot) return; // This will prevent bots from using the bot (and will also disable DMs). Lovely!
