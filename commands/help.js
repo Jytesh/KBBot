@@ -33,7 +33,7 @@ module.exports.run = async (client,message)=>{
             .setAuthor(client.user.username, client.user.displayAvatarURL, 'https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot')
             .setColor("BLURPLE")
             .setDescription('Note: *<>* signify required fields and *[]* signify optional fields.')
-            .addField("defenitelyServer Prefix", `**${prefix}**`)
+            .addField("Server Prefix", `**${prefix}**`)
             .addField("Utility",U_String)
             .addField("General",G_String)
             .addField("Staff",S_String)
