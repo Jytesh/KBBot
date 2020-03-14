@@ -14,7 +14,7 @@ module.exports.run = (client,message)=>{
 		.setDescription('KrunkerLFG is an LFG bot designed for the online FPS game, krunker.io.')
 		.addField('Version:', `**${config.version}**`, true)
 		.addField('Creator:', '**JJ_G4M3R & Jytesh**', true)
-		.addField('Invite:', '[https://krunker.io/lfgbot](https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot)')
+		.addField('Invite:', '[https://krunkerlfgbot.gg/](https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot)')
 		.addField('Support Server:', '[https://discord.gg/lfg_bot](https://discord.gg/myHnhfD)', false)
 		.setTimestamp()
 		.setFooter('KrunkerLFG');
