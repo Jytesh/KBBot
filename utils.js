@@ -69,6 +69,7 @@ module.exports = {
         let error = errors.find(e => e.id == id)
         if(!error) return
         this.ErrorMsg(m,error.text,error.id,"RED")
+        m.delete
     },
     CheckRole(member,roles){
         let ret = false
