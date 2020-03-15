@@ -168,8 +168,9 @@ async function VerifyChannel(link,message){
                     }
                 if(isRegion(region)){
                     
+                    
+                    let c = await db.get(message.guild.id,region)
                     console.log(c)
-                    c = await db.get(message.guild.id,region)
                     if(c){
                         return true
                     }else{
