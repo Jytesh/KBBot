@@ -23,7 +23,7 @@ module.exports.run = async(client,message)=>{
                 let eb = new MessageEmbed()
                     .setTitle(message.author.username + ' is looking to party! :tada:')
                     .setDescription(description)
-                    .setAuthor(message.author.username + ' (' + message.author.tag + ')', null, message.author.displayAvatarURL)
+                    .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.displayAvatarURL, null)
                     .addField('Link: ', link)
                     .setFooter('KrunkerLFG')
                     .setTimestamp()
