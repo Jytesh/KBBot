@@ -5,6 +5,7 @@ module.exports = async (client, message) => {
     client.setTimeout(async() => {
         if(!message.deleted){
             prefix = await db.prefix(message.guild.id)
+
             if(message.author.bot) return; // This will prevent bots from using the bot. Lovely!
             if(!message.guild) message.channel.send("No u") // Comic relief for those who decide to DM the bot.
 
