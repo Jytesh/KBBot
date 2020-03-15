@@ -3,6 +3,7 @@ const fs = require("fs")
 let exp = {
     get : async function(key,value){
         let json = require("./data/sqlite.json")
+
         //json = await JSON.parse(fs.readFileSync("./.data/sqlite.json")) ASYNCHROUNOUS
         if(Object.keys(json).includes(key)){
             if(value){

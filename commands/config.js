@@ -45,6 +45,7 @@ module.exports.run = async(client,message)=>{
             message.channel.send(embed)
             return;
         }
+        
         switch(c) {
             case "1": //Prefix
                 args = fullcommand.split(" ").splice(2)
