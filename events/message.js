@@ -4,7 +4,7 @@ const db = require("../json.db")
 module.exports = async (client, message) => { 
     client.setTimeout(async() => {
         if(!message.deleted){ // Comic relief for those who decide to DM the bot.
-            if(!message.guild) {
+            if(!message.guild && !message.author.bot) {
                 message.channel.send("No u")
                 return
             } 
