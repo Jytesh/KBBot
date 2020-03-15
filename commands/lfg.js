@@ -135,7 +135,8 @@ function getLinkInfo(link){
                     mode: json[4].i.split('_')[0],
                     map: json[4].i.split("_")[1],
                     party: json[4].cs,
-                    color: colour
+                    color: colour,
+                    custom: json[4].cs
                 }
                 
                 return resolve(game)
