@@ -9,10 +9,9 @@ module.exports.run = async(client,message)=>{
     const gid = message.guild.id
     const checkIfAdmin = message.member.hasPermission('ADMINISTRATOR')
     const checkIfWhiteListed = await roleCheck(message.member.roles, gid)
-    const checkIfJJ = message.author.id == "235418753335033857"
-    const newLocal_3 = message.author.id == "518097896365752338"
-
-    if(checkIfAdmin || checkIfWhiteListed || checkIfJJ || newLocal_3){ 
+    const checkIfOwner = ["518097896365752338","235418753335033857"].includes(message.author.id)
+    console.log(checkIfAdmin || checkIfWhiteListed || checkIfOwner))
+    if(checkIfAdmin || checkIfWhiteListed || checkIfOwner){ 
         let prefix = await db.prefix(gid)
         let fullcommand = message.content.substring(prefix.length)
         let args = fullcommand.split(" ")
@@ -148,18 +147,22 @@ module.exports.run = async(client,message)=>{
                         .setColor("RED")
                 }
                 return message.channel.send(eb)
-          case "4": {
-            message.delete().catch(console.log)
-            let eb = new MessageEmbed()
+          /*case "4": {
+            let eb ;
+            message.delete().catch(console.log);
+            eb = new MessageEmbed()
               .setTitle("Usage")
-              .setDescription("This bot is to look for groups in krunker.io\n *<> Required Arguments []Optional Arguments")
-              .addField("$lfg <Valid Krunker.io Link> [Description(No need to add game data as bot will fetch that for you.)]")
-              .addField("Bot is delayed by one second, so if you include banned words in the description, you will be warned by Data.")
-            message.channel.send(eb)
-          }
+              .setDescription("This bot is to look for groups in krunker.io\n *<> Required Arguments []Optional Arguments*")
+              .addField("Usage","$lfg <Valid Krunker.io Link> [Description(No need to add game data as bot will fetch that for you.)]")
+              .addField("Note","Bot is delayed by one second, so if you include banned words in the description, you will be warned by Data.")
+              .setColor("BLURPLE")
+              .setFooter("Krunker LFG Bot |");
+            message.channel.send(eb);
+            
+          }*/
             default:   
-                console.log("Invalid Config")
-                return utils.Error(message,100)
+                console.log("Invalid Config");
+                return utils.Error(message,100);
         }
     }else{
         return utils.Error(message,200)
