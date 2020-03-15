@@ -1,12 +1,12 @@
-const js = require("./.data/sqlite.json")
+const js = require("./data/sqlite.json")
 const fs = require("fs")
 let exp = {
     get : async function(key,value){
-        json = require("./.data/sqlite.json")
+        let json = require("./data/sqlite.json")
         //json = await JSON.parse(fs.readFileSync("./.data/sqlite.json")) ASYNCHROUNOUS
         if(Object.keys(json).includes(key)){
             if(value){
-                val = json[key][value]
+                let val = json[key][value]
                 if(val)return val
                 else return false
             }else{
@@ -17,7 +17,7 @@ let exp = {
         
     },
     prefix: async function(id){
-        let guild = require("./.data/sqlite.json")[id]
+        let guild = require("./data/sqlite.json")[id]
         if(guild){
             let prefix = guild.PREFIX
         if(prefix){
@@ -31,13 +31,13 @@ let exp = {
         
     },
     set : async function(key,value){
-        keys = Object.keys(value)
-        json = require("./.data/sqlite.json")
+        let keys = Object.keys(value)
+        let json = require("./data/sqlite.json")
         //json = await JSON.parse(fs.readFileSync("./.data/sqlite.json")) // asynchronous + slow
-        for(k of keys){
+        for(let k of keys){
         json[key][k] = value[k]
         }
-        await fs.writeFileSync("./.data/sqlite.json",JSON.stringify(json))
+        await fs.writeFileSync("./data/sqlite.json",JSON.stringify(json))
         return {key:value}
     }
 }
