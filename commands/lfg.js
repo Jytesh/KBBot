@@ -23,7 +23,7 @@ module.exports.run = async(client,message)=>{
                 let eb = new MessageEmbed()
                     .setTitle(message.author.username + ' is looking to party! :tada:')
                     .setDescription(description)
-                    .setAuthor(message.author.username + ' (' + message.author.tag + ')', "https://cdn.discordapp.com/avatars/618565086239522837/a5b4964c07f16cc590bec4a83e07478a.webp", null)
+                    .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.defaultAvatarURL, null)
                     .addField('Link: ', link)
                     .setFooter('KrunkerLFG')
                     .setTimestamp()
