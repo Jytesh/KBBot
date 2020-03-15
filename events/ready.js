@@ -4,5 +4,5 @@ const config = require("../config.json")
 
 module.exports = (client)=>{ 
     console.log("[Krunker Bunker Bot] ready to roll!")
-    client.user.setActivity(`v${config.version}`,{type: "PLAYING"})
+    client.user.setActivity(`v${config.version}`,{type: "WATCHING"})
 }
