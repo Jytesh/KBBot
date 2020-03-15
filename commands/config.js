@@ -7,6 +7,7 @@ const db = require("../json.db")
 
 module.exports.run = async(client,message)=>{
     const gid = message.guild.id
+
     const checkIfAdmin = message.member.hasPermission('ADMINISTRATOR')
     const checkIfWhiteListed = await roleCheck(message.member.roles, gid)
     const checkIfJJ = message.author.id == "235418753335033857"
@@ -46,6 +47,7 @@ module.exports.run = async(client,message)=>{
             message.channel.send(embed)
             return;
         }
+        
         switch(c) {
             case "1": //Prefix
                 if(args.length == 0) {
