@@ -7,21 +7,19 @@ const db = require("../json.db")
 
 module.exports.run = async(client,message)=>{
     const gid = message.guild.id
-
     const checkIfAdmin = message.member.hasPermission('ADMINISTRATOR')
     const checkIfWhiteListed = await roleCheck(message.member.roles, gid)
-    const checkIfJJ = message.author.id == "235418753335033857"
-    const checkIfJyt = message.author.id == "518097896365752338"
-
-    if(checkIfAdmin || checkIfWhiteListed || checkIfJJ || checkIfJyt){ 
+    const checkIfOwner = ["518097896365752338","235418753335033857"].includes(message.author.id)
+    console.log(checkIfAdmin || checkIfWhiteListed || checkIfOwner))
+    if(checkIfAdmin || checkIfWhiteListed || checkIfOwner){ 
         let prefix = await db.prefix(gid)
-        fullcommand = message.content.substring(prefix.length)
-        args = fullcommand.split(" ")
-        command = args.shift()
-        c = args.shift()
+        let fullcommand = message.content.substring(prefix.length)
+        let args = fullcommand.split(" ")
+        let command = args.shift()
+        let c = args.shift()
         
         if(!c) {
-            embed = utils.embed("Config Window","`config <config-id> [arguments]`","GOLD")
+            let embed = utils.embed("Config Window","`config <config-id> [arguments]`","GOLD")
             embed.addField("Prefix",
                 "**Config ID:** `1` \n" +
                 "• `[arguments]` => `<prefix>` \n" +
@@ -50,11 +48,12 @@ module.exports.run = async(client,message)=>{
         
         switch(c) {
             case "1": //Prefix
+                args = fullcommand.split(" ").splice(2)
                 if(args.length == 0) {
                     utils.Error(message,"100")
                 }else {
-                    oldPrefix = prefix
-                    newPrefix = prefixParse(args.join(" "))
+                    let oldPrefix = prefix
+                    let newPrefix = prefixParse(args.join(" "))
                     if(!args.join(" ").includes("`")){
                     utils.setPrefix(gid,newPrefix)
                     let eb = new MessageEmbed()
@@ -69,7 +68,7 @@ module.exports.run = async(client,message)=>{
                 }} 
                 break;
             case "2": //Set Region
-                let args = message.content.split(' ')
+                args = message.content.split(' ')
                 command = args.shift()
                 c = args.shift()
                 if(args.length != 2) {
@@ -120,18 +119,18 @@ module.exports.run = async(client,message)=>{
                 }
             case "3":
                 let roles = message.mentions.roles.keyArray()
-                roles_ = args.join(" ").replace("<@&","").replace(">","").split(" ")
-                roles__ = new Set(roles.concat(roles_)) //Prevents duplication
-                roles___ = await db.get(gid,"C_ROLES")
-                arr = Array.from(roles__)
-                arr_= roles___.filter(value => arr.includes(value))
+                let roles_ = args.join(" ").replace("<@&","").replace(">","").split(" ")
+                let roles__ = new Set(roles.concat(roles_)) //Prevents duplication
+                let roles___ = await db.get(gid,"C_ROLES")
+                let arr = Array.from(roles__)
+                let arr_= roles___.filter(value => arr.includes(value))
                 arr.concat(roles___)
                 if(arr_){
-                    for(el in arr_){
+                    for(let el in arr_){
                         delete arr[el]
                     }
                 }
-                array = await db.set(message.guild.id,{"C_ROLES":arr})
+                let array = await db.set(message.guild.id,{"C_ROLES":arr})
                 let eb
                 if(typeof array.key.C_ROLES[0] === "string"){
                     eb = new MessageEmbed()
@@ -149,9 +148,22 @@ module.exports.run = async(client,message)=>{
                         .setColor("RED")
                 }
                 return message.channel.send(eb)
+          /*case "4": {
+            let eb ;
+            message.delete().catch(console.log);
+            eb = new MessageEmbed()
+              .setTitle("Usage")
+              .setDescription("This bot is to look for groups in krunker.io\n *<> Required Arguments []Optional Arguments*")
+              .addField("Usage","$lfg <Valid Krunker.io Link> [Description(No need to add game data as bot will fetch that for you.)]")
+              .addField("Note","Bot is delayed by one second, so if you include banned words in the description, you will be warned by Data.")
+              .setColor("BLURPLE")
+              .setFooter("Krunker LFG Bot |");
+            message.channel.send(eb);
+            
+          }*/
             default:   
-                console.log("Invalid Config")
-                return utils.Error(message,100)
+                console.log("Invalid Config");
+                return utils.Error(message,100);
         }
     }else{
         return utils.Error(message,200)
