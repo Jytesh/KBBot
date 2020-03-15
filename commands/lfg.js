@@ -10,7 +10,7 @@ module.exports.run = async(client,message)=>{
     let args = message.content.substring(prefix.length).split(' ')
     let channel
     command = args.shift()
-    if(args.length < 2){
+    if(args.length < 1){
         utils.Error(message,"100")
     }else{
         link = args.shift()
@@ -22,11 +22,13 @@ module.exports.run = async(client,message)=>{
             if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
                 let eb = new MessageEmbed()
                     .setTitle(message.author.username + ' is looking to party! :tada:')
-                    .setDescription(description)
                     .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
                     .addField('Link: ', link)
                     .setFooter('KrunkerLFG')
                     .setTimestamp()
+
+                if(description) eb.setDescription(description)
+
                 if(link.indexOf("https://krunker.io/?game=") == 0) {
                     await getLinkInfo(link).then(async game => {
                         channel = await getChannel(link,message)
@@ -40,19 +42,23 @@ module.exports.run = async(client,message)=>{
                         }else {
                             eb.addField('Custom? ', 'No', true)
                         }
+
                         channel.send(eb)
+                        message.channel.send("Success!")
+                        console.log(channel)
                     }).catch(error => {
-                    console.log(error)
-                    utils.Error(message,"404")
+                        console.log(error)
+                        utils.Error(message,"404")
                     })
                 }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
                     channel = await getChannel(true,message)
                     if(channel != -1) {
-
                         eb.setColor(party)
                         if(args[0])eb.addField('Region: ' , args.shift())
                         if(args)eb.setDescription(args.join(" "))
+
                         channel.send(eb);
+                        message.channel.send("Success!")
                     }else {
                         utils.Error(message, '102')
                     }
