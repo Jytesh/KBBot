@@ -4,13 +4,14 @@ const db = require("../json.db")
 module.exports = async (client, message) => { 
     client.setTimeout(async() => {
         if(!message.deleted){ // Comic relief for those who decide to DM the bot.
-            if(!message.guild && !message.author.bot) {
+            if(message.author.bot) return; // This will prevent bots from using the bot. Lovely!
+
+            if(!message.guild) {
                 message.channel.send("No u")
                 return
             } 
             prefix = await db.prefix(message.guild.id)
 
-            if(message.author.bot) return; // This will prevent bots from using the bot. Lovely!
 
             const args = message.content.split(/\s+/g); // This will return the message content and split the prefix.
             const command = message.content.startsWith(prefix) && args.shift().slice(prefix.length).toLowerCase(); // This is the name of the command itself.
