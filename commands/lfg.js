@@ -44,8 +44,8 @@ module.exports.run = async(client,message)=>{
                         }
 
                         channel.send(eb)
-                        message.channel.send("Success!")
-                        console.log(channel)
+                        message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
+                        message.delete
                     }).catch(error => {
                         console.log(error)
                         utils.Error(message,"404")
@@ -58,7 +58,8 @@ module.exports.run = async(client,message)=>{
                         if(args)eb.setDescription(args.join(" "))
 
                         channel.send(eb);
-                        message.channel.send("Success!")
+                        message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
+                        message.delete
                     }else {
                         utils.Error(message, '102')
                     }
