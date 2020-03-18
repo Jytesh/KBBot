@@ -17,62 +17,63 @@ module.exports.run = async(client,message)=>{
         if(args.length != 0){
             description = args.join(" ")
         }
+        
+        if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
         ch = await VerifyChannel(link,message)
         if(ch === true) { //Checks whether set command has been used, and all channels have been declared
-            if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
-                let eb = new MessageEmbed()
-                    .setTitle(message.author.username + ' is looking to party! :tada:')
-                    .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
-                    .addField('Link: ', link)
-                    .setFooter('KrunkerLFG')
-                    .setTimestamp()
-
-                if(description) eb.setDescription(description)
-
-                if(link.indexOf("https://krunker.io/?game=") == 0) {
-                    await getLinkInfo(link).then(async game => {
-                        channel = await getChannel(link,message)
-                        eb.setColor(game.color)
-                            .addField('Region: ', game.region, true)
-                            .addField('Players: ', game.players, true)
-                            .addField('Mode: ', game.mode.toUpperCase(), true)
-                            .addField('Map: ', game.map, true)
-                        if(game.custom) {
-                            eb.addField('Custom? ', 'Yes', true)
-                        }else {
-                            eb.addField('Custom? ', 'No', true)
-                        }
-
-                        channel.send(eb)
-                        message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
-                        message.delete
-                    }).catch(error => {
-                        console.log(error)
-                        utils.Error(message,"404")
-                    })
-                }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                    channel = await getChannel(true,message)
-                    if(channel != -1) {
-                        eb.setColor(party)
-                        if(args[0])eb.addField('Region: ' , args.shift())
-                        if(args)eb.setDescription(args.join(" "))
-
-                        channel.send(eb);
-                        message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
-                        message.delete
+            let eb = new MessageEmbed()
+                .setTitle(message.author.username + ' is looking to party! :tada:')
+                .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
+                .addField('Link: ', link)
+                .setFooter('KrunkerLFG')
+                .setTimestamp()
+    
+            if(description) eb.setDescription(description)
+    
+            if(link.indexOf("https://krunker.io/?game=") == 0) {
+                await getLinkInfo(link).then(async game => {
+                    channel = await getChannel(link,message)
+                    eb.setColor(game.color)
+                        .addField('Region: ', game.region, true)
+                        .addField('Players: ', game.players, true)
+                        .addField('Mode: ', game.mode.toUpperCase(), true)
+                        .addField('Map: ', game.map, true)
+                    if(game.custom) {
+                        eb.addField('Custom? ', 'Yes', true)
                     }else {
-                        utils.Error(message, '102')
+                        eb.addField('Custom? ', 'No', true)
                     }
-                }else{
-                    utils.Error(message,"101") // Error for non-krunker links
-                    return
+    
+                    channel.send(eb)
+                    message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
+                    message.delete
+                }).catch(error => {
+                    console.log(error)
+                    utils.Error(message,"404")
+                })
+            }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
+                channel = await getChannel(true,message)
+                if(channel != -1) {
+                    eb.setColor(party)
+                    if(args[0])eb.addField('Region: ' , args.shift())
+                    if(args)eb.setDescription(args.join(" "))
+    
+                    channel.send(eb);
+                    message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
+                    message.delete
+                }else {
+                    utils.Error(message, '102')
                 }
             }else{
                 utils.Error(message,"101") // Error for non-krunker links
                 return
             }
         }else{
-            utils.Error(message,104)
+            utils.Error(message,"104")
+        }
+        }else{
+            utils.Error(message,"101") // Error for non-krunker links
+            return
         }
     }
 }
@@ -136,16 +137,17 @@ function getLinkInfo(link){
                         colour = other
                         break;
                 }
+                let tempMap = json[4].i.split('_')
+                tempMap.split()
                 const game = {
                     region : json[0].split(":")[0],
                     players: `${json[2]}/${json[3]}`,
                     mode: json[4].i.split('_')[0],
-                    map: json[4].i.split("_")[1],
+                    map: tempMap,
                     party: json[4].cs,
                     color: colour,
                     custom: json[4].cs
-                }
-                
+                }       
                 return resolve(game)
                 
             }else{
@@ -156,6 +158,7 @@ function getLinkInfo(link){
         }
     })
 }
+
 async function VerifyChannel(link,message){
     if(link.includes("game")){
         let region = link.split("=")
@@ -175,8 +178,7 @@ async function VerifyChannel(link,message){
                         region = "OCE"
                     }
                 if(isRegion(region)){
-                    
-                    
+              
                     let c = await db.get(message.guild.id,region)
                     console.log(c)
                     if(c){
@@ -185,7 +187,7 @@ async function VerifyChannel(link,message){
                         return false
                     }
                 }else{
-
+                    return false
                 }
             }else{
                 return 1
@@ -199,6 +201,7 @@ async function VerifyChannel(link,message){
         else return false
     }
 }
+
 function isRegion(arg) {
     arg = arg.toUpperCase()
     console.log(arg)
