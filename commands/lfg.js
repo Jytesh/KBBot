@@ -138,7 +138,7 @@ function getLinkInfo(link){
                         break;
                 }
                 let tempMap = json[4].i.split('_')
-                tempMap.split()
+                tempMap.shift()
                 tempMap = tempMap.join('_')
                 const game = {
                     region : json[0].split(":")[0],
