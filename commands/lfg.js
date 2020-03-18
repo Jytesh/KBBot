@@ -19,58 +19,58 @@ module.exports.run = async(client,message)=>{
         }
         
         if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
-        ch = await VerifyChannel(link,message)
-        if(ch === true) { //Checks whether set command has been used, and all channels have been declared
-            let eb = new MessageEmbed()
-                .setTitle(message.author.username + ' is looking to party! :tada:')
-                .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
-                .addField('Link: ', link)
-                .setFooter('KrunkerLFG')
-                .setTimestamp()
-    
-            if(description) eb.setDescription(description)
-    
-            if(link.indexOf("https://krunker.io/?game=") == 0) {
-                await getLinkInfo(link).then(async game => {
-                    channel = await getChannel(link,message)
-                    eb.setColor(game.color)
-                        .addField('Region: ', game.region, true)
-                        .addField('Players: ', game.players, true)
-                        .addField('Mode: ', game.mode.toUpperCase(), true)
-                        .addField('Map: ', game.map, true)
-                    if(game.custom) {
-                        eb.addField('Custom? ', 'Yes', true)
+            ch = await VerifyChannel(link,message)
+            if(ch === true) { //Checks whether set command has been used, and all channels have been declared
+                let eb = new MessageEmbed()
+                    .setTitle(message.author.username + ' is looking to party! :tada:')
+                    .setAuthor(message.author.username + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
+                    .addField('Link: ', link)
+                    .setFooter('KrunkerLFG')
+                    .setTimestamp()
+        
+                if(description) eb.setDescription(description)
+        
+                if(link.indexOf("https://krunker.io/?game=") == 0) {
+                    await getLinkInfo(link).then(async game => {
+                        channel = await getChannel(link,message)
+                        eb.setColor(game.color)
+                            .addField('Region: ', game.region, true)
+                            .addField('Players: ', game.players, true)
+                            .addField('Mode: ', game.mode.toUpperCase(), true)
+                            .addField('Map: ', game.map, true)
+                        if(game.custom) {
+                            eb.addField('Custom? ', 'Yes', true)
+                        }else {
+                            eb.addField('Custom? ', 'No', true)
+                        }
+        
+                        channel.send(eb)
+                        message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
+                        message.delete
+                    }).catch(error => {
+                        console.log(error)
+                        utils.Error(message,"404")
+                    })
+                }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
+                    channel = await getChannel(true,message)
+                    if(channel != -1) {
+                        eb.setColor(party)
+                        if(args[0])eb.addField('Region: ' , args.shift())
+                        if(args)eb.setDescription(args.join(" "))
+        
+                        channel.send(eb);
+                        message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
+                        message.delete
                     }else {
-                        eb.addField('Custom? ', 'No', true)
+                        utils.Error(message, '102')
                     }
-    
-                    channel.send(eb)
-                    message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
-                    message.delete
-                }).catch(error => {
-                    console.log(error)
-                    utils.Error(message,"404")
-                })
-            }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
-                channel = await getChannel(true,message)
-                if(channel != -1) {
-                    eb.setColor(party)
-                    if(args[0])eb.addField('Region: ' , args.shift())
-                    if(args)eb.setDescription(args.join(" "))
-    
-                    channel.send(eb);
-                    message.channel.send("Success! Your game has been posted in <#" + channel.id + ">")
-                    message.delete
-                }else {
-                    utils.Error(message, '102')
+                }else{
+                    utils.Error(message,"101") // Error for non-krunker links
+                    return
                 }
             }else{
-                utils.Error(message,"101") // Error for non-krunker links
-                return
+                utils.Error(message,"104")
             }
-        }else{
-            utils.Error(message,"104")
-        }
         }else{
             utils.Error(message,"101") // Error for non-krunker links
             return
@@ -139,6 +139,7 @@ function getLinkInfo(link){
                 }
                 let tempMap = json[4].i.split('_')
                 tempMap.split()
+                tempMap = tempMap.join('_')
                 const game = {
                     region : json[0].split(":")[0],
                     players: `${json[2]}/${json[3]}`,
@@ -154,7 +155,8 @@ function getLinkInfo(link){
                 return reject(new Error('404',json))}
             }).catch(error => {
                 console.log(error)
-            return reject(new Error('404', error))})
+                return reject(new Error('404', error))
+            })
         }
     })
 }
