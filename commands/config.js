@@ -10,7 +10,6 @@ module.exports.run = async(client,message)=>{
     const checkIfAdmin = message.member.hasPermission('ADMINISTRATOR')
     const checkIfWhiteListed = await roleCheck(message.member.roles, gid)
     const checkIfOwner = ["518097896365752338","235418753335033857"].includes(message.author.id)
-    console.log(checkIfAdmin || checkIfWhiteListed || checkIfOwner))
     if(checkIfAdmin || checkIfWhiteListed || checkIfOwner){ 
         let prefix = await db.prefix(gid)
         let fullcommand = message.content.substring(prefix.length)
@@ -182,7 +181,6 @@ function isChannel(arg, message) {
         return false
     }
 }
-
 function isRegion(arg) {
     arg = arg.toUpperCase()
     switch(arg) {
@@ -200,12 +198,10 @@ function isRegion(arg) {
             return false
     }
 }
-
 function prefixParse(text){
     if(text.includes("`")) return "-"
     else return text
 }
-
 async function roleCheck(roles,id){
     roles_ = await db.get(id,"C_ROLES")
     if(!roles_) return true

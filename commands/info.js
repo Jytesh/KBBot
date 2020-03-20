@@ -15,9 +15,9 @@ module.exports.run = (client,message)=>{
 		.addField('Version:', `**${config.version}**`, true)
 		.addField('Creator:', '**JJ_G4M3R & Jytesh**', true)
 		.addField('Invite:', '[https://krunkerlfgbot.gg/](https://discordapp.com/api/oauth2/authorize?client_id=678674368783450119&permissions=387136&scope=bot)')
-		.addField('Support Server:', '[https://discord.gg/lfg_bot](https://discord.gg/myHnhfD)', false)
+		.addField('Support Server:', '[https://discord.gg/lfg_bot](https://discord.gg/25KcmHg)', false)
 		.setTimestamp()
-		.setFooter('KrunkerLFG');
+		.setFooter('KrunkerLFG'+" | Coming to get you.");
     message.channel.send(eb)
 }
 
