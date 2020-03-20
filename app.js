@@ -4,6 +4,15 @@ const config = require("./config.json");
 const client = new Discord.Client();
 const fs = require("fs");
 const path = require("path");
+const env = require("dotenv")
+
+//Login
+env.config()
+if(process.argv[2] === 'dev') {
+  config.token = process.env.TOKEN
+}else if(process.argv[2] === 'test' || !process.argv[2]) {
+  config.token = process.env.TEST_TOKEN
+}
 
 //Loading Events from /events directory
 fs.readdir("./events/", (err, files) => { //Getting all files from directory
