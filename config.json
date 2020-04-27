@@ -1,12 +1,12 @@
 {
     "prefix" : "$",
     "version": "1.0.4.3",
-    "token" : "Njk2NjczMjUxNzUzMDY2NTU2.XqafUQ.pKcuW1BFJPZV02QSZHq0tTRCaQE",
+    "token" : "/*INSERT YOUR TOKEN HERE */",
     "channels" : ["/* INSERT CHANNEL IDs HERE /*","/* MORE THAN ONE CHANNELS ARE ALLOWED */"],
     "lfg": {
         "NA" : "/* LFG Channel ID here*/",
         "EU" : "/* LFG Channel ID here*/",
-        "AS" : "704270828119785472",
+        "AS" : "/* LFG Channel ID here*/",
         "OCE" : "/* LFG Channel ID here*/"
     },
     "guild" : "/* OPTIONAL GUILD ID HERE */"
