@@ -2,7 +2,9 @@ const Discord = require("discord.js");
 const config = require("../config.json");
 const db = require("../json.db")
 module.exports = async (client, message) => { 
+    if(config.channels.includes("/* INSERT CHANNEL IDs HERE /*") || config.channels.includes(message.channel.id)) {
     client.setTimeout(async() => {
+        
         if(!message.deleted){ // Comic relief for those who decide to DM the bot.
             if(message.author.bot) return; // This will prevent bots from using the bot. Lovely!
 
@@ -25,4 +27,5 @@ module.exports = async (client, message) => {
             }
         }
     }, 1*1000);
+}
 };

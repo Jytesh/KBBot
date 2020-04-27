@@ -7,19 +7,23 @@ const path = require("path");
 const env = require("dotenv")
 
 //Login
-env.config()
-if(process.argv[2] === 'dev') {
-  config.token = process.env.TOKEN
-}else if(process.argv[2] === 'test' || !process.argv[2]) {
-  config.token = process.env.TEST_TOKEN
+if(config.token){
+  console.log("Token Found ==>",config.token)
 }
-
+else{
+  env.config()
+  if(process.argv[2] === 'dev') {
+    config.token = process.env.TOKEN
+  }else if(process.argv[2] === 'test' || !process.argv[2]) {
+    config.token = process.env.TEST_TOKEN
+  }
+}
 //Loading Events from /events directory
 fs.readdir("./events/", (err, files) => { //Getting all files from directory
   if (err) return console.error(err);
   let jsfile = files.filter(f => f.split(".").pop() === "js")
   if(jsfile.length <= 0){
-        return console.log("[KB Bot] There aren't any events!");
+        return console.log("[LFG Bot] There aren't any events!");
     }
   jsfile.forEach(file => { //For each file, ddo this.
     const event = require(`./events/${file}`);
@@ -37,7 +41,7 @@ fs.readdir("./commands/", (err, files) => {
     if(err) console.error(err);
     let jsfile = files.filter(f => f.split(".").pop() === "js");
     if(jsfile.length <= 0){
-        return console.log("[KB Bot] There aren't any commands!"); //JJ has fucked up
+        return console.log("[LFG Bot] There aren't any commands!"); //JJ has fucked up
     }
     jsfile.forEach((f, i) => {
       let pull = require(`./commands/${f}`)
@@ -48,13 +52,6 @@ fs.readdir("./commands/", (err, files) => {
       })
     });
 });
-//Logging In
-require("dotenv").config()
-if(process.argv[2] === 'dev'){
-    config.token = process.env.TOKEN
-}else if(process.argv[2] === 'test' || !process.argv[2]){
-    config.token = process.env.TEST_TOKEN
-    
-}
-client.login(config.token)
+
+client.login(config.token).catch(e => console.log("INVALID TOKEN ENTER CORRECT TOKEN!",e))
 module.exports.client = client;

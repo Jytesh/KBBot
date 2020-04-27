@@ -16,15 +16,15 @@ module.exports.run = async (client,message)=>{
         let Utility = commands.filter(e => e.config.type === "Utility")
         let General = commands.filter(e => e.config.type === "General")
         let Staff = commands.filter(e => e.config.type === "Staff")
-        let U_String = ""
+        let U_String = '\u200b '
         Utility.forEach(e =>{
             U_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
         });
-        let G_String = ""
+        let G_String = '\u200b '
         General.forEach(e =>{
             G_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
         });
-        let S_String = ""
+        let S_String = '\u200b '
         Staff.forEach(e =>{
             S_String += `> **${prefix+e.help.usage}**\r\n > •\`${e.help.description}\`\r\n`
         });

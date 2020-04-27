@@ -90,7 +90,7 @@ async function getChannel(link,message) {
             channel = await client.channels.fetch(await db.get(message.guild.id,"NA"))
         }else if(link == 'EU' || link == 'FRA') {
             channel = await client.channels.fetch(await db.get(message.guild.id,"EU"))
-        }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+        }else if(link == 'AS' || link == 'SIN' || link == 'TOK' || link == "BLR") {
             channel = await client.channels.fetch(await db.get(message.guild.id,"AS"))
         }else if(link == 'OCE' || link == 'SYD') {
             channel = await client.channels.fetch(await db.get(message.guild.id,"OCE"))
@@ -174,7 +174,7 @@ async function VerifyChannel(link,message){
                         region = "NA"
                     }else if(link == 'EU' || link == 'FRA') {
                         region = "EU"
-                    }else if(link == 'AS' || link == 'SIN' || link == 'TOK') {
+                    }else if(link == 'AS' || link == 'SIN' || link == 'TOK' || link == "BLR") {
                         region = "AS"
                     }else if(link == 'OCE' || link == 'SYD') {
                         region = "OCE"
@@ -182,7 +182,7 @@ async function VerifyChannel(link,message){
                 if(isRegion(region)){
               
                     let c = await db.get(message.guild.id,region)
-                    console.log(c)
+                    console.log(c, "185")
                     if(c){
                         return true
                     }else{
@@ -206,7 +206,7 @@ async function VerifyChannel(link,message){
 
 function isRegion(arg) {
     arg = arg.toUpperCase()
-    console.log(arg)
+    console.log(arg,"isRegion")
     switch(arg) {
         case 'NA':
             return true

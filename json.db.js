@@ -2,44 +2,20 @@ const js = require("./data/sqlite.json")
 const fs = require("fs")
 let exp = {
     get : async function(key,value){
-        let json = require("./data/sqlite.json")
-
-        //json = await JSON.parse(fs.readFileSync("./.data/sqlite.json")) ASYNCHROUNOUS
-        if(Object.keys(json).includes(key)){
-            if(value){
-                let val = json[key][value]
-                if(val)return val
-                else return false
-            }else{
-                return key
-            }
-        }else return false
-        
-        
+        let config = require("./config.json")
+        if(config.guild == "/* OPTIONAL GUILD ID HERE */" || !config.guild){
+            const client = require("./app").client
+            config.guild = client.guilds.cache.first().id
+        }
+        if(key == config.guild){
+            console.log(config.lfg[value])
+            return config.lfg[value]
+        }
     },
     prefix: async function(id){
-        let guild = require("./data/sqlite.json")[id]
-        if(guild){
-            let prefix = guild.PREFIX
-        if(prefix){
-            return prefix
-        }else{
-            return require("./config.json").prefix
-        }
-        }else{
-            return require("./config.json").prefix
-        }
+        let config = require("./config.json")
+        return config.prefix
         
-    },
-    set : async function(key,value){
-        let keys = Object.keys(value)
-        let json = require("./data/sqlite.json")
-        //json = await JSON.parse(fs.readFileSync("./.data/sqlite.json")) // asynchronous + slow
-        for(let k of keys){
-        json[key][k] = value[k]
-        }
-        await fs.writeFileSync("./data/sqlite.json",JSON.stringify(json))
-        return {key:value}
     }
 }
 module.exports = exp
