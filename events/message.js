@@ -13,9 +13,9 @@ module.exports = async (client, message) => {
             if(message.channel.id == '688434522072809500') { //#looking-for-game
                 lfg.run(client, message)
             }else if(message.channel.id == '687539638168059956') { //#bunker-bot-commands
-                if(message.channel.content.indexOf(`${config.prefix}info`) == 0) {
+                if(message.content.indexOf(`${config.prefix}info`) == 0) {
                     info.run(client, message)
-                }else if(message.channel.content.indexOf(`${config.prefix}lfg`) == 0) {
+                }else if(message.content.indexOf(`${config.prefix}lfg`) == 0) {
                     lfg.run(client, message)
                 }
             } 
