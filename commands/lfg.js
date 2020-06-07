@@ -3,7 +3,7 @@ const {MessageEmbed} = require("discord.js")
 module.exports.run = async(client,message)=>{
     var args
     if(message.content.indexOf('$lfg') == 0) {
-        args = message.content.substring(4).split(' ')
+        args = message.content.substring(5).split(' ')
     }else {
         args = message.content.split(' ');
     }
