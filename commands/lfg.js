@@ -57,7 +57,7 @@ module.exports.run = async(client,message)=>{
     if(message.channel.id == '688434522072809500') message.delete
 }
 
-function error() {
+function error(message) {
     message.channel.send(new MessageEmbed()
         .setColor('RED')
         .setTitle('Error')
