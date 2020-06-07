@@ -49,12 +49,14 @@ module.exports.run = async(client,message)=>{
                     eb.setColor('GREEN')
                     break;
             }
-            const sentGame = message.channel.send(eb);
-            sentGame.delete(options = { timeout = 1800000 });
+            message.channel.send(eb).then(msg => {
+                msg.delete(timeout = 1800000)
+            })
         }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            const sentParty = message.channel.send(eb);
-            sentPartydelete(options = { timeout = 1800000 });
+            message.channel.send(eb).then(msg => {
+                msg.delete(timeout = 1800000)
+            });
         }else{
             error(message)
         }
@@ -65,14 +67,15 @@ module.exports.run = async(client,message)=>{
 }
 
 function error(message) {
-    const sentError = message.channel.send(new MessageEmbed()
+    message.channel.send(new MessageEmbed()
         .setColor('RED')
         .setTitle('Error')
         .setDescription('Misuse of <#688434522072809500>. Please only send game links with an optional description afterwards.')
         .setTimestamp()
         .setFooter(`${message.member.displayName} (${message.author.tag})`, message.author.avatarURL())
-    )
-    sentError.delete(options = { timeout = 30000 });
+    ).then(msg => {
+        msg.delete(timeout = 30000)
+    })
 }
 
 module.exports.config = {
