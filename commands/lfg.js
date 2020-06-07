@@ -1,9 +1,4 @@
 const {MessageEmbed} = require("discord.js")
-const config = require("../config.json")
-const utils = require("../utils")
-const db =require("../json.db")
-//const {NA,EU,OCE,AS} = require("../utils.js").channels
-const {ffa, tdm, ctf, point, party, other} = require('../utils.js').gamemodes
 
 module.exports.run = async(client,message)=>{
     let args = message.content.split(' ');

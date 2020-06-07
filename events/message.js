@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const config = require("../config.json");
+
 module.exports = async (client, message) => { 
     client.setTimeout(async() => {
         if(!message.deleted){ 
@@ -9,9 +10,15 @@ module.exports = async (client, message) => {
                 message.channel.send("No u")
                 return
             }
-            if(message.channel.id == '688434522072809500' || message.channel.id == '687539638168059956') {
+            if(message.channel.id == '688434522072809500') { //#looking-for-game
                 lfg.run(client, message)
-            }
+            }else if(message.channel.id == '687539638168059956') { //#bunker-bot-commands
+                if(message.channel.content.indexOf(`${config.prefix}info`) == 0) {
+                    info.run(client, message)
+                }else if(message.channel.content.indexOf(`${config.prefix}lfg`) == 0) {
+                    lfg.run(client, message)
+                }
+            } 
             
         }
     }, 1*1000);
