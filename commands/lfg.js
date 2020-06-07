@@ -17,7 +17,7 @@ module.exports.run = async(client,message)=>{
             .setFooter('KrunkerLFG')
             .setTimestamp()
             
-        if(args.length > 1) {
+        if(args.length > 0) {
             var desc = args.join(' ')
             eb.setDescription(desc == desc.toUpperCase() ? desc.toLowerCase() : desc)
         }
@@ -59,7 +59,7 @@ module.exports.run = async(client,message)=>{
     }else{
         error(message)
     }
-    if(message.channel.id == '688434522072809500') message.delete
+    message.delete
 }
 
 function error(message) {
