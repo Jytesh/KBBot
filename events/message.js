@@ -11,12 +11,12 @@ module.exports = async (client, message) => {
                 return
             }
             if(message.channel.id == '688434522072809500') { //#looking-for-game
-                lfg.run(client, message)
+                client.commands.get('lfg').run(client, message)
             }else if(message.channel.id == '687539638168059956') { //#bunker-bot-commands
                 if(message.content.indexOf(`${config.prefix}info`) == 0) {
-                    info.run(client, message)
+                    client.commands.get('info').run(client, message)
                 }else if(message.content.indexOf(`${config.prefix}lfg`) == 0) {
-                    lfg.run(client, message)
+                    client.commands.get('lfg').run(client, message)
                 }
             } 
             
