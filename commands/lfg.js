@@ -19,7 +19,7 @@ module.exports.run = async(client,message)=>{
             
         if(args.length > 0) {
             var desc = args.join(' ')
-            eb.setDescription(desc == desc.toUpperCase() ? desc.toLowerCase() : desc)
+            if(desc.indexOf('krunker.io') == -1) eb.setDescription(desc == desc.toUpperCase() ? desc.toLowerCase() : desc)
         }
         
         if(link.indexOf("https://krunker.io/?game=") == 0 && link.split('=')[1].split(':')[1].length == 5) {
@@ -49,27 +49,30 @@ module.exports.run = async(client,message)=>{
                     eb.setColor('GREEN')
                     break;
             }
-            message.channel.send(eb);
+            const sentGame = message.channel.send(eb);
+            sentGame.delete(options = { timeout = 1800000 });
         }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            message.channel.send(eb);
+            const sentParty = message.channel.send(eb);
+            sentPartydelete(options = { timeout = 1800000 });
         }else{
             error(message)
         }
     }else{
         error(message)
     }
-    message.delete
+    message.delete();
 }
 
 function error(message) {
-    message.channel.send(new MessageEmbed()
+    const sentError = message.channel.send(new MessageEmbed()
         .setColor('RED')
         .setTitle('Error')
         .setDescription('Misuse of <#688434522072809500>. Please only send game links with an optional description afterwards.')
         .setTimestamp()
         .setFooter(`${message.member.displayName} (${message.author.tag})`, message.author.avatarURL())
     )
+    sentError.delete(options = { timeout = 30000 });
 }
 
 module.exports.config = {
