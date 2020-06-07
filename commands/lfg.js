@@ -1,7 +1,12 @@
 const {MessageEmbed} = require("discord.js")
 
 module.exports.run = async(client,message)=>{
-    let args = message.content.split(' ');
+    var args
+    if(message.content.indexOf('$lfg') == 0) {
+        args = message.content.substring(4).split(' ')
+    }else {
+        args = message.content.split(' ');
+    }
     const link = args.shift();
     
     if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
@@ -49,10 +54,10 @@ module.exports.run = async(client,message)=>{
             eb.setColor('BLACK')
             message.channel.send(eb);
         }else{
-            error()
+            error(message)
         }
     }else{
-        error()
+        error(message)
     }
     if(message.channel.id == '688434522072809500') message.delete
 }
