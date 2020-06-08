@@ -49,14 +49,14 @@ module.exports.run = async(client,message)=>{
                     eb.setColor('GREEN')
                     break;
             }
-            message.channel.send(eb)
+            message.reply(eb)
                 .then(msg => {
                     msg.delete({ timeout: 1800000 })
                 })
                 .catch(console.error);
         }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            message.channel.send(eb)
+            message.reply(eb)
                 .then(msg => {
                     msg.delete({ timeout: 1800000 })
                 })
@@ -78,7 +78,7 @@ function error(message) {
         .setTimestamp()
         .setFooter(`${message.member.displayName} (${message.author.tag})`, message.author.avatarURL())
     ).then(msg => {
-        msg.delete({ timeout: 10000 })
+        msg.delete({ timeout: 7000 })
     }).catch(console.error);
 }
 
