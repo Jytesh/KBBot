@@ -11,7 +11,7 @@ module.exports.run = async(client,message)=>{
     
     if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
         let eb = new MessageEmbed()
-            .setTitle(message.author + ' is looking to party! :tada:')
+            .setTitle(message.member.displayName + ' is looking to party! :tada:')
             .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
             .addField('Link: ', link)
             .setFooter('KrunkerLFG')
@@ -78,7 +78,7 @@ function error(message) {
         .setTimestamp()
         .setFooter(`${message.member.displayName} (${message.author.tag})`, message.author.avatarURL())
     ).then(msg => {
-        msg.delete({ timeout: 20000 })
+        msg.delete({ timeout: 10000 })
     }).catch(console.error);
 }
 
