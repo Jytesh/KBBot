@@ -11,7 +11,7 @@ module.exports.run = async(client,message)=>{
     
     if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
         let eb = new MessageEmbed()
-            .setTitle(message.member.displayName + ' is looking to party! :tada:')
+            .setTitle(`<@${message.author.id}> is looking to party! :tada:`)
             .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
             .addField('Link: ', link)
             .setFooter('KrunkerLFG')
@@ -50,12 +50,12 @@ module.exports.run = async(client,message)=>{
                     break;
             }
             message.channel.send(eb).then(msg => {
-                msg.delete(timeout = 1800000)
+                msg.delete(1800000)
             })
         }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
             message.channel.send(eb).then(msg => {
-                msg.delete(timeout = 1800000)
+                msg.delete(1800000)
             });
         }else{
             error(message)
@@ -74,7 +74,7 @@ function error(message) {
         .setTimestamp()
         .setFooter(`${message.member.displayName} (${message.author.tag})`, message.author.avatarURL())
     ).then(msg => {
-        msg.delete(timeout = 30000)
+        msg.delete(30000)
     })
 }
 
