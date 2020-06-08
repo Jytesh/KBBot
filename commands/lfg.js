@@ -11,7 +11,7 @@ module.exports.run = async(client,message)=>{
     
     if(link.indexOf("https://krunker.io/?") == 0){ //Checks if its a krunker game link
         let eb = new MessageEmbed()
-            .setTitle(`<@${message.author.id}> is looking to party! :tada:`)
+            .setTitle(message.author + ' is looking to party! :tada:')
             .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
             .addField('Link: ', link)
             .setFooter('KrunkerLFG')
@@ -49,14 +49,14 @@ module.exports.run = async(client,message)=>{
                     eb.setColor('GREEN')
                     break;
             }
-            message.reply(eb)
+            message.channel.send(eb)
                 .then(msg => {
                     msg.delete({ timeout: 1800000 })
                 })
                 .catch(console.error);
         }else if(link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            message.reply(eb)
+            message.channel.send(eb)
                 .then(msg => {
                     msg.delete({ timeout: 1800000 })
                 })
