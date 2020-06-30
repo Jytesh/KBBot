@@ -8,11 +8,7 @@ const env = require("dotenv")
 
 //Login
 env.config()
-if(process.argv[2] === 'dev') {
-  config.token = process.env.TOKEN
-}else if(process.argv[2] === 'test' || !process.argv[2]) {
-  config.token = process.env.TEST_TOKEN
-}
+client.login(process.env.TOKEN)
 
 //Loading Events from /events directory
 fs.readdir("./events/", (err, files) => { //Getting all files from directory
@@ -48,13 +44,5 @@ fs.readdir("./commands/", (err, files) => {
       })
     });
 });
-//Logging In
-require("dotenv").config()
-if(process.argv[2] === 'dev'){
-    config.token = process.env.TOKEN
-}else if(process.argv[2] === 'test' || !process.argv[2]){
-    config.token = process.env.TEST_TOKEN
-    
-}
-client.login(config.token)
+
 module.exports.client = client;
