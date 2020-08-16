@@ -24,7 +24,7 @@ client.on('ready', async() => {
     client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
 });
 
-client.on('message', async() => {
+client.on('message', async(message) => {
     client.setTimeout(async() => {
         if (!message.deleted) {
             if (message.author.bot) return; // This will prevent bots from using the bot. Lovely!
