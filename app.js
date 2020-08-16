@@ -7,6 +7,7 @@ const path = require("path");
 const env = require("dotenv");
 const db = require("./mongo.js");
 
+//Boot up the database
 async function init() {
     await db.init().catch(console.error);
 }
@@ -16,19 +17,37 @@ init();
 env.config()
 client.login(process.env.TOKEN)
 
-//Loading Events from /events directory
-fs.readdir("./events/", (err, files) => { //Getting all files from directory
-    if (err) return console.error(err);
-    let jsfile = files.filter(f => f.split(".").pop() === "js")
-    if (jsfile.length <= 0) {
-        return console.log("[KB Bot] There aren't any events!");
-    }
-    jsfile.forEach(file => { //For each file, ddo this.
-        const event = require(`./events/${file}`);
-        let eventName = file.split(".")[0];
-        client.on(eventName, event.bind(null, client)); //Name of the file is the name of the event. https://discord.js.org/#/docs/main/stable/class/Client?scrollTo=e
-        delete require.cache[require.resolve(`./events/${file}`)];
-    });
+//Event Handler
+client.on('ready', async() => {
+    const ts = new Date();
+    console.log(`${ts.getFullYear()}-${ts.getMonth()}-${ts.getDate()}T${ts.getHours()}:${ts.getMinutes()}:${ts.getSeconds()}.${ts.getMilliseconds()}B${config.version} [Krunker Bunker Bot] ready to roll!`);
+    client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
+});
+
+client.on('message', async() => {
+    client.setTimeout(async() => {
+        if (!message.deleted) {
+            if (message.author.bot) return; // This will prevent bots from using the bot. Lovely!
+
+            if (!message.guild) return; // This will prevent the bot from responding to DMs. Lovely!
+
+            if (message.channel.id == '688434522072809500') { //#looking-for-game
+                //client.commands.get('lfg').run(client, message)
+            } else if (message.channel.id == '687539638168059956' || message.channel.id == '679429025445445643') { //#bunker-bot-commands and #dev
+                if (message.content.indexOf(`${config.prefix}info`) == 0) {
+                    client.commands.get('info').run(client, message);
+                } else if (message.content.indexOf(`${config.prefix}lfg`) == 0) {
+                    client.commands.get('lfg').run(client, message);
+                }
+            } else if (message.channel.id == '710454866002313248') { //#trading-board
+                client.commands.get('trading').run(client, message);
+            } else if (message.channel.id == '604386199976673291') { //#market-chat
+                client.commands.get('market').run(client, message);
+            } else if (message.channel.id == '727526422381461514') { //krunker-art
+                client.commands.get('art').run(client, message);
+            }
+        }
+    }, 1 * 250);
 });
 
 //Loading commands from /commands directory, to client
