@@ -32,7 +32,7 @@ client.on('message', async(message) => {
             if (!message.guild) return; // This will prevent the bot from responding to DMs. Lovely!
 
             if (message.channel.id == '688434522072809500') { //#looking-for-game
-                //client.commands.get('lfg').run(client, message)
+                client.commands.get('lfg').run(client, message)
             } else if (message.channel.id == '687539638168059956' || message.channel.id == '679429025445445643') { //#bunker-bot-commands and #dev
                 if (message.content.indexOf(`${config.prefix}info`) == 0) {
                     client.commands.get('info').run(client, message);
