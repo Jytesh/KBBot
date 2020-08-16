@@ -24,7 +24,7 @@ module.exports.run = (client, message) => {
         if (!canAccess) roles.forEach(role => { if (message.member.roles.cache.has(role)) canAccess = true; return });
         if (canAccess) {
             const str = message.content.split(' ').length == 2 ? `<@${message.content.split(' ')[1]}> ` : '';
-            message.channel.send(`${str}Need help with market? Here are the commands. \n - \`$stonks\` is for advice on whether a trade is good or bad. \n - \`$bid\` is for creating a new bid.`);
+            message.channel.send(`${str}Need help with market? Here are the commands. \n - \`$stonks\` is for advice on whether a trade is good or bad. \n - \`$bid\` is for creating a new bid. \n -> For both commands, please remember to include relevant images.`);
         }
         message.delete();
     } else if (message.content.indexOf(`${config.prefix}stonks`) == 0) {
@@ -35,12 +35,9 @@ module.exports.run = (client, message) => {
             message.delete();
             return;
         }
-        const emojis = {
-            stonks: client.emojis.cache.get('744384600780046438'),
-            meh: client.emojis.cache.get('744384600780046418'),
-            bonks: client.emojis.cache.get('744384601165791302')
-        }
-        message.react(emojis.stonks).then(message.react(emojis.meh)).then(message.react(emojis.bonks)).catch(console.error);
+        message.react(client.emojis.cache.get('744384600780046438'));
+        message.react(client.emojis.cache.get('744384600780046418'));
+        message.react(client.emojis.cache.get('744384601165791302'));
     }
 }
 
