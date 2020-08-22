@@ -37,7 +37,7 @@ module.exports.run = (client, message) => {
     } else if (message.content.startsWith(`${config.prefix}advise`)) {
         advise(client, message);
     } else if (message.content.startsWith(`${config.prefix}stonks`)) {
-        stonks(message);
+        stonks(client, message);
     } else if (message.content.startsWith(`${config.prefix}bid`)) {
         //bid(message);
     }
@@ -85,7 +85,7 @@ function advise(client, message) {
 }
 
 // Public Functions
-function stonks(message) {
+function stonks(client, message) {
     if (message.attachments.size == 0) { // Checks if message lacks an attachment
         message.reply("please include **cropped** image displaying the trade in question.").then(msg => {
             msg.delete({ timeout: 6000 }); // Autodel after 6000ms
