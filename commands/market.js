@@ -101,7 +101,7 @@ function stonks(message) {
 async function bid(message) {
     const args = message.content.split(" ");
     if (args[1] == '-c') { // Creating bid
-        const hasActiveBid = await db.market.hasActiveBid(message.author.id);
+        const hasActiveBid = await db.market.hasActiveBid(message.author.id, message.author.tag);
         if (hasActiveBid == -1) {
             dbError(message);
         } else if (hasActiveBid == true) {
@@ -110,17 +110,20 @@ async function bid(message) {
             }).catch(console.error);
         } else {
             if (message.attachments.size > 0) {
+                const attachUrl = message.attachments.first().url;
                 const createdBid = await db.market.createNewBid(message.author.id, {
-                    start: args.includes('-start') ? parseInt(args[args.indexOf('-start') - 1]) : defaultStart,
-                    min: args.includes('-min') ? parseInt(args[args.indexOf('-min') - 1]) : defaultMin,
-                    url: message.attachments.first().url
+                    start: args.length > 1 ? parseInt(args[2]) : defaultStart,
+                    min: args.length > 2 ? parseInt(args[3]) : defaultMin,
+                    url: attachUrl
                 });
                 if (createdBid == -1) {
                     dbError(message);
                 } else {
+                    console.log(createdBid.url)
                     const eb = new MessageEmbed()
                         .setTitle(`Bid #${await db.market.getUserBid(message.author.id)} Created`)
                         .setColor('GREEN')
+                        .addField('Host:', `<@${createdBid.uid}>`, true)
                         .addField('Starting bid:', `${createdBid.start} kr`, true)
                         .addField('Minimum increments:', `${createdBid.min} kr`, true)
                         .setImage(createdBid.url)
@@ -134,7 +137,7 @@ async function bid(message) {
             }
         }
     } else if (args[1] == '-f') { // Finalise bid
-        const hasActiveBid = await db.market.hasActiveBid(message.author.id);
+        const hasActiveBid = await db.market.hasActiveBid(message.author.id, message.author.tag);
         if (hasActiveBid == -1) {
             dbError(message);
         } else if (hasActiveBid == true) {
@@ -142,11 +145,13 @@ async function bid(message) {
             if (finalisedBid == -1) {
                 dbError(message);
             } else {
+                console.log(finalisedBid.url)
                 const eb = new MessageEmbed()
                     .setTitle(`Bid #${finalisedBid.bid} Finalised`)
                     .setColor('RED')
-                    .addField('Buyer:', `<@${finalisedBid.uid}>`, true)
-                    .addField('Final Price:', `${finalisedBid.curVal} kr`)
+                    .addField('Host:', `<@${finalisedBid.uid}>`, true)
+                    .addField('Buyer:', `<@${finalisedBid.bidder}>`, true)
+                    .addField('Final Price:', `${finalisedBid.curVal} kr`, true)
                     .setImage(finalisedBid.url)
                     .setTimestamp()
                 message.channel.send(eb);
