@@ -19,17 +19,16 @@ const advisors = [
     '425441636449910807', // JB#0001
     '504794061820133383', // ItzUchiha#8516
     '363756486100385801', // ReDeagle#7877
+    '411015471618588678', // lek#5811
+    '485676072176713729', // ._.#3220
+    '622950330283458580', // Arjun#0001
 ];
-
-// Default bid details
-const defaultMin = 10;
-const defaultStart = 100;
 
 module.exports.run = (client, message) => {
     if (message.content.startsWith(`${config.prefix}trade`)) {
         trade(message);
-    } else if (message.content.startsWith(`${config.prefix}market-help`)) {
-        marketHelp(message);
+    } else if (message.content.startsWith(`${config.prefix}help`)) {
+        helpCmd(message);
     } else if (message.content.startsWith(`${config.prefix}pins`)) {
         pins(message);
     } else if (message.content.startsWith(`${config.prefix}advisors`)) {
@@ -39,21 +38,56 @@ module.exports.run = (client, message) => {
     } else if (message.content.startsWith(`${config.prefix}stonks`)) {
         stonks(client, message);
     } else if (message.content.startsWith(`${config.prefix}bid`)) {
-        //bid(message);
+        bid(client, message);
     }
 }
 
 // Mini Mod Functions
 function trade(message) {
     miniModBase(message, 'Trade/Trading? Make sure you are in the right channel. \n - <#604386199976673291> is for trade advice \n - <#710454866002313248> is for trade listings.');
+
+    message.delete();
 }
 
-function marketHelp(message) {
-    miniModBase(message, 'Need help with market? Here are the commands. \n - \`$stonks\` is for advice on whether a trade is good or bad. \n - \`$bid\` is for creating a new bid (WIP not available yet). \n -> For both commands, please remember to include relevant images.');
+function helpCmd(message) {
+    const args = message.content.split(' ');
+    if (args[1] == '-user') {
+        if (users.includes(message.author.id)) {
+            const eb = new MessageEmbed()
+                .setTitle('Krunker Bunker Bot Help Guide - Users')
+                .setColor('ORANGE')
+                .addField(`\`${config.prefix}trade [optional id]\``, 'Remind kids where to trade items and where to get trade advice.')
+                .addField(`\`${config.prefix}help [optional id]\``, 'Remind kids of what commands they can use.')
+                .addField(`\`${config.prefix}help -users\``, 'This thingy.')
+                .addField(`\`${config.prefix}pins [optional id]\``, 'Remind kids of the pins.')
+                .addField(`\`${config.prefix}advisors\``, 'Remind kids of who the current advisors are.')
+                .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+                .setTimestamp();
+            message.author.createDM().then(m => m.send(eb));
+        }
+    } else if (args[1] == '-advisor') {
+        if (advisors.includes(message.author.id)) {
+            const eb = new MessageEmbed()
+                .setTitle('Krunker Bunker Bot Help Guide - Advisors')
+                .setColor('RED')
+                .addField(`\`${config.prefix}advisors\``, 'Remind kids of who the current advisors are.')
+                .addField(`\`${config.prefix}advise (yes/no) (message id)\``, 'React with a special emotes to stonks votes.')
+                .addField()
+                .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+                .setTimestamp();
+            message.author.createDM().then(m => m.send(eb));
+        }
+    } else {
+        miniModBase(message, 'Need help with market? Here are the commands. \n - \`$stonks\` is for advice on whether a trade is good or bad. \n - \`$bid\` is for creating a new bid (See \`$bid -help\` for more information). \n -> For both commands, please remember to include relevant images.');
+    }
+
+    message.delete();
 }
 
 function pins(message) {
     miniModBase(message, '- No Free KR Spin flexing \n- No loadout showcases \n- No unboxings unless you intend to sell them \n- No cashbacks');
+
+    message.delete();
 }
 
 //Advisor Functions
@@ -62,14 +96,14 @@ function advisorsCmd(message) {
     if (!canAccess) roles.forEach(role => { if (message.member.roles.cache.has(role)) canAccess = true; return });
     if (canAccess) {
         var advisorsInString = '';
-        advisors.forEach((id) => {
-            advisorsInString += `- <@${id}> \n`
-        });
+        advisors.forEach((id) => { advisorsInString += `- <@${id}> \n` });
         const eb = new MessageEmbed()
             .setTitle('Advisors')
             .setDescription('This is a list of people who are known to give proper advice.')
             .setColor('GREEN')
-            .addField('Current Advisors:', advisorsInString);
+            .addField('Current Advisors:', advisorsInString)
+            .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+            .setTimestamp();
         message.channel.send(eb);
     }
     message.delete();
@@ -98,43 +132,51 @@ function stonks(client, message) {
     message.react(client.emojis.cache.get('744384601165791302')); // Bonks emote
 }
 
-async function bid(message) {
+async function bid(client, message) {
     const args = message.content.split(" ");
+    var doNotDelete = false;
+
     if (args[1] == '-c') { // Creating bid
         const hasActiveBid = await db.market.hasActiveBid(message.author.id, message.author.tag);
         if (hasActiveBid == -1) {
             dbError(message);
-        } else if (hasActiveBid == true) {
-            message.reply("you already have an active bid open. Please close the active bid before creating a new one.").then(msg => {
-                msg.delete({ timeout: 6000 });
-            }).catch(console.error);
-        } else {
+        } else if (hasActiveBid == false) {
             if (message.attachments.size > 0) {
-                const attachUrl = message.attachments.first().url;
-                const createdBid = await db.market.createNewBid(message.author.id, {
-                    start: args.length > 1 ? parseInt(args[2]) : defaultStart,
-                    min: args.length > 2 ? parseInt(args[3]) : defaultMin,
-                    url: attachUrl
-                });
-                if (createdBid == -1) {
-                    dbError(message);
+                if (args.length >= 4) {
+                    const createdBid = await db.market.createNewBid(message.author.id, {
+                        start: Math.abs(parseInt(args[2])),
+                        min: Math.abs(parseInt(args[3])),
+                        url: message.attachments.first().url
+                    });
+                    if (createdBid == -1) {
+                        dbError(message);
+                    } else {
+                        const eb = new MessageEmbed()
+                            .setTitle(`Bid #${createdBid.bid} Created`)
+                            .setColor('GREEN')
+                            .addField('Host:', `<@${createdBid.uid}>`, true)
+                            .addField('Starting bid:', `${createdBid.start} kr`, true)
+                            .addField('Minimum increments:', `${createdBid.min} kr`, true)
+                            .setThumbnail(createdBid.url)
+                            .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+                            .setTimestamp();
+                        message.channel.send(eb);
+                        doNotDelete = true;
+                    }
                 } else {
-                    console.log(createdBid.url)
-                    const eb = new MessageEmbed()
-                        .setTitle(`Bid #${await db.market.getUserBid(message.author.id)} Created`)
-                        .setColor('GREEN')
-                        .addField('Host:', `<@${createdBid.uid}>`, true)
-                        .addField('Starting bid:', `${createdBid.start} kr`, true)
-                        .addField('Minimum increments:', `${createdBid.min} kr`, true)
-                        .setImage(createdBid.url)
-                        .setTimestamp()
-                    message.channel.send(eb);
+                    message.reply("your message was deleted. Please ensure that your message includes the proper details required to create a bid.").then(msg => {
+                        msg.delete({ timeout: 6000 });
+                    }).catch(console.error);
                 }
             } else {
                 message.reply("please include an image displaying the item you wish to auction off.").then(msg => {
                     msg.delete({ timeout: 6000 });
                 }).catch(console.error);
             }
+        } else {
+            message.reply("you already have an active bid open. Please close the active bid before creating a new one.").then(msg => {
+                msg.delete({ timeout: 6000 });
+            }).catch(console.error);
         }
     } else if (args[1] == '-f') { // Finalise bid
         const hasActiveBid = await db.market.hasActiveBid(message.author.id, message.author.tag);
@@ -145,15 +187,15 @@ async function bid(message) {
             if (finalisedBid == -1) {
                 dbError(message);
             } else {
-                console.log(finalisedBid.url)
                 const eb = new MessageEmbed()
                     .setTitle(`Bid #${finalisedBid.bid} Finalised`)
                     .setColor('RED')
                     .addField('Host:', `<@${finalisedBid.uid}>`, true)
                     .addField('Buyer:', `<@${finalisedBid.bidder}>`, true)
                     .addField('Final Price:', `${finalisedBid.curVal} kr`, true)
-                    .setImage(finalisedBid.url)
-                    .setTimestamp()
+                    .setThumbnail(finalisedBid.url)
+                    .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+                    .setTimestamp();
                 message.channel.send(eb);
             }
         } else {
@@ -161,23 +203,94 @@ async function bid(message) {
                 msg.delete({ timeout: 6000 });
             }).catch(console.error);
         }
-    } else if (args[1] == '-b') { // Bid on item
-        const args = message.content.split(' ');
-        if (args.includes('-id') && args.includes('-inc')) {
-            const bidIsHigher = await db.market.bidIsHigher(args[args.indexOf('-id') - 1], args[args.indexOf('-inc') - 1]);
-            if (bidIsHigher == -1) {
+    } else if (args[1] == '-help') { //Help with bid
+        const eb = new MessageEmbed()
+            .setTitle('Need help with bidding in Krunker Bunker?')
+            .setColor('BLURPLE')
+            .setAuthor(client.user.tag, client.user.avatarURL())
+            .setDescription('In-depth tutorial on how to use the bidding function in Krunker Bunker. All modifiers and input fields are to be separated by a space (\` \`).')
+            .addField('Usage:', `\`${config.prefix}bid -c\``, true)
+            .addField('Description:', `In order to create a bid, use the \`-c\` modifer after the bid command. Next, input the desired starting value for the bid. Finally, input the desired minimum increment for the bid (this is how much more KR others must bid on top of the previous bid). The bot will then reply with a confirmation message containing the bid ID # other members can bid upon. \n\n ex) \`${config.prefix}bid -c 1000 100\` -> Creates a bid which starts at 1000 kr and with a minimum increment of 100 kr. \n\n *>Note: Must include an attached image displaying the item to be auctioned.*`, true)
+            .addField('\u200B', '\u200B')
+            .addField('Usage:', `\`${config.prefix}bid -f\``, true)
+            .addField('Description', `In order to finalise a bid, use the \`-c\` modifier after the bid command. The bot will then send a confirmation message containing all relevant information for the buyer and host. (Coming soon: Will also send a DM to the buyer to notify them of their purchase.) \n\n ex) \`${config.prefix}bid -f\` -> Finalises whatever bid the message author have open.`, true)
+            .addField('\u200B', '\u200B')
+            .addField('Usage:', `\`${config.prefix}bid [bid ID #]\``, true)
+            .addField('Description:', `In order to bid on items, enter the bid's ID # after the bid command. Next, input the desired value for the bid. The bot will then reply with a confirmation message containing updated inforamtion about the bid. \n\n ex) \`${config.prefix}bid 55 1100\` -> Bids 1000 kr on bid #55.`, true)
+            .addField('\u200B', '\u200B')
+            .addField('Usage:', `\`${config.prefix}bid -help\``, true)
+            .addField('Description:', `In order to see a detailed tutorial on how to use the bid command, use the \`-help\` modifier after the bid command. \n\n ex) \`${config.prefix}bid -help\` -> Sends a DM with this embeded message attached.`, true)
+            .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+            .setTimestamp();
+        message.author.createDM().then(m => m.send(eb));
+    } else { // Bid on item
+        const args = message.content.split('-').join('').split(' ');
+        if (args.length == 3) {
+            const exists = await db.market.bidExists(parseInt(args[1]));
+            if (exists == -1) {
                 dbError(message);
-            } else {
-                const updateBid = await db.market.updateBid(args[args.indexOf('-id') - 1], message.author.id, args[args.indexOf('-inc') - 1]);
-                if (updateBid == -1) {
+            } else if (exists == true) {
+                const isOpen = await db.market.bidIsOpen(parseInt(args[1]));
+                if (isOpen == -1) {
                     dbError(message);
+                } else if (isOpen == true) {
+                    const isSelf = await db.market.isSelf(message.author.id, parseInt(args[1]));
+                    if (isSelf == -1) {
+                        dbError(message);
+                    } else if (isSelf == false) {
+                        const bidIsHigher = await db.market.bidIsHigher(parseInt(args[1]), parseInt(args[2]));
+                        if (bidIsHigher == -1) {
+                            dbError(message);
+                        } else if (bidIsHigher == true) {
+                            const updatedBid = await db.market.updateBid(parseInt(args[1]), message.author.id, parseInt(args[2]));
+                            if (updatedBid == -1) {
+                                dbError(message);
+                            } else {
+                                const eb = new MessageEmbed()
+                                    .setTitle(`Bid #${updatedBid.bid} Updated`)
+                                    .setColor('YELLOW')
+                                    .addField('Starting Price:', `${updatedBid.start} kr`, true)
+                                    .addField('Minimum Increment:', `${updatedBid.min} kr`, true)
+                                    .addField('Current Price:', `${updatedBid.curVal} kr`, true)
+                                    .addField('Host:', `<@${updatedBid.uid}>`, true)
+                                    .addField('Highest Bidder:', `<@${updatedBid.bidder}>`, true)
+                                    .setThumbnail(updatedBid.url)
+                                    .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+                                    .setTimestamp();
+
+                                message.channel.send(eb).then(async(m) => {
+                                    if (updatedBid.lastMsgID != -1) message.channel.messages.fetch(updatedBid.lastMsgID).then(m => m.delete());
+                                    const updateLastMsgID = await db.market.updateMsgID(parseInt(args[1]), m.id);
+                                    if (updateLastMsgID == -1) dbError(message);
+                                });
+                            }
+                        } else {
+                            message.reply('your bid is not high enough to outbid the previous highest bid and/or does not meet the minimum required increment.').then(msg => {
+                                msg.delete({ timeout: 6000 });
+                            }).catch(console.error);
+                        }
+                    } else {
+                        message.reply('you cannot bid on your own items.').then(msg => {
+                            msg.delete({ timeout: 6000 });
+                        }).catch(console.error);
+                    }
+                } else {
+                    message.reply(`bid #${args[1]} is already closed. Please pick another bid to bid on.`).then(msg => {
+                        msg.delete({ timeout: 6000 });
+                    }).catch(console.error);
                 }
+            } else {
+                message.reply(`bid #${args[1]} does not exist. Please make sure you have entered the correct bid ID #.`).then(msg => {
+                    msg.delete({ timeout: 6000 });
+                }).catch(console.error);
             }
         } else {
-            message.reply('your message was deleted. Please ensure that your message includes the proper details required to bid (\'-id\' and \'-inc\')');
+            message.reply('your message was deleted. Please ensure that your message includes the proper details required to bid.').then(msg => {
+                msg.delete({ timeout: 6000 });
+            }).catch(console.error);
         }
     }
-    message.delete();
+    if (!doNotDelete) message.delete();
 }
 
 // Util Functions 
@@ -194,7 +307,6 @@ function miniModBase(message, str) {
         const ping = message.content.split(' ').length == 2 ? `<@${message.content.split(' ')[1]}> ` : ''; // Allows for an optional ping with the message.
         message.channel.send(`${ping}${str}`);
     }
-    message.delete();
 }
 
 module.exports.config = {

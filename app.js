@@ -1,7 +1,10 @@
 // Load dependencies
 const Discord = require('discord.js');
 const config = require("./config.json");
-const client = new Discord.Client();
+const client = new Discord.Client({
+    fetchAllMembers: false,
+
+});
 const fs = require("fs");
 const path = require("path");
 const env = require("dotenv");
@@ -14,14 +17,17 @@ async function init() {
 init();
 
 //Login
-env.config()
-client.login(process.env.TOKEN)
+env.config();
+client.login(process.env.TOKEN);
 
 //Event Handler
 client.on('ready', async() => {
     const ts = new Date();
     console.log(`${ts.getFullYear()}-${ts.getMonth()}-${ts.getDate()}T${ts.getHours()}:${ts.getMinutes()}:${ts.getSeconds()}.${ts.getMilliseconds()}B${config.version} [Krunker Bunker Bot] ready to roll!`);
     client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
+
+    const lfgChannel = client.channels.fetch('688434522072809500');
+    lfgChannel.messages.cache().each(m => m.delete());
 });
 
 client.on('message', async(message) => {
@@ -47,7 +53,7 @@ client.on('message', async(message) => {
                 client.commands.get('art').run(client, message);
             }
         }
-    }, 1 * 250);
+    }, 250);
 });
 
 //Loading commands from /commands directory, to client
@@ -55,13 +61,16 @@ client.commands = new Discord.Collection(); //Discord's Collection Class, extend
 client.aliases = new Discord.Collection();
 
 fs.readdir("./commands/", (err, files) => {
-    if (err) console.error(err);
+    if (err) {
+        console.error(err);
+        return;
+    }
     let jsfile = files.filter(f => f.split(".").pop() === "js");
     if (jsfile.length <= 0) {
         return console.log("[KB Bot] There aren't any commands!"); //JJ has fucked up
     }
     jsfile.forEach((f, i) => {
-        let pull = require(`./commands/${f}`)
+        const pull = require(`./commands/${f}`)
 
         client.commands.set(pull.config.name, pull);
         pull.config.aliases.forEach(alias => {
