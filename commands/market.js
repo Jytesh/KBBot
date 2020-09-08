@@ -19,7 +19,6 @@ const advisors = [
     '425441636449910807', // JB#0001
     '504794061820133383', // ItzUchiha#8516
     '363756486100385801', // ReDeagle#7877
-    '411015471618588678', // lek#5811
     '485676072176713729', // ._.#3220
     '622950330283458580', // Arjun#0001
 ];
@@ -85,7 +84,7 @@ function helpCmd(message) {
 }
 
 function pins(message) {
-    miniModBase(message, '- No Free KR Spin flexing \n- No loadout showcases \n- No unboxings unless you intend to sell them \n- No cashbacks');
+    miniModBase(message, '\n- No Free KR Spin flexing \n- No loadout showcases \n- No unboxings unless you intend to sell them \n- No cashbacks \n- No sob-stories \n- No zero-to-hero challenge advertisements\n- No excessive usage of caps');
 
     message.delete();
 }
