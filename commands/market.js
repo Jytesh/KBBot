@@ -84,7 +84,7 @@ function helpCmd(message) {
 }
 
 function pins(message) {
-    miniModBase(message, '\n- - No Free KR Spin flexing \n- No loadout showcases \n- No unboxings unless you intend to sell them \n- No cashbacks \n- No sob-stories \n- No zero-to-hero challenge advertisements \n- No excessive usage of caps \n- No wagers, this is market chat, not wager chat \n- No begging');
+    miniModBase(message, '\n- No Free KR Spin flexing \n- No loadout showcases \n- No unboxings unless you intend to sell them \n- No cashbacks \n- No sob-stories \n- No zero-to-hero challenge advertisements \n- No excessive usage of caps \n- No wagers, this is market chat, not wager chat \n- No begging');
 
     message.delete();
 }
