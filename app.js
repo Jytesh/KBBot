@@ -49,8 +49,10 @@ client.on('message', async(message) => {
                 client.commands.get('trading').run(client, message);
             } else if (message.channel.id == '604386199976673291') { //#market-chat
                 client.commands.get('market').run(client, message);
-            } else if (message.channel.id == '727526422381461514') { //krunker-art
+            } else if (message.channel.id == '727526422381461514') { //#krunker-art
                 client.commands.get('art').run(client, message);
+            } else if (message.channel.id == '534664336027680768') { //#suggestions
+                client.commands.get('suggestions').run(client, message);
             }
         }
     }, 250);
