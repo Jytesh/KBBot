@@ -22,7 +22,6 @@ const advisors = [
     '363756486100385801', // ReDeagle#7877
     '485676072176713729', // ._.#3220
     '622950330283458580', // Arjun#0001
-    '519931575555850240', // Jordinias#6466
 ];
 
 module.exports.run = (client, message) => {
