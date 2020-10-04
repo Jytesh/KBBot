@@ -25,9 +25,6 @@ client.on('ready', async() => {
     const ts = new Date();
     console.log(`${ts.getFullYear()}-${ts.getMonth()}-${ts.getDate()}T${ts.getHours()}:${ts.getMinutes()}:${ts.getSeconds()}.${ts.getMilliseconds()}B${config.version} [Krunker Bunker Bot] ready to roll!`);
     client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
-
-    const lfgChannel = client.channels.fetch('688434522072809500');
-    lfgChannel.messages.cache().each(m => m.delete());
 });
 
 client.on('message', async(message) => {

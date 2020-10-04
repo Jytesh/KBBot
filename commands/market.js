@@ -112,7 +112,7 @@ function advisorsCmd(message) {
 function advise(client, message) {
     const args = message.content.split(' '); // Checks if author is an advisor
     if (advisors.includes(message.author.id)) {
-        const emote = args[1] == 'yes' ? client.emojis.cache.get('540751229022765067') : client.emojis.cache.get('692001947158315080'); // Gets emote depending on advisor's advice
+        const emote = args[1] == 'yes' ? client.emojis.cache.get('540751229022765067') : "💩"; // Gets emote depending on advisor's advice
         message.channel.messages.fetch(args[2]).then(m => m.react(emote)).catch(console.error); // Gets message by id and then reacts with emote
     }
     message.delete();
