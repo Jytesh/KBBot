@@ -98,9 +98,9 @@ function pins(message) {
         'No begging',
         'No excessive off-topic usage of the `$stonks` command',
     ];
-    
+
     const args = message.content.split(' ');
-    miniModBase(message, args.length == 3 && args[2] >= 0 && args[2] < rules.length ? `\n- ${rules[args[2]]}` : `\n- ${rules.join('\n- )}`);
+    miniModBase(message, args.length == 3 && args[2] >= 0 && args[2] < rules.length ? `\n- ${rules[args[2]]}` : `\n- ${rules.join('\n- ')}`);
 
     message.delete();
 }
