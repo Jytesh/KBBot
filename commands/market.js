@@ -86,7 +86,21 @@ function helpCmd(message) {
 }
 
 function pins(message) {
-    miniModBase(message, '\n- No Free KR Spin flexing \n- No loadout showcases \n- No unboxings unless you intend to sell them \n- No cashbacks \n- No sob-stories \n- No zero-to-hero challenge advertisements \n- No excessive usage of caps \n- No wagers, this is market chat, not wager chat \n- No begging \n- No excessive off-topic usage of the `$stonks` command');
+    const rules = [
+        'No Free KR Spin flexing',
+        'No loadout showcases',
+        'No unboxings unless you intend to sell them',
+        'No cashbacks',
+        'No sob-stories',
+        'No zero-to-hero challenge advertisements',
+        'No excessive usage of caps',
+        'No wagers, this is market chat, not wager chat',
+        'No begging',
+        'No excessive off-topic usage of the `$stonks` command',
+    ];
+    
+    const args = message.content.split(' ');
+    miniModBase(message, args.length == 3 && args[2] >= 0 && args[2] < rules.length ? `\n- ${rules[args[2]]}` : `\n- ${rules.join('\n- )}`);
 
     message.delete();
 }
@@ -305,7 +319,7 @@ function miniModBase(message, str) {
     var canAccess = users.includes(message.author.id); // Checks if author is in the access list
     if (!canAccess) roles.forEach(role => { if (message.member.roles.cache.has(role)) canAccess = true; return }); // If author is not in access list, checks if roles they have are.
     if (canAccess) {
-        const ping = message.content.split(' ').length == 2 ? `<@${message.content.split(' ')[1]}> ` : ''; // Allows for an optional ping with the message.
+        const ping = message.content.split(' ').length > 1 ? `<@${message.content.split(' ')[1]}> ` : ''; // Allows for an optional ping with the message.
         message.channel.send(`${ping}${str}`);
     }
 }
