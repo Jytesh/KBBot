@@ -35,23 +35,21 @@ client.on('message', async(message) => {
             if (!message.guild) return; // This will prevent the bot from responding to DMs. Lovely!
 
             if (message.channel.id == '688434522072809500') { //#looking-for-game
-                //client.commands.get('lfg').run(client, message)
+                client.commands.get('lfg').run(client, message)
             } else if (message.channel.id == '687539638168059956' || message.channel.id == '679429025445445643') { //#bunker-bot-commands and #dev
                 if (message.content.indexOf(`${config.prefix}info`) == 0) {
                     client.commands.get('info').run(client, message);
                 } else if (message.content.indexOf(`${config.prefix}lfg`) == 0) {
                     client.commands.get('lfg').run(client, message);
                 }
-
-
             } else if (message.channel.id == '710454866002313248') { //#trading-board
-                //client.commands.get('trading').run(client, message);
+                client.commands.get('trading').run(client, message);
             } else if (message.channel.id == '604386199976673291') { //#market-chat
-                //client.commands.get('market').run(client, message);
+                client.commands.get('market').run(client, message);
             } else if (message.channel.id == '727526422381461514') { //#krunker-art
-                //client.commands.get('art').run(client, message);
+                client.commands.get('art').run(client, message);
             } else if (message.channel.id == '534664336027680768') { //#suggestions
-                //client.commands.get('suggestions').run(client, message);
+                client.commands.get('suggestions').run(client, message);
             }
 
             if (message.guild.id == '448194623580667916' && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
