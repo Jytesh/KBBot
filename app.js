@@ -8,13 +8,6 @@ const client = new Discord.Client({
 const fs = require("fs");
 const path = require("path");
 const env = require("dotenv");
-const db = require("./mongo.js");
-
-//Boot up the database
-async function init() {
-    await db.init().catch(console.error);
-}
-init();
 
 //Login
 env.config();
