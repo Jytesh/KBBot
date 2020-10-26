@@ -1,5 +1,4 @@
 const config = require("../config.json");
-const db = require("../mongo.js");
 const { MessageEmbed } = require("discord.js")
 
 // Access IDs
