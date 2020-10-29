@@ -1,16 +1,15 @@
-const { MessageEmbed } = require("discord.js")
+const { MessageEmbed } = require("discord.js"),
+    logger = require('../logger');
 
 module.exports.run = (client, message) => {
-    var args = message.content.split(' ');
-    const sid = args.shift();
-    const suggestion = args.join(' ');
-    const eb = new MessageEmbed()
-        .setColor('YELLOW')
-        .setDescription(`${suggestion} \n\n - Suggested by <@${sid}>`)
-    message.channel.send(eb).then(sentEmbed => {
-        sentEmbed.react("👍");
-        sentEmbed.react("👎");
-    });
+    message.channel.send(new MessageEmbed()
+            .setColor('YELLOW')
+            .setDescription(`${message.content.split(' ').splice(1).join(' ')} \n\n - Suggested by <@${message.content.split(' ')[0]}>`))
+        .then(sentEmbed => {
+            sentEmbed.react("👍");
+            sentEmbed.react("👎");
+        });
+    logger.messageDeleted(message, 'Suggestion')
     message.delete();
 }
 

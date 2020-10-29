@@ -1,5 +1,6 @@
-const config = require("../config.json");
-const { MessageEmbed } = require("discord.js")
+const config = require("../config.json"),
+    { MessageEmbed } = require("discord.js"),
+    logger = require("../logger");
 
 // Access IDs
 const roles = [
@@ -42,7 +43,7 @@ module.exports.run = (client, message) => {
 // Mini Mod Functions
 function trade(message) {
     miniModBase(message, 'Trade/Trading? Make sure you are in the right channel. \n - <#604386199976673291> is for trade advice \n - <#710454866002313248> is for trade listings.');
-
+    logger.messageDeleted(message, 'Market command')
     message.delete();
 }
 
@@ -78,6 +79,7 @@ function helpCmd(message) {
         miniModBase(message, 'Need help with market? Here are the commands. \n - \`$stonks\` is for advice on whether a trade is good or bad. \n - \`$bid\` is for creating a new bid (See \`$bid -help\` for more information). \n -> For both commands, please remember to include relevant images.');
     }
 
+    logger.messageDeleted(message, 'Market command')
     message.delete();
 }
 
@@ -98,6 +100,7 @@ function pins(message) {
     const args = message.content.split(' ');
     miniModBase(message, args.length == 3 && args[2] >= 0 && args[2] < rules.length ? `\n- ${rules[args[2]]}` : `\n- ${rules.join('\n- ')}`);
 
+    logger.messageDeleted(message, 'Market command')
     message.delete();
 }
 
@@ -117,6 +120,7 @@ function advisorsCmd(message) {
             .setTimestamp();
         message.channel.send(eb);
     }
+    logger.messageDeleted(message, 'Market command')
     message.delete();
 }
 
@@ -126,6 +130,7 @@ function advise(client, message) {
         const emote = args[1] == 'yes' ? client.emojis.cache.get('540751229022765067') : "💩"; // Gets emote depending on advisor's advice
         message.channel.messages.fetch(args[2]).then(m => m.react(emote)).catch(console.error); // Gets message by id and then reacts with emote
     }
+    logger.messageDeleted(message, 'Market command')
     message.delete();
 }
 
