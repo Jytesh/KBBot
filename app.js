@@ -54,8 +54,19 @@ client.on('message', async(message) => {
 
             //Disable stickers in KB
             if (message.guild.id == '448194623580667916' && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
-                logger.messageDeleted(message, 'Sticker/Invite')
-                message.delete()
+                const roles = [
+                    '692870902005629041', //Trial Mod
+                    '448207247215165451', //Mod
+                    '448195089471111179', //CM
+                    '638129127555072028', //Yendis
+                    '448198031041495040', //Dev
+                ];
+                var canBypass = false;
+                if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+                if (!canBypass) {
+                    logger.messageDeleted(message, 'Sticker/Invite')
+                    message.delete()
+                }
             }
         }
     }, 250);
