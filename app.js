@@ -51,7 +51,7 @@ client.on('message', async(message) => {
 
             //Disable stickers in KB
             if (message.guild.id == '448194623580667916' && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
-                logger.messageDeleted(message, 'Sticker')
+                logger.messageDeleted(message, 'Sticker/Invite')
                 message.delete()
             }
         }
