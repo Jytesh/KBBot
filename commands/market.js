@@ -160,10 +160,4 @@ function miniModBase(message, str) {
 
 module.exports.config = {
     name: 'market',
-    aliases: ['market'],
-}
-module.exports.help = {
-    usage: '',
-    User: 0,
-    description: ''
 }

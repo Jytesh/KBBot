@@ -71,11 +71,4 @@ function error(message) {
 
 module.exports.config = {
     name: "lfg",
-    aliases: ["looking", "lf", "lfm"],
-    type: "General"
-}
-module.exports.help = {
-    usage: `lfg <link> [message]`, //Example usage of command
-    User: 2, //Who this command can be used by, 1 for Everyone 2 for Restricted Roles 3 for Moderators and 4 for Admins 5 for Server Owner
-    description: `Creates an LFG posting with <link> and [message].` //Description to come when you use prefix help <command name>
 }

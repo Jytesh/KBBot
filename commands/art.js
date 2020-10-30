@@ -19,10 +19,4 @@ module.exports.run = (client, message) => {
 
 module.exports.config = {
     name: 'art',
-    aliases: ['art'],
-}
-module.exports.help = {
-    usage: '',
-    User: 0,
-    description: ''
 }

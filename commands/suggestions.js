@@ -15,10 +15,4 @@ module.exports.run = (client, message) => {
 
 module.exports.config = {
     name: 'suggestions',
-    aliases: ['sug'],
-}
-module.exports.help = {
-    usage: '',
-    User: 0,
-    description: ''
 }
