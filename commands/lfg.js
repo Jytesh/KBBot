@@ -48,7 +48,7 @@ module.exports.run = async(client, message) => {
             message.reply(eb).then(msg => { msg.delete({ timeout: 1800000 }) }).catch(console.error);
         } else if (link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            message.reply(eb).then(msg => { msg.delete({ timeout: 1800000 }) }).catch(console.error);
+            message.reply(eb).then(msg => { msg.delete({ timeout: 600000 }) }).catch(console.error);
         } else {
             error(message)
         }
