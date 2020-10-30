@@ -1,7 +1,6 @@
 const logger = require('../logger'),
     { MessageEmbed } = require("discord.js");
 
-
 const roles = [
     '692870902005629041', //Trial Mod
     '448207247215165451', //Mod
