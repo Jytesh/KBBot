@@ -26,10 +26,4 @@ module.exports.run = (client, message) => {
 
 module.exports.config = {
     name: 'trading',
-    aliases: ['trading'],
-}
-module.exports.help = {
-    usage: '',
-    User: 0,
-    description: ''
 }
