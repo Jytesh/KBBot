@@ -1,6 +1,6 @@
 //Require basic classes
-const { MessageEmbed } = require("discord.js")
-const config = require("../config.json")
+const { MessageEmbed } = require("discord.js"),
+    config = require("../config.json");
 
 const day = 86400000
 const hour = 3600000
