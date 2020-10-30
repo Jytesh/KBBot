@@ -40,7 +40,7 @@ module.exports.run = (client, message) => {
             client.channels.cache.get('727467397740625951').send(new MessageEmbed()
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                 .setColor('BLURPLE')
-                .setDescription('► Content: \n> ' + message.content)
+                .addField('► Content: ', message.content)
                 .setFooter('Does anyone actually read this?')
                 .setTimestamp());
             logger.messageDeleted(message, 'Hacker Report - Report processed');
