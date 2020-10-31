@@ -65,6 +65,7 @@ client.on('message', async(message) => {
                     '448195089471111179', //CM
                     '638129127555072028', //Yendis
                     '448198031041495040', //Dev
+                    '674746305624408064', //Devoted
                 ];
                 var canBypass = false;
                 if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
