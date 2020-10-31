@@ -1,4 +1,5 @@
-const config = require("../config.json");
+const logger = require('../logger');
+
 const roles = [
     '692870902005629041', //Trial Mod
     '448207247215165451', //Mod
@@ -16,20 +17,13 @@ const users = [];
 module.exports.run = (client, message) => {
     var canBypass = false;
     if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
-    if (!canBypass) {
-        if (message.content.indexOf('https://krunker.io/social.html?p=profile&q=') < 0 && message.content.indexOf('https://kr.social/p/') < 0 && message.attachments.size == 0) {
-            message.channel.send(`<@${message.author.id}> Your message was deleted for breaking the following rule(s): \n > All trades require an inventory screenshot with the username visible, or a link to your account. \n *This is an automated message.*`);
-            message.delete();
-        }
+    if (!canBypass && message.content.indexOf('https://krunker.io/social.html?p=profile&q=') < 0 && message.content.indexOf('https://kr.social/p/') < 0 && message.attachments.size == 0) {
+        message.channel.send(`<@${message.author.id}> Your message was deleted for breaking the following rule(s): \n> All trades require an inventory screenshot with the username visible, or a link to your account. \n *This is an automated message.*`);
+        logger.messageDeleted(message, 'All trades require an inventory screenshot with the username visible, or a link to your account.');
+        message.delete();
     }
 }
 
 module.exports.config = {
     name: 'trading',
-    aliases: ['trading'],
-}
-module.exports.help = {
-    usage: '',
-    User: 0,
-    description: ''
 }
