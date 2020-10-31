@@ -50,6 +50,11 @@ client.on('message', async(message) => {
                 case '727452241749082113': // #report-hackers
                     client.commands.get('reporthackers').run(client, message);
                     break;
+                case '534605399287136257': // #random-chat
+                    if (message.content.includes('http')) {
+                        logger.messageDeleted(message, 'Temp link filter for random chat')
+                        message.delete();
+                    }
             }
 
             //Disable stickers in KB
