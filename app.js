@@ -51,15 +51,27 @@ client.on('message', async(message) => {
                     client.commands.get('reporthackers').run(client, message);
                     break;
                 case '534605399287136257': // #random-chat
+                    const randomRoles = [
+                        '692870902005629041', //Trial Mod
+                        '448207247215165451', //Mod
+                        '448195089471111179', //CM
+                        '638129127555072028', //Yendis
+                        '448198031041495040', //Dev
+                        '675168719827238941', //Active
+                    ];
                     if (message.content.includes('http')) {
-                        logger.messageDeleted(message, 'Temp link filter for random chat')
-                        message.delete();
+                        var canBypass = false;
+                        if (!canBypass) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+                        if (!canBypass) {
+                            logger.messageDeleted(message, 'Link ')
+                            message.delete();
+                        }
                     }
             }
 
             //Disable stickers in KB
             if (message.guild.id == '448194623580667916' && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
-                const roles = [
+                const stickerRoles = [
                     '692870902005629041', //Trial Mod
                     '448207247215165451', //Mod
                     '448195089471111179', //CM
@@ -68,7 +80,7 @@ client.on('message', async(message) => {
                     '674746305624408064', //Devoted
                 ];
                 var canBypass = false;
-                if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+                if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
                 if (!canBypass) {
                     logger.messageDeleted(message, 'Sticker/Invite')
                     message.delete()
