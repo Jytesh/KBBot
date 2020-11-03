@@ -15,6 +15,14 @@ client.on('ready', async() => {
     const ts = new Date();
     console.log('[Krunker Bunker Bot] ready to roll!');
     client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
+
+    //Deletes all messages in LFG on startup
+    lfg = client.channels.resolve('688434522072809500') //#looking-for-game
+    lfg.messages.fetch({limit:100},false,true).then(
+        messages=>{
+            lfg.bulkDelete(messages,true)
+        }
+    )
 });
 
 client.on('message', async(message) => {
