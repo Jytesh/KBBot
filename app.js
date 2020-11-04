@@ -7,6 +7,19 @@ const config = require("./config.json"),
     env = require("dotenv"),
     logger = require('./logger');
 
+//Loading commands from /commands directory, to client
+client.commands = new Discord.Collection();
+
+fs.readdir("./commands/", (err, files) => {
+    if (err) return console.error(err);
+    let jsfile = files.filter(f => f.split(".").pop() === "js");
+    if (jsfile.length <= 0) return console.log("[KB Bot] There aren't any commands!"); //JJ has fucked up
+    jsfile.forEach((f, i) => {
+        const pull = require(`./commands/${f}`)
+        client.commands.set(pull.config.name, pull);
+    });
+});
+
 //Login
 env.config();
 client.login(process.env.TOKEN);
@@ -17,13 +30,16 @@ client.on('ready', async() => {
     console.log('[Krunker Bunker Bot] ready to roll!');
     client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
 
-    //Deletes all messages in LFG on startup
-    lfg = client.channels.resolve('688434522072809500') //#looking-for-game
-    lfg.messages.fetch({ limit: 100 }, false, true).then(
-        messages => {
-            lfg.bulkDelete(messages, true)
-        }
-    )
+    client.channels.resolve(id.channels["looking-for-game"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
+        messages.array().forEach(m => {
+            logger.messageDeleted(m, 'Bot reboot autodel', 'AQUA')
+        });
+    });
+    client.channels.resolve(id.channels["report-hackers"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
+        messages.array().forEach(m => {
+            if (m.id != id.messages["report-hackers"]) client.commands.get('reporthackers').run(client, m)
+        })
+    });
 });
 
 client.on('message', async(message) => {
@@ -71,10 +87,7 @@ client.on('message', async(message) => {
                     if (message.content.includes('http')) {
                         var canBypass = false;
                         if (!canBypass) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
-                        if (!canBypass) {
-                            logger.messageDeleted(message, 'Random Chat Link')
-                            message.delete();
-                        }
+                        if (!canBypass) logger.messageDeleted(message, 'Random Chat Link', 'BLURPLE');
                     }
                     break;
             }
@@ -91,26 +104,10 @@ client.on('message', async(message) => {
                 ];
                 var canBypass = false;
                 if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
-                if (!canBypass) {
-                    logger.messageDeleted(message, 'Sticker/Invite')
-                    message.delete()
-                }
+                if (!canBypass) logger.messageDeleted(message, 'Sticker/Invite', 'BLURPLE');
             }
         }
     }, 250);
-});
-
-//Loading commands from /commands directory, to client
-client.commands = new Discord.Collection();
-
-fs.readdir("./commands/", (err, files) => {
-    if (err) return console.error(err);
-    let jsfile = files.filter(f => f.split(".").pop() === "js");
-    if (jsfile.length <= 0) return console.log("[KB Bot] There aren't any commands!"); //JJ has fucked up
-    jsfile.forEach((f, i) => {
-        const pull = require(`./commands/${f}`)
-        client.commands.set(pull.config.name, pull);
-    });
 });
 
 module.exports.client = client;
