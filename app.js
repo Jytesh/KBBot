@@ -1,6 +1,7 @@
 // Load dependencies
-const Discord = require('discord.js'),
-    config = require("./config.json"),
+const config = require("./config.json"),
+    id = require('./id.json'),
+    Discord = require('discord.js'),
     client = new Discord.Client({ fetchAllMembers: false }),
     fs = require("fs"),
     env = require("dotenv"),
@@ -18,9 +19,9 @@ client.on('ready', async() => {
 
     //Deletes all messages in LFG on startup
     lfg = client.channels.resolve('688434522072809500') //#looking-for-game
-    lfg.messages.fetch({limit:100},false,true).then(
-        messages=>{
-            lfg.bulkDelete(messages,true)
+    lfg.messages.fetch({ limit: 100 }, false, true).then(
+        messages => {
+            lfg.bulkDelete(messages, true)
         }
     )
 });
@@ -33,59 +34,60 @@ client.on('message', async(message) => {
             if (!message.guild) return; // This will prevent the bot from responding to DMs. Lovely!
 
             switch (message.channel.id) {
-                case '688434522072809500': // #looking-for-game
+                case id.channels["looking-for-game"]:
                     client.commands.get('lfg').run(client, message);
                     break;
-                case '687539638168059956' || '679429025445445643': // #bunker-bot-commands and #dev
+                case id.channels["bunker-bot-commands"] || id.channels["dev"]:
                     if (message.content.indexOf(`${config.prefix}info`) == 0) {
                         client.commands.get('info').run(client, message);
                     } else if (message.content.indexOf(`${config.prefix}lfg`) == 0) {
                         client.commands.get('lfg').run(client, message);
                     }
                     break;
-                case '710454866002313248': // #trading-board
+                case id.channels["trading-board"]:
                     client.commands.get('trading').run(client, message);
                     break;
-                case '604386199976673291': // #market-chat
+                case id.channels["market-chat"]:
                     client.commands.get('market').run(client, message);
                     break;
-                case '727526422381461514': // #krunker-art
+                case id.channels["krunker-art"]:
                     client.commands.get('art').run(client, message);
                     break;
-                case '534664336027680768': // #suggestions
+                case id.channels["suggestions"]:
                     client.commands.get('suggestions').run(client, message);
                     break;
-                case '727452241749082113': // #report-hackers
+                case id.channels["report-hackers"]:
                     client.commands.get('reporthackers').run(client, message);
                     break;
-                case '534605399287136257': // #random-chat
+                case id.channels["random-chat"]:
                     const randomRoles = [
-                        '692870902005629041', //Trial Mod
-                        '448207247215165451', //Mod
-                        '448195089471111179', //CM
-                        '638129127555072028', //Yendis
-                        '448198031041495040', //Dev
-                        '675168719827238941', //Active
+                        id.roles.dev,
+                        id.roles.yendis,
+                        id.roles.cm,
+                        id.roles.mod,
+                        id.roles.tmod,
+                        id.roles.active,
                     ];
                     if (message.content.includes('http')) {
                         var canBypass = false;
                         if (!canBypass) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
                         if (!canBypass) {
-                            logger.messageDeleted(message, 'Link ')
+                            logger.messageDeleted(message, 'Random Chat Link')
                             message.delete();
                         }
                     }
+                    break;
             }
 
             //Disable stickers in KB
-            if (message.guild.id == '448194623580667916' && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
+            if (message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 const stickerRoles = [
-                    '692870902005629041', //Trial Mod
-                    '448207247215165451', //Mod
-                    '448195089471111179', //CM
-                    '638129127555072028', //Yendis
-                    '448198031041495040', //Dev
-                    '674746305624408064', //Devoted
+                    id.roles.dev,
+                    id.roles.yendis,
+                    id.roles.cm,
+                    id.roles.mod,
+                    id.roles.tmod,
+                    id.roles.devoted,
                 ];
                 var canBypass = false;
                 if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });

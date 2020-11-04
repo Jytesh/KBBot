@@ -1,12 +1,13 @@
-const logger = require('../logger'),
-    { MessageEmbed } = require("discord.js");
+const id = require('../id.json'),
+    { MessageEmbed } = require("discord.js"),
+    logger = require('../logger');
 
 const roles = [
-    '692870902005629041', //Trial Mod
-    '448207247215165451', //Mod
-    '448195089471111179', //CM
-    '638129127555072028', //Yendis
-    '448198031041495040', //Dev
+    id.roles.dev,
+    id.roles.yendis,
+    id.roles.cm,
+    id.roles.mod,
+    id.roles.tmod,
 ];
 
 const rules = {
@@ -37,7 +38,7 @@ module.exports.run = (client, message) => {
                 .setDescription('Your report has been submitted for review. Thank you for the report.')
                 .setTimestamp()
             ).then(msg => { msg.delete({ timeout: 20000 }) }).catch(console.error);
-            client.channels.cache.get('727467397740625951').send(new MessageEmbed()
+            client.channels.cache.get(id.channels["hacker-reports"]).send(new MessageEmbed()
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                 .setColor('BLURPLE')
                 .addField('► Content: ', message.content)
