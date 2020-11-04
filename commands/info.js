@@ -1,11 +1,5 @@
-//Require basic classes
 const { MessageEmbed } = require("discord.js"),
     config = require("../config.json");
-
-const day = 86400000
-const hour = 3600000
-const minute = 60000
-const second = 1000
 
 module.exports.run = (client, message) => {
     const eb = new MessageEmbed()
@@ -20,13 +14,13 @@ module.exports.run = (client, message) => {
 
     time = client.uptime
     if (time / day > 1) {
-        eb.addField('Uptime', (time / day).toFixed(2) + 'd', true)
+        eb.addField('Uptime', (time / 86400000).toFixed(2) + 'd', true)
     } else if (time / hour > 1) {
-        eb.addField('Uptime', (time / hour).toFixed(2) + 'h', true)
+        eb.addField('Uptime', (time / 3600000).toFixed(2) + 'h', true)
     } else if (time / minute > 1) {
-        eb.addField('Uptime', (time / minute).toFixed(2) + 'm', true)
+        eb.addField('Uptime', (time / 60000).toFixed(2) + 'm', true)
     } else if (time / second > 1) {
-        eb.addField('Uptime', (time / second).toFixed(2) + 's', true)
+        eb.addField('Uptime', (time / 1000).toFixed(2) + 's', true)
     } else {
         eb.addField(time + 'ms')
     }
