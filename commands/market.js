@@ -44,7 +44,6 @@ module.exports.run = (client, message) => {
 }
 
 // Mini Mod Functions
-
 function helpCmd(message) {
     const args = message.content.split(' ');
     if (args[1] == '-user') {
@@ -73,8 +72,7 @@ function helpCmd(message) {
         message.channel.send("Need help with the stonks command? Just just send a message starting with `$stonks` with an image attached displaying the trade you want advice on.")
     }
 
-    logger.messageDeleted(message, 'Market command')
-    message.delete();
+    logger.messageDeleted(message, 'Market command', 'PURPLE');
 }
 
 function pins(message) {
@@ -111,8 +109,7 @@ function advisorsCmd(message) {
             .setTimestamp();
         message.channel.send(eb);
     }
-    logger.messageDeleted(message, 'Market command')
-    message.delete();
+    logger.messageDeleted(message, 'Market command', 'PURPLE');
 }
 
 function advise(client, message) {
@@ -121,16 +118,14 @@ function advise(client, message) {
         const emote = args[1] == 'yes' ? client.emojis.cache.get(id.emojis.verified) : "💩"; // Gets emote depending on advisor's advice
         message.channel.messages.fetch(args[2]).then(m => m.react(emote)).catch(console.error); // Gets message by id and then reacts with emote
     }
-    logger.messageDeleted(message, 'Market command')
-    message.delete();
+    logger.messageDeleted(message, 'Market command', 'PURPLE');
 }
 
 // Public Functions
 function stonks(client, message) {
     if (message.attachments.size == 0) { // Checks if message lacks an attachment
         message.reply("please include **cropped** image displaying the trade in question.").then(msg => { msg.delete({ timeout: 6000 }) }).catch(console.error);
-        logger.messageDeleted(message, "Invalid use of stonks command");
-        return message.delete();
+        logger.messageDeleted(message, 'Invalid use of stonks command', 'PURPLE');
     }
     message.react(client.emojis.cache.get(id.emojis.yes));
     message.react(client.emojis.cache.get(id.emojis.neutral));
@@ -145,8 +140,7 @@ function miniModBase(message, str) {
         const ping = message.content.split(' ').length > 1 ? `<@${message.content.split(' ')[1]}> ` : ''; // Allows for an optional ping with the message.
         message.channel.send(`${ping}${str}`);
     }
-    logger.messageDeleted(message, 'Market command')
-    message.delete();
+    logger.messageDeleted(message, 'Market command', 'PURPLE');
 }
 
 module.exports.config = {

@@ -13,8 +13,7 @@ module.exports.run = (client, message) => {
                 sentEmbed.react("👍");
                 sentEmbed.react("👎");
             });
-        logger.messageDeleted(message, 'Suggestion')
-        message.delete();
+        logger.messageDeleted(message, 'Suggestion', 'YELLOW')
     });
 }
 

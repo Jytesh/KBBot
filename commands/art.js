@@ -11,10 +11,7 @@ const roles = [
 module.exports.run = (client, message) => {
     var canBypass = false;
     if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
-    if (!canBypass && message.attachments.size == 0) {
-        logger.messageDeleted(message, 'No attachment')
-        message.delete();
-    }
+    if (!canBypass && message.attachments.size == 0) logger.messageDeleted(message, 'No attachment', 'ORANGE');
 }
 
 module.exports.config = {

@@ -29,8 +29,7 @@ module.exports.run = (client, message) => {
                 .setDescription('Your report has broken the following rule(s): \n' + rulesBroken)
                 .setTimestamp()
             ).then(msg => { msg.delete({ timeout: 20000 }) }).catch(console.error);
-            logger.messageDeleted(message, 'Hacker Report - Missing required info');
-            message.delete();
+            logger.messageDeleted(message, 'Hacker Report - Missing required info', 'RED');
         } else {
             message.reply(new MessageEmbed()
                 .setTitle('Thank you')
@@ -44,8 +43,7 @@ module.exports.run = (client, message) => {
                 .addField('► Content: ', message.content)
                 .setFooter('Does anyone actually read this?')
                 .setTimestamp());
-            logger.messageDeleted(message, 'Hacker Report - Report processed');
-            message.delete();
+            logger.messageDeleted(message, 'Hacker Report - Report processed', 'GREEN');
         }
     }
 }
