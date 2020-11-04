@@ -92,6 +92,23 @@ client.on('message', async(message) => {
                     break;
             }
 
+            //Loop message
+            if(message.guild.id = id.guilds.kb && message.content.toLowerCase().startsWith('$loop')) {
+                const loopRoles = [
+                    id.roles.dev,
+                    id.roles.yendis,
+                    id.roles.cm,
+                    id.roles.mod,
+                    id.roles.tmod,
+                ];   
+                var canUse = false;
+                if (!canUse) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canUse = true; return });
+                if (canUse) {
+                    var interval = setInterval(() => {
+                        message.channel.send(message.content.substring(message.content.indexOf(' ') + 1));
+                    }, 300*1000);
+                }
+            }
             //Disable stickers in KB
             if (message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 const stickerRoles = [
