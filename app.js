@@ -102,7 +102,7 @@ client.on('message', async(message) => {
                     id.roles.tmod,
                 ];   
                 var canUse = false;
-                if (!canUse) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canUse = true; return });
+                if (!canUse) loopRoles.forEach(role => { if (message.member.roles.cache.has(role)) canUse = true; return });
                 if (canUse) {
                     var interval = setInterval(() => {
                         message.channel.send(message.content.substring(message.content.indexOf(' ') + 1));
