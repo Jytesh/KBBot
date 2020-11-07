@@ -28,7 +28,9 @@ client.login(process.env.TOKEN);
 client.on('ready', async() => {
     const ts = new Date();
     console.log('[Krunker Bunker Bot] ready to roll!');
-    client.user.setActivity(`v${config.version}`, { type: "WATCHING" });
+    client.user.setActivity('DM JJ with bot suggestions', { type: "PLAYING" });
+
+    client.channels.resolve(id.channels["bunker-bot-commands"]).send(config.version);
 
     client.channels.resolve(id.channels["looking-for-game"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
         messages.array().forEach(m => {
