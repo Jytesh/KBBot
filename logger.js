@@ -8,7 +8,7 @@ module.exports = {
             .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
             .setDescription(`► Channel: **${message.channel.name}** \n► Message ID: ${message.id} \n► Content: \n> ${message.content}`)
             .addField('Reason:', reason)
-            .setFooter('First person to DM JJ gets 5k kr', message.client.user.displayAvatarURL())
+            .setFooter('No more KR, yall are boring', message.client.user.displayAvatarURL())
             .setTimestamp());
         if (message.deletable) message.delete();
     }
