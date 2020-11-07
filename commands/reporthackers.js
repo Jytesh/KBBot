@@ -15,13 +15,27 @@ const rules = {
     video: 'Reports must include a **YouTube** video, a **Streamable** video, a **Loom** video, or a **Twitch** clip when submitting a report. We will only accept video evidence from those platforms. \n - Reports with videos uploaded to any other video sharing platform will be deleted. \n - If your video or clip is deleted and is unavailable in the future, users that you reported may be unflagged.',
 };
 
+const socials = [
+    'https://kr.social/p/',
+    'https://krunker.io/social.html?p=profile&q=',
+];
+
+const videos = [
+    'https://www.youtube.com/watch?v=',
+    'https://youtu.be/',
+    'https://streamable.com/',
+    'https://www.loom.com/share/',
+    'https://clips.twitch.tv/',
+    'https://www.twitch.tv/',
+];
+
 module.exports.run = (client, message) => {
     var canBypass = false;
     if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
         let rulesBroken = '';
-        if (!message.content.includes('https://kr.social/p/') && !message.content.includes('https://krunker.io/social.html?p=profile&q=')) rulesBroken += `► ${rules.social} \n`;
-        if (!message.content.includes('https://www.youtube.com/watch?v=') && !message.content.includes('https://youtu.be/') && !message.content.includes('https://streamable.com/') && !message.content.includes('https://www.loom.com/share/') && !message.content.includes('https://clips.twitch.tv/') && !message.content.includes('https://www.twitch.tv/')) rulesBroken += `► ${rules.video}`;
+        if (socials.every(domain => !message.content.includes(domain))) rulesBroken += `► ${rules.social} \n`;
+        if (videos.every(domain => !message.content.includes(domain))) rulesBroken += `► ${rules.video}`;
         if (rulesBroken != '') {
             message.reply(new MessageEmbed()
                 .setTitle('Please make sure you read the rules about submitting a report')
@@ -41,7 +55,7 @@ module.exports.run = (client, message) => {
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                 .setColor('BLURPLE')
                 .addField('► Content: ', message.content)
-                .setFooter('Does anyone actually read this?')
+                .setFooter('YEEEET!')
                 .setTimestamp());
             logger.messageDeleted(message, 'Hacker Report - Report processed', 'GREEN');
         }
