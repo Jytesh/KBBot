@@ -1,5 +1,21 @@
 const { MessageEmbed } = require("discord.js"),
-    logger = require('../logger');
+    logger = require('../logger'),
+    fetch = require("node-fetch");
+
+const regions = {
+    AFR: 'AQUA',
+    BHN: 'GREEN',
+    BLR: 'BLUE',
+    BRZ: 'PURPLE',
+    DAL: 'GOLD',
+    FRA: 'ORANGE',
+    MIA: 'GREY',
+    NY: 'DARKER_GREY',
+    SIN: 'NAVY',
+    SV: 'DARK_AQUA',
+    SYD: 'DARK_GREEN',
+    TOK: 'DARK_BLUE',
+};
 
 module.exports.run = async(client, message) => {
     const args = message.content.indexOf('$lfg') == 0 ? message.content.substring(5).split(' ') : message.content.split(' ');
@@ -7,62 +23,50 @@ module.exports.run = async(client, message) => {
 
     if (link.indexOf("https://krunker.io/?") == 0) { //Checks if its a krunker game link
         let eb = new MessageEmbed()
+            .setAuthor(message.author.tag + ' (' + message.author.id + ')', message.author.avatarURL(), null)
             .setTitle(message.member.displayName + ' is looking to party! :tada:')
-            .setAuthor(message.member.displayName + ' (' + message.author.tag + ')', message.author.avatarURL(), null)
             .addField('Link: ', link)
-            .setFooter('KrunkerLFG')
-            .setTimestamp()
+            .setFooter(client.user.username, client.user.displayAvatarURL())
+            .setTimestamp();
 
         if (args.length > 0) {
-            var desc = args.join(' ')
-            if (desc.indexOf('krunker.io') == -1) eb.setDescription(desc == desc.toUpperCase() ? desc.toLowerCase() : desc)
+            const desc = args.join(' ');
+            if (desc.indexOf('krunker.io') == -1) eb.setDescription(desc.toUpperCase() ? desc.toLowerCase() : desc);
         }
 
-        if (link.indexOf("https://krunker.io/?game=") == 0 && link.split('=')[1].split(':')[1].length == 5) {
-            game = await getLinkInfo(link).catch(console.log)
-            console.log(game)
-            eb.addField('Players', game.players, true)
-            eb.addField('Map', game.map, true)
-            eb.addField('Game Mode', game.mode, true)
+        if (link.indexOf("https://krunker.io/?game=") == 0) {
+            const game = await getLinkInfo(link).catch(console.log);
+            if (game) {
+                const map = await getMapInfo(game.map).catch(console.log);
 
-            game.party ? eb.addField('Custom Match', 'Yes') : null;
-            switch (link.split('=')[1].split(':')[0]) {
-                case 'SV':
-                    eb.setColor('BLURPLE')
-                    break;
-                case 'MIA':
-                    eb.setColor('BLUE')
-                    break;
-                case 'NY':
-                    eb.setColor('AQUA')
-                    break;
-                case 'FRA':
-                    eb.setColor('GOLD')
-                    break;
-                case 'TOK':
-                    eb.setColor('ORANGE')
-                    break;
-                case 'SIN':
-                    eb.setColor('LUMINOUS_VIVID_PINK')
-                    break;
-                case 'BLR':
-                    eb.setColor('DARK_VIVID_PINK')
-                    break;
-                case 'SYD':
-                    eb.setColor('GREEN')
-                    break;
+                if (map.thumbnail) eb.setImage(map.thumbnail);
+                eb.setColor(regions[game.region])
+                    .addField('Players', game.players, true)
+                    .addField('Map', game.map, true)
+                    .addField('Game Mode', game.mode, true)
+
+                message.reply(eb).then(msg => { msg.delete({ timeout: 600000 }) }).catch(console.error);
+                autodel(message);
+            } else {
+                message.reply(new MessageEmbed()
+                    .setColor('RED')
+                    .setTitle('Error')
+                    .setDescription('Invalid game link.')
+                    .setTimestamp()
+                    .setFooter(`${message.member.displayName} (${message.author.tag})`, message.author.avatarURL())
+                ).then(msg => { msg.delete({ timeout: 7000 }) }).catch(console.error);
             }
-            message.reply(eb).then(msg => { msg.delete({ timeout: 1800000 }) }).catch(console.error);
         } else if (link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            message.reply(eb).then(msg => { msg.delete({ timeout: 600000 }) }).catch(console.error);
+            message.reply(eb).then(msg => { msg.delete({ timeout: 300000 }) }).catch(console.error);
+            autodel(message);
         } else {
             error(message)
         }
     } else {
         error(message)
     }
-    logger.messageDeleted(message, 'LFG', 'DARK_VIVID_PINK');
+    //logger.messageDeleted(message, 'LFG', 'DARK_VIVID_PINK');
 }
 
 function error(message) {
@@ -75,52 +79,80 @@ function error(message) {
     ).then(msg => { msg.delete({ timeout: 7000 }) }).catch(console.error);
 }
 
+function autodel(message) {
+    message.channel.messages.fetch({ limit: 100 }, false, true).then(messages => {
+        messages.array().forEach(m => {
+            if (m.content.includes(message.author.id)) m.delete();
+        });
+    });
+}
+
 function getLinkInfo(link) {
     return new Promise(async(resolve, reject) => {
         link = link.split("=")[1]
-
-        if (!link) return reject(new Error(false))
-        else {
-
-            const fetch = require("node-fetch")
-            options = {
+        if (!link) {
+            return reject(new Error(false));
+        } else {
+            const options = {
                 headers: {
                     'authority': 'matchmaker.krunker.io',
                     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36',
                     'origin': 'https://krunker.io',
                     'scheme': 'https',
                     'referer': 'https://krunker.io/',
-
                 }
             }
-            res = await fetch(`https://matchmaker.krunker.io/game-info?game=${link}`, options)
+            const res = await fetch(`https://matchmaker.krunker.io/game-info?game=${link}`, options);
+            const json = await res.json().catch(error => { reject(new Error('JSON', error)) });
 
-            json = await res.json().catch(
-                error => {
-                    console.log(error)
-                    reject(new Error('JSON', error))
-                })
-
-            if (!json) resolve(false)
+            if (!json) reject(new Error('JSON', error));
             if (!json.error) {
-
-                //json = JSON.parse(body)
-                const game = {
+                resolve({
                     region: json[0].split(":")[0],
                     players: `${json[2]}/${json[3]}`,
                     mode: json[4].i.split('_')[0],
                     map: json[4].i.split("_")[1],
-                    party: json[4].cs,
-                }
-
-                resolve(game)
-
+                });
             } else {
-                reject(new Error('404', json))
+                reject(new Error('404', json));
             }
         }
+    });
+}
 
-    })
+function getMapInfo(name) {
+    return new Promise(async(resolve, reject) => {
+        const options = {
+            uri: `https://api.krunker.io/search?type=map&val=${name}`,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36',
+                'origin': 'https://krunker.io',
+            },
+            json: true, // Automatically parses the JSON string in the response
+        };
+        const res = await fetch(`https://api.krunker.io/search?type=map&val=${name}`, options);
+        const json = await res.json().catch(error => { reject(new Error('JSON', error)) });
+        if (!json) reject(new Error('JSON', error));
+        if (!json.error) {
+            const map = json.data[0];
+            resolve({
+                id: map.map_id,
+                name: map.map_name,
+                creator: map.creatorname,
+                description: map.map_description,
+                votes: map.map_votes,
+                verified: map.map_verified,
+                date: new Date(map.map_date).toUTCString().split(' ').splice(0, 4).join(' '),
+                info: map.map_info,
+                updatecounter: map.map_updatecounter,
+                featured: map.map_featured,
+                fund: map.fund,
+                thumbnail: map.map_info = { 't': 1 } ? `https://user-assets.krunker.io/m${map.map_id}/thumb.png` : null
+            });
+        } else {
+            reject(new Error('404', json));
+        }
+    });
 }
 
 module.exports.config = {
