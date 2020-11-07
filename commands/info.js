@@ -8,6 +8,8 @@ module.exports.run = (client, message) => {
         .setColor("BLURPLE")
         .addField('Version:', `**${config.version}**`, true)
         .addField('Ping: ', `${client.ws.ping}ms`, true)
+        .addField('Server Count: ', client.guilds.cache.size, true)
+        .addField('User Count: ', client.guilds.cache.reduce((a, g) => { return a + g.memberCount }, 0), true)
         .setTimestamp()
         .setFooter('KrunkerLFG • Coming to get you');
 
