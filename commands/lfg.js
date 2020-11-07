@@ -66,7 +66,7 @@ module.exports.run = async(client, message) => {
     } else {
         error(message)
     }
-    //logger.messageDeleted(message, 'LFG', 'DARK_VIVID_PINK');
+    logger.messageDeleted(message, 'LFG', 'DARK_VIVID_PINK');
 }
 
 function error(message) {
