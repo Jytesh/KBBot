@@ -42,7 +42,7 @@ module.exports.run = (client, message) => {
                 .setColor('ORANGE')
                 .setDescription('Your report has broken the following rule(s): \n' + rulesBroken)
                 .setTimestamp()
-            ).then(msg => { msg.delete({ timeout: 20000 }) }).catch(console.error);
+            ).then(msg => { msg.delete({ timeout: 90000 }) }).catch(console.error);
             logger.messageDeleted(message, 'Hacker Report - Missing required info', 'RED');
         } else {
             message.reply(new MessageEmbed()
