@@ -38,8 +38,7 @@ module.exports.run = async(client, message) => {
             const game = await getLinkInfo(link).catch(console.log);
             if (game) {
                 const map = await getMapInfo(game.map).catch(console.log);
-
-                if (map.thumbnail) eb.setImage(map.thumbnail);
+                if(map)if (map.thumbnail) eb.setImage(map.thumbnail);
                 eb.setColor(regions[game.region])
                     .addField('Players', game.players, true)
                     .addField('Map', game.map, true)
@@ -135,6 +134,7 @@ function getMapInfo(name) {
         if (!json) reject(new Error('JSON', error));
         if (!json.error) {
             const map = json.data[0];
+            if(!map) reject(new Error('Map Not Found',json))
             resolve({
                 id: map.map_id,
                 name: map.map_name,
