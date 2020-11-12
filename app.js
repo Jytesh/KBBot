@@ -39,7 +39,7 @@ client.on('ready', async() => {
     });
     client.channels.resolve(id.channels["report-hackers"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
         messages.array().forEach(m => {
-            if (m.id != id.messages["report-hackers"]) client.commands.get('reporthackers').run(client, m)
+            if (m.id != id.messages["report-hackers"] && m.author.id != id.users.kbbot) client.commands.get('reporthackers').run(client, m)
         })
     });
 });
