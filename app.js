@@ -39,8 +39,8 @@ client.on('ready', async() => {
     });
     client.channels.resolve(id.channels["report-hackers"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
         messages.array().forEach(m => {
-            if (m.author.id != id.users.kbbot) m.delete({ timeout: 20000 });
-            else if (m.id != id.messages["report-hackers"]) client.commands.get('reporthackers').run(client, m);
+            if (m.author.id == id.users.kbbot) m.delete({ timeout: 20000 });
+            else if (m.author.id != id.users.vortx && m.author.id != id.users.jj) client.commands.get('reporthackers').run(client, m);
         })
     });
 });
