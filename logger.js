@@ -6,7 +6,7 @@ module.exports = {
             .setTitle('Message Deleted')
             .setColor(colour)
             .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-            .setDescription(`► Channel: **${message.channel.name}** \n► Message ID: ${message.id} \n► Content: \n> ${message.content}`)
+            .setDescription(`► Channel: **${message.channel.name}** \n► Message ID: ${message.id} \n► Content: \n${message.content}`)
             .addField('Reason:', reason)
             .setFooter('No more KR, yall are boring', message.client.user.displayAvatarURL())
             .setTimestamp());
