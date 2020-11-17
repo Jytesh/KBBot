@@ -93,6 +93,9 @@ client.on('message', async(message) => {
                         if (!canBypass) logger.messageDeleted(message, 'Random Chat Link', 'BLURPLE');
                     }
                     break;
+                    // case id.channels["automation-2"]:
+                    //     client.commands.get('modmail').run(client, message);
+                    //     break;
             }
 
             //Disable stickers in KB
@@ -113,4 +116,13 @@ client.on('message', async(message) => {
     }, 250);
 });
 
+client.on('messageReactionAdd', async(reaction, user) => {
+    if (user.bot) return; // Ignore bot reactions
+
+    switch (reaction.message.channel.id) {
+        case id.channels["automation-2"]:
+            client.commands.get('modmail').react(client, reaction, user);
+            break;
+    }
+});
 module.exports.client = client;
