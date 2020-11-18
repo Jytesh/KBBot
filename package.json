@@ -4,7 +4,7 @@
     "description": "KrunkerLFG is an LFG bot desgined for the online FPS game, krunker.io.",
     "main": "app.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "node app.js test",
         "start": "node --max_old_space_size=4096 app.js dev"
     },
     "author": "JJ_G4M3R & Jytesh",
