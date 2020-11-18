@@ -2,11 +2,15 @@
 const config = require("./config.json"),
     id = require('./id.json'),
     Discord = require('discord.js'),
-    client = new Discord.Client({ fetchAllMembers: false }),
+    client = new Discord.Client({ fetchAllMembers: false ,partials : ['GUILD_MEMBER','REACTION','USER','MESSAGE']}),
     fs = require("fs"),
-    env = require("dotenv"),
     logger = require('./logger');
-
+let env;
+if(process.argv[2] == 'test' || !process.argv[2]){
+    env = 'DEV'
+}else{
+    env = 'PROD'
+}
 //Loading commands from /commands directory, to client
 client.commands = new Discord.Collection();
 
@@ -21,28 +25,31 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 //Login
-env.config();
+require("dotenv").config();
 client.login(process.env.TOKEN);
 
 //Event Handlers
 client.on('ready', async() => {
     const ts = new Date();
     console.log('[Krunker Bunker Bot] ready to roll!');
-    client.user.setActivity('DM JJ with bot suggestions', { type: "PLAYING" });
+    if(env == 'PROD'){
+        client.user.setActivity('DM JJ with bot suggestions', { type: "PLAYING" });
 
-    client.channels.resolve(id.channels["bunker-bot-commands"]).send(config.version);
+        client.channels.resolve(id.channels["bunker-bot-commands"]).send(config.version);
 
-    client.channels.resolve(id.channels["looking-for-game"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
-        messages.array().forEach(m => {
-            logger.messageDeleted(m, 'Bot reboot autodel', 'AQUA')
+        client.channels.resolve(id.channels["looking-for-game"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
+            messages.array().forEach(m => {
+                logger.messageDeleted(m, 'Bot reboot autodel', 'AQUA')
+            });
         });
-    });
-    client.channels.resolve(id.channels["report-hackers"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
-        messages.array().forEach(m => {
-            if (m.author.id == id.users.kbbot) m.delete({ timeout: 20000 });
-            else if (m.author.id != id.users.vortx && m.author.id != id.users.jj) client.commands.get('reporthackers').run(client, m);
-        })
-    });
+        client.channels.resolve(id.channels["report-hackers"]).messages.fetch({ limit: 100 }, false, true).then(messages => {
+            messages.array().forEach(m => {
+                if (m.author.id == id.users.kbbot) m.delete({ timeout: 20000 });
+                else if (m.author.id != id.users.vortx && m.author.id != id.users.jj) client.commands.get('reporthackers').run(client, m);
+            })
+        });
+    }
+    
 });
 
 client.on('message', async(message) => {
@@ -93,11 +100,11 @@ client.on('message', async(message) => {
                         if (!canBypass) logger.messageDeleted(message, 'Random Chat Link', 'BLURPLE');
                     }
                     break;
-                    // case id.channels["automation-2"]:
-                    //     client.commands.get('modmail').run(client, message);
-                    //     break;
+                    case id.channels["automation-2"]:
+                        env == 'DEV' ? client.commands.get('modmail').run(client, message) : null ;
+                        break;
             }
-
+            if(env == 'DEV') return
             //Disable stickers in KB
             if (message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 const stickerRoles = [
@@ -118,11 +125,8 @@ client.on('message', async(message) => {
 
 client.on('messageReactionAdd', async(reaction, user) => {
     if (user.bot) return; // Ignore bot reactions
-
-    switch (reaction.message.channel.id) {
-        case id.channels["automation-2"]:
-            client.commands.get('modmail').react(client, reaction, user);
-            break;
+    if(reaction.message.channel.id == id.channels["bunker-bot-commands"]){
+        client.commands.get('modmail').react(client, reaction, user);
     }
 });
 module.exports.client = client;
