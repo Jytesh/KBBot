@@ -19,19 +19,19 @@ const clanRequirements = [
 
 module.exports.run = (client, message) => {
     const request = message.content.substring(0, message.content.indexOf(' '));
-    const content = message.content.substring(message.content.indexOf(' ') + 1);
+    let content = message.content.substring(message.content.indexOf(' ') + 1);
 
-    if (request == '' || content == '') {
+    /*if (request == '' || content == '') { //JJ uncomment this and why is this necessary
         message.channel.send(new MessageEmbed()
             .setTitle('Oi oi oi, u didnt include enough inputs')
             .setColor('RED')
         ).then(m => { m.delete({ timeout: 7000 }) });
-    }
+    }*/
 
     if (requestKeys["suggestion"].includes(request)) {
         client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
             .setTitle('Suggestions submission request')
-            .setColor('YELLOW')
+            .setColor(id.colors.suggest)
             .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
             .setDescription(content)
             .setTimestamp()
@@ -49,7 +49,7 @@ module.exports.run = (client, message) => {
         if (denyReasons == '') {
             client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
                 .setTitle('Clan Boards submission request')
-                .setColor('YELLOW')
+                .setColor(id.colors.clan)
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                 .setDescription(content)
                 .setTimestamp()
@@ -62,7 +62,7 @@ module.exports.run = (client, message) => {
                 .setTitle('Missing info')
                 .setColor('RED')
                 .setDescription(denyReasons)
-            ).then(m => { m.delete({ timeout: 7000 }) });
+            ).then(m => { m.delete({ timeout: 30000 }) });
         }
     }
 }
@@ -71,25 +71,52 @@ module.exports.react = async(client, reaction, user) => {
     await reaction.fetch();
     await reaction.message.fetch();
     const embed = reaction.message.embeds[0];
-
-    if (embed.color == 'YELLOW') switch (reaction.emoji.id) {
+    channel = null,
+        note = null;
+    if (!embed) return
+    console.log(embed.hexColor.toUpperCase(), id.colors.clan)
+    switch (embed.hexColor.toUpperCase()) {
+        case id.colors.suggest:
+            {
+                channel = id.channels.suggestions
+                note = 'suggestion'
+                break;
+            }
+        case id.colors.clan:
+            {
+                console.log('meet')
+                channel = id.channels["automation-2"] //change to clan boards when deploying
+                note = 'clan board application'
+                break;
+            }
+        case id.colors.green:
+            {
+                return //Already processed
+            }
+        case id.colors.red:
+            {
+                return //Already error
+            }
+    }
+    if (!channel) return console.log('Error')
+    switch (reaction.emoji.id) {
         case id.emojis.yes:
-            reaction.message.guild.channels.resolve(id.channels.suggestions).send(embed).then(m => {
+            reaction.message.guild.channels.resolve(channel).send(embed).then(m => {
                 m.react('👍');
                 m.react('👎');
             });
             embed.setColor('GREEN');
             break;
         case id.emojis.no:
-            reaction.message.channel.send(`<@${user.id}>, What is the reason for declining ${reaction.message.url}`)
+            reaction.message.channel.send(`<@${user.id}>, What is the reason for declining ${reaction.message.url} the ${note}`)
             messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Time up! Go decline it again."));
-            author_id = embed.author.name.match(/(([^)]+))/)[1] //Extracts the ID
+            author_id = embed.author.name.match(/\((\d{17,19})\)/)[1] //Extracts the ID
             member = reaction.message.guild.member(author_id)
-            member.send(new Discord.MessageEmbed().setDescription(`Your suggestion \`${embed.description}\` was declined due to \`${messages.first().content}\` `).setColor("GOLD"))
+            member.send(new MessageEmbed().setDescription(`Your ${note} \`${embed.description}\` was declined due to \`${messages.first().content}\` `).setColor("GOLD"))
             embed.setColor('RED');
-
             break;
     }
+    reaction.message.edit(embed)
 }
 
 module.exports.config = {
