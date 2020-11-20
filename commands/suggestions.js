@@ -12,8 +12,17 @@ module.exports.run = (client, message) => {
             .then(sentEmbed => {
                 sentEmbed.react("👍");
                 sentEmbed.react("👎");
+
+                suggester.createDM(true).then(dm => {
+                    dm.send(new MessageEmbed()
+                        .setColor('GREEN')
+                        .setTitle('Suggestion Posted')
+                        .setDescription(`Thank you for your suggestion. View your suggestion [here](${sentEmbed.url}).`)
+                        .setFooter('Suggestion posted by: ' + message.author.username, message.author.displayAvatarURL())
+                        .setTimestamp());
+                });
             });
-        logger.messageDeleted(message, 'Suggestion', 'YELLOW')
+        logger.messageDeleted(message, 'Suggestion', 'YELLOW');
     });
 }
 
