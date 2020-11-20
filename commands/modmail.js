@@ -31,7 +31,7 @@ module.exports.run = (client, message) => {
     if (requestKeys["suggestion"].includes(request)) {
         client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
             .setTitle('Suggestions submission request')
-            .setColor(id.colors.suggest)
+            .setColor(id.colours.suggest)
             .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
             .setDescription(content)
             .setTimestamp()
@@ -49,7 +49,7 @@ module.exports.run = (client, message) => {
         if (denyReasons == '') {
             client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
                 .setTitle('Clan Boards submission request')
-                .setColor(id.colors.clan)
+                .setColor(id.colours.clan)
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                 .setDescription(content)
                 .setTimestamp()
@@ -74,26 +74,26 @@ module.exports.react = async(client, reaction, user) => {
     channel = null,
         note = null;
     if (!embed) return
-    console.log(embed.hexColor.toUpperCase(), id.colors.clan)
+    console.log(embed.hexColor.toUpperCase(), id.colours.clan)
     switch (embed.hexColor.toUpperCase()) {
-        case id.colors.suggest:
+        case id.colours.suggest:
             {
                 channel = id.channels.suggestions
                 note = 'suggestion'
                 break;
             }
-        case id.colors.clan:
+        case id.colours.clan:
             {
                 console.log('meet')
                 channel = id.channels["automation-2"] //change to clan boards when deploying
                 note = 'clan board application'
                 break;
             }
-        case id.colors.green:
+        case id.colours.green:
             {
                 return //Already processed
             }
-        case id.colors.red:
+        case id.colours.red:
             {
                 return //Already error
             }
