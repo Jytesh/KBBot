@@ -29,6 +29,7 @@
         "automation-2": "778141538991341588",
         "bunker-bot-commands": "687539638168059956",
         "bunker-bot-logs": "770758419737083944",
+        "clan-boards": "534664312149508099",
         "dev": "679429025445445643",
         "general": "534593585354637324",
         "hacker-reports": "727467397740625951",
@@ -39,8 +40,7 @@
         "report-hackers": "727452241749082113",
         "suggestions": "534664336027680768",
         "trading-board": "710454866002313248",
-        "verified": "722612663753900103",
-        "clan-boards" : "534664312149508099" 
+        "verified": "722612663753900103"
     },
     "guilds": {
         "kb": "448194623580667916",
@@ -64,10 +64,10 @@
         "no": "744384601165791302",
         "verified": "540751229022765067"
     },
-    "colors" : {
-        "suggest" : "#FFFF00",
-        "clan" : "#0FFEEE",
-        "green" : "#2ECC71",
-        "red" : "#E74C3C"
+    "colours": {
+        "suggest": "#FFFF00",
+        "clan": "#0FFEEE",
+        "green": "#2ECC71",
+        "red": "#E74C3C"
     }
 }
