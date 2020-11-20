@@ -28,7 +28,7 @@ module.exports.run = (client, message) => {
         ).then(m => { m.delete({ timeout: 7000 }) });
     }
 
-    if (requestKeys['suggestion'].includes(request)) {
+    if (requestKeys["suggestion"].includes(request)) {
         client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
             .setTitle('Suggestions submission request')
             .setColor('YELLOW')
