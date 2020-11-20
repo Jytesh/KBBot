@@ -2,13 +2,14 @@
 const config = require("./config.json"),
     id = require('./id.json'),
     Discord = require('discord.js'),
-    client = new Discord.Client({ fetchAllMembers: false ,partials : ['GUILD_MEMBER','REACTION','USER','MESSAGE']}),
+    client = new Discord.Client({ fetchAllMembers: false, partials: ['GUILD_MEMBER', 'REACTION', 'USER', 'MESSAGE'] }),
     fs = require("fs"),
     logger = require('./logger');
+
 let env;
-if(process.argv[2] == 'test' || !process.argv[2]){
+if (process.argv[2] == 'test' || !process.argv[2]) {
     env = 'DEV'
-}else{
+} else {
     env = 'PROD'
 }
 //Loading commands from /commands directory, to client
@@ -32,7 +33,7 @@ client.login(process.env.TOKEN);
 client.on('ready', async() => {
     const ts = new Date();
     console.log('[Krunker Bunker Bot] ready to roll!');
-    if(env == 'PROD'){
+    if (env == 'PROD') {
         client.user.setActivity('DM JJ with bot suggestions', { type: "PLAYING" });
 
         client.channels.resolve(id.channels["bunker-bot-commands"]).send(config.version);
@@ -49,7 +50,7 @@ client.on('ready', async() => {
             })
         });
     }
-    
+
 });
 
 client.on('message', async(message) => {
@@ -100,12 +101,12 @@ client.on('message', async(message) => {
                         if (!canBypass) logger.messageDeleted(message, 'Random Chat Link', 'BLURPLE');
                     }
                     break;
-                    case id.channels["automation-2"]:
-                        env == 'DEV' ? client.commands.get('modmail').run(client, message) : null ;
-                        break;
+                case id.channels["automation-2"]:
+                    env == 'DEV' ? client.commands.get('modmail').run(client, message) : null;
+                    break;
             }
-            if(env == 'DEV') return
-            //Disable stickers in KB
+            if (env == 'DEV') return
+                //Disable stickers in KB
             if (message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 const stickerRoles = [
                     id.roles.dev,
@@ -125,7 +126,7 @@ client.on('message', async(message) => {
 
 client.on('messageReactionAdd', async(reaction, user) => {
     if (user.bot) return; // Ignore bot reactions
-    if(reaction.message.channel.id == id.channels["bunker-bot-commands"]){
+    if (reaction.message.channel.id == id.channels["bunker-bot-commands"]) {
         client.commands.get('modmail').react(client, reaction, user);
     }
 });
