@@ -251,6 +251,11 @@ function autoDeny(message, denyReasons) {
 }
 
 function approvalRequest(client, embed) {
+    client.channels.resolve(id.channels["submissions"]).send(new MessageEmbed()
+        .setTitle('Submission sent for review')
+        .setColor('GREEN')
+        .setDescription('To receive updates about your submission, please ensure that you do not have me blocked.')
+        .setTimestamp()).then(m => m.delete({ timeout: 10000 }));
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
@@ -266,7 +271,7 @@ function denyRequest(member, user, reason) {
             .setColor('ORANGE')
             .setDescription('Your submission request has been denied. For help, please check out the guide [here](https://discord.com/channels/448194623580667916/779620494328070144/779621435299725323). If you think this is a mistake, please contact ' + user.tag)
             .addField('Reason:', reason)
-            .setFooter(member.username, member.displayAvatarURL())
+            .setFooter('Submission denied by ' + member.username, member.displayAvatarURL())
             .setTimestamp());
     });
 }
