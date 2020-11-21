@@ -34,74 +34,72 @@ module.exports.run = (client, message) => {
     var canBypass = false;
     //if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
-        const request = message.content.substring(0, message.content.indexOf(' '));
-        let content = message.content.substring(message.content.indexOf(' ') + 1);
         let denyReasons = '';
 
-        if (requestKeys["suggestion"].includes(request)) {
+        if (message.content.toUpperCase().startsWith('SUGGEST')) {
             approvalRequest(client, new MessageEmbed()
                 .setTitle('Suggestions submission request')
                 .setColor('YELLOW')
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                .setDescription(content)
+                .setDescription(message.content.substring(message.content.indexOf(' ') + 1))
                 .setTimestamp());
-        } else if (requestKeys["clan-board"].includes(request)) {
-            requirements["clan-board"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+        } else if (message.content.toUpperCase().includes('CLAN NAME')) {
+            requirements["clan-board"].forEach(requirement => { if (message.content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
-            if (!content.startsWith('```')) content = '```' + content;
-            if (!content.endsWith('```')) content += '\n```';
+            if (!message.content.startsWith('```')) message.content = '```' + message.content;
+            if (!message.content.endsWith('```')) message.content += '\n```';
 
             if (denyReasons == '') {
                 approvalRequest(client, new MessageEmbed()
                     .setTitle('Clan boards submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setTimestamp());
             } else {
                 autoDeny(message, denyReasons);
             }
-        } else if (requestKeys["customizations"].includes(request)) {
+        } else if (message.content.toUpperCase().includes('TYPE')) {
             if (message.attachments.size == 0) denyReasons += '- ***Missing attachment*** \n';
             else if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["customizations"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["customizations"].forEach(requirement => { if (message.content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 approvalRequest(client, new MessageEmbed()
                     .setTitle('Customisations submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setImage(message.attachments.array()[0].url)
                     .setTimestamp());
             } else {
                 autoDeny(message, denyReasons);
             }
-        } else if (requestKeys["community-maps"].includes(request)) {
+        } else if (message.content.toUpperCase().includes('MAP NAME')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["community-maps"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["community-maps"].forEach(requirement => { if (message.content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 approvalRequest(client, new MessageEmbed()
                     .setTitle('Community maps submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setImage(message.attachments.array()[0].url)
                     .setTimestamp());
             } else {
                 autoDeny(message, denyReasons);
             }
-        } else if (requestKeys["community-mods"].includes(request)) {
+        } else if (message.content.toUpperCase().includes('MOD NAME')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["community-mods"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["community-mods"].forEach(requirement => { if (message.content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 const eb = new MessageEmbed()
                     .setTitle('Community mods submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setTimestamp();
                 if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
 
@@ -109,16 +107,16 @@ module.exports.run = (client, message) => {
             } else {
                 autoDeny(message, denyReasons);
             }
-        } else if (requestKeys["skin-vote-submissions"].includes(request)) {
+        } else if (message.content.toUpperCase().includes('SKIN NAME')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["skin-vote-submissions"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["skin-vote-submissions"].forEach(requirement => { if (message.content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 const eb = new MessageEmbed()
                     .setTitle('Skin vote submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setTimestamp();
                 if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
 
@@ -127,16 +125,16 @@ module.exports.run = (client, message) => {
                 autoDeny(message, denyReasons);
             }
 
-        } else if (requestKeys["bug-reports"].includes(request)) {
+        } else if (message.content.toUpperCase().includes('REPORT')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["bug-reports"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["bug-reports"].forEach(requirement => { if (message.content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 const eb = new MessageEmbed()
                     .setTitle('Bug reports submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setTimestamp();
                 if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
 
@@ -144,7 +142,7 @@ module.exports.run = (client, message) => {
             } else {
                 autoDeny(message, denyReasons);
             }
-        } else if (requestKeys["exploit-reports"].includes(request)) {
+        } else if (message.content.toUpperCase().includes('EXPLOIT')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
 
             if (denyReasons == '') {
@@ -152,7 +150,7 @@ module.exports.run = (client, message) => {
                     .setTitle('Exploit reports submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(content)
+                    .setDescription(message.content)
                     .setTimestamp();
                 if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
 
@@ -168,7 +166,7 @@ module.exports.run = (client, message) => {
             ).then(m => { m.delete({ timeout: 30000 }) });
         }
 
-        //logger.messageDeleted(message, 'Modmail', 'NAVY');
+        logger.messageDeleted(message, 'Modmail', 'NAVY');
     }
 }
 
@@ -185,21 +183,17 @@ module.exports.react = async(client, reaction, user) => {
             let sentMsg;
             switch (embed.title) {
                 case 'Suggestions submission request':
-                    client.channels.resolve(id.channels["suggestions"]).send(new MessageEmbed()
-                            .setColor('YELLOW')
-                            .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
-                            .setDescription(embed.description)
-                            .setFooter('Go to #submissions to submit a request')
-                            .setTimestamp())
-                        .then(sentEmbed => {
-                            sentEmbed.react("👍");
-                            sentEmbed.react("👎");
-
-                            sentMsg = sentEmbed;
-                        });
+                    sentMsg = await client.channels.resolve(id.channels["suggestions"]).send(new MessageEmbed()
+                        .setColor('YELLOW')
+                        .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
+                        .setDescription(embed.description)
+                        .setFooter('Go to #submissions to submit a request')
+                        .setTimestamp());
+                    sentMsg.react("👍");
+                    sentMsg.react("👎");
                     break;
                 case 'Clan boards submission request':
-                    sentMsg = await client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
+                    sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(new MessageEmbed()
                         .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
                         .setDescription(embed.description)
                         .setFooter('Go to #submissions to submit a request')
@@ -213,12 +207,6 @@ module.exports.react = async(client, reaction, user) => {
                     break;
                 case 'Community mods submission request':
 
-                    break;
-                case 'Skin vote submission request':
-                    sentMsg = await client.channels.resolve(id.channels["skin-vote-submissions"]).send(new MessageEmbed()
-                        .setuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
-                        .setImage(embed.image)
-                        .setTimestamp());
                     break;
                     // case 'Bug reports submission request':
                     //     break;
@@ -238,15 +226,15 @@ module.exports.react = async(client, reaction, user) => {
         case id.emojis.no:
             reaction.message.channel.send(`<@${user.id}> Please provide a reason:`)
             const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go decline it again."));
-            denyRequest(member, messages.first().content);
+            denyRequest(member, user, messages.first().content);
             embed.setColor('RED');
             break;
         case id.emojis.formatting:
-            denyRequest(member, 'Incorrect formatting.');
+            denyRequest(member, user, 'Incorrect formatting.');
             embed.setColor('RED');
             break;
         case id.emojis.missing:
-            denyRequest(member, 'Missing information.');
+            denyRequest(member, user, 'Missing information.');
             embed.setColor('RED');
             break;
     }
@@ -271,7 +259,7 @@ function approvalRequest(client, embed) {
     });
 }
 
-function denyRequest(member, reason) {
+function denyRequest(member, user, reason) {
     member.createDM().then(dm => {
         dm.send(new MessageEmbed()
             .setTitle('Submission request denied')
