@@ -26,7 +26,6 @@
         "member": "534594271592972320"
     },
     "channels": {
-        "automation-2": "778141538991341588",
         "bunker-bot-commands": "687539638168059956",
         "bunker-bot-logs": "770758419737083944",
         "clan-boards": "534664312149508099",
@@ -39,6 +38,8 @@
         "random-chat": "534605399287136257",
         "report-hackers": "727452241749082113",
         "skin-vote-submissions": "720694730123509841",
+        "submissions": "779620494328070144",
+        "submissions-review": "779620831268438047",
         "suggestions": "534664336027680768",
         "trading-board": "710454866002313248",
         "verified": "722612663753900103"
@@ -68,9 +69,6 @@
         "verified": "540751229022765067"
     },
     "colours": {
-        "suggest": "#FFFF00",
-        "clan": "#0FFEEE",
-        "green": "#2ECC71",
-        "red": "#E74C3C"
+        "YELLOW": "FFFF00"
     }
 }
