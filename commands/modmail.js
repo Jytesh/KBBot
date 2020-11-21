@@ -1,5 +1,4 @@
-const config = require("../config.json"),
-    id = require("../id.json"),
+const id = require("../id.json"),
     { MessageEmbed } = require("discord.js"),
     logger = require("../logger");
 
@@ -12,22 +11,22 @@ const roles = [
 ];
 
 const requestKeys = {
-    'clan-board': ['clan', 'clans', 'clan-board'],
     'suggestion': ['suggest', 'suggestion'],
+    'clan-board': ['clan', 'clans', 'clan-board'],
     'customizations': ['customization', 'customizations', 'customisation', 'customisations'],
     'community-maps': ['map', 'maps', 'community map', 'community maps'],
     'community-mods': ['mod', 'mods', 'community mod', 'community mods'],
     'skin-vote-submissions': ['skin', 'skins', 'skinvote', 'skin vote'],
-    'bug-reports': ['bug', 'bug report'],
-    'exploit-reports': ['exploit', 'exploit report'],
+    'bug-reports': [], //['bug', 'bug report'],
+    'exploit-reports': [], //['exploit', 'exploit report'],
 }
 
 const requirements = {
-    'clan-board': ['Clan Name:', 'Clan Level:', 'Clan Leader(s):', 'Clan Info:', 'Contact Info:', 'Discord Link:'],
-    'customizations': ['Type:', 'Name:', 'By:'],
-    'community-maps': ['Map Name:', 'Map Link:', 'Submitted by:', 'Description:'],
-    'community-mods': ['Mod Name:', 'Modifies:', 'Submitted by:'],
-    'skin-vote-submissions': ['Name:', 'By:'],
+    'clan-board': ['Clan Name:', 'Clan Level:', 'Clan Info:', 'discord.gg/'],
+    'customizations': ['Type:', 'Name:'],
+    'community-maps': ['Map Name:', 'Description:'],
+    'community-mods': ['Mod Name:', 'Modifies:'],
+    'skin-vote-submissions': ['Name:'],
     'bug-reports': ['Platform:', 'Operating System:', 'Report:', 'Reported by:', 'IGN:'],
 }
 
@@ -42,20 +41,20 @@ module.exports.run = (client, message) => {
         if (requestKeys["suggestion"].includes(request)) {
             approvalRequest(client, new MessageEmbed()
                 .setTitle('Suggestions submission request')
-                .setColor(id.colours.suggest)
+                .setColor('YELLOW')
                 .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                 .setDescription(content)
                 .setTimestamp());
         } else if (requestKeys["clan-board"].includes(request)) {
-            requirements["clan-board"].forEach(requirement => { if (!content.includes(requirement)) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["clan-board"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (!content.startsWith('```')) content = '```' + content;
-            if (!content.endsWith('```')) content += '```';
+            if (!content.endsWith('```')) content += '\n```';
 
             if (denyReasons == '') {
                 approvalRequest(client, new MessageEmbed()
                     .setTitle('Clan boards submission request')
-                    .setColor(id.colours.clan)
+                    .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(content)
                     .setTimestamp());
@@ -65,7 +64,7 @@ module.exports.run = (client, message) => {
         } else if (requestKeys["customizations"].includes(request)) {
             if (message.attachments.size == 0) denyReasons += '- ***Missing attachment*** \n';
             else if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["customizations"].forEach(requirement => { if (!content.includes(requirement)) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["customizations"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 approvalRequest(client, new MessageEmbed()
@@ -80,7 +79,7 @@ module.exports.run = (client, message) => {
             }
         } else if (requestKeys["community-maps"].includes(request)) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["community-maps"].forEach(requirement => { if (!content.includes(requirement)) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["community-maps"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 approvalRequest(client, new MessageEmbed()
@@ -95,7 +94,7 @@ module.exports.run = (client, message) => {
             }
         } else if (requestKeys["community-mods"].includes(request)) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["community-mods"].forEach(requirement => { if (!content.includes(requirement)) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["community-mods"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 const eb = new MessageEmbed()
@@ -112,7 +111,7 @@ module.exports.run = (client, message) => {
             }
         } else if (requestKeys["skin-vote-submissions"].includes(request)) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["skin-vote-submissions"].forEach(requirement => { if (!content.includes(requirement)) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["skin-vote-submissions"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 const eb = new MessageEmbed()
@@ -130,7 +129,7 @@ module.exports.run = (client, message) => {
 
         } else if (requestKeys["bug-reports"].includes(request)) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["bug-reports"].forEach(requirement => { if (!content.includes(requirement)) denyReasons += `- Missing field: ***${requirement}*** \n`; });
+            requirements["bug-reports"].forEach(requirement => { if (content.localeCompare(requirement, undefined, { sensitivity: 'base' }) == 0) denyReasons += `- Missing field: ***${requirement}*** \n`; });
 
             if (denyReasons == '') {
                 const eb = new MessageEmbed()
@@ -177,22 +176,34 @@ module.exports.react = async(client, reaction, user) => {
     await reaction.fetch();
     await reaction.message.fetch();
     const embed = reaction.message.embeds[0];
-    if (!embed) return
+    if (!embed || embed.hexColor == id.colours["YELLOW"]) return
 
-    if (reaction.emoji.id == id.emojis.warn)
+    const member = await client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true);
 
-        switch (reaction.emoji.id) {
+    switch (reaction.emoji.id) {
         case id.emojis.yes:
+            let sentMsg;
             switch (embed.title) {
                 case 'Suggestions submission request':
-                    reaction.message.guild.channels.resolve(channel).send(embed).then(m => {
-                        m.react('👍');
-                        m.react('👎');
-                    });
-                    embed.setColor('GREEN');
+                    client.channels.resolve(id.channels["suggestions"]).send(new MessageEmbed()
+                            .setColor('YELLOW')
+                            .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
+                            .setDescription(embed.description)
+                            .setFooter('Go to #submissions to submit a request')
+                            .setTimestamp())
+                        .then(sentEmbed => {
+                            sentEmbed.react("👍");
+                            sentEmbed.react("👎");
+
+                            sentMsg = sentEmbed;
+                        });
                     break;
                 case 'Clan boards submission request':
-
+                    sentMsg = await client.channels.resolve(id.channels["bunker-bot-commands"]).send(new MessageEmbed()
+                        .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
+                        .setDescription(embed.description)
+                        .setFooter('Go to #submissions to submit a request')
+                        .setTimestamp());
                     break;
                 case 'Customizations submission request':
 
@@ -204,28 +215,38 @@ module.exports.react = async(client, reaction, user) => {
 
                     break;
                 case 'Skin vote submission request':
-
+                    sentMsg = await client.channels.resolve(id.channels["skin-vote-submissions"]).send(new MessageEmbed()
+                        .setuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
+                        .setImage(embed.image)
+                        .setTimestamp());
                     break;
-                case 'Bug reports submission request':
-
-                    break;
-                case 'Exploit reports submission request':
-
-                    break;
+                    // case 'Bug reports submission request':
+                    //     break;
+                    // case 'Exploit reports submission request':
+                    //     break;
             }
+            member.createDM(true).then(dm => {
+                dm.send(new MessageEmbed()
+                    .setColor('GREEN')
+                    .setTitle('Submission Posted')
+                    .setDescription(`Thank you for your submission. View your submission [here](${sentMsg.url}).`)
+                    .setFooter('Submission approved by: ' + user.username, user.displayAvatarURL())
+                    .setTimestamp());
+            });
+            embed.setColor('GREEN');
             break;
         case id.emojis.no:
-            reaction.message.channel.send(`<@${user.id}> please provide a reason:`)
+            reaction.message.channel.send(`<@${user.id}> Please provide a reason:`)
             const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go decline it again."));
-            denyRequest(client, embed, messages.first().content);
+            denyRequest(member, messages.first().content);
             embed.setColor('RED');
             break;
         case id.emojis.formatting:
-            denyRequest(client, embed, 'Incorrect formatting.');
+            denyRequest(member, 'Incorrect formatting.');
             embed.setColor('RED');
             break;
         case id.emojis.missing:
-            denyRequest(client, embed, 'Missing information.');
+            denyRequest(member, 'Missing information.');
             embed.setColor('RED');
             break;
     }
@@ -242,22 +263,22 @@ function autoDeny(message, denyReasons) {
 }
 
 function approvalRequest(client, embed) {
-    client.channels.resolve(id.channels["bunker-bot-commands"]).send(embed).then(m => {
+    client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
-        m.react(client.emojis.cache.get(id.emojis.warn));
+        m.react(client.emojis.cache.get(id.emojis.formatting));
         m.react(client.emojis.cache.get(id.emojis.missing));
     });
 }
 
-function denyRequest(client, embed, reason) {
-    client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true).then(user => {
-        user.dm.send(new MessageEmbed()
+function denyRequest(member, reason) {
+    member.createDM().then(dm => {
+        dm.send(new MessageEmbed()
             .setTitle('Submission request denied')
             .setColor('ORANGE')
-            .setDescription('Your submission request has been denied. For help, please check out the guide [here](https://discord.com/channels/448194623580667916/778141538991341588/779606190589083668). If you think this is a mistake, please contact ' + user.tag)
+            .setDescription('Your submission request has been denied. For help, please check out the guide [here](https://discord.com/channels/448194623580667916/779620494328070144/779621435299725323). If you think this is a mistake, please contact ' + user.tag)
             .addField('Reason:', reason)
-            .setFooter(user.username, user.displayAvatarURL())
+            .setFooter(member.username, member.displayAvatarURL())
             .setTimestamp());
     });
 }

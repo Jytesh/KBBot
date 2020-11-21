@@ -102,7 +102,7 @@ client.on('message', async(message) => {
                         if (!canBypass) logger.messageDeleted(message, 'Random Chat Link', 'BLURPLE');
                     }
                     break;
-                case id.channels["automation-2"]:
+                case id.channels["submissions"]:
                     env == 'DEV' ? client.commands.get('modmail').run(client, message) : null;
                     break;
             }
@@ -127,7 +127,7 @@ client.on('message', async(message) => {
 
 client.on('messageReactionAdd', async(reaction, user) => {
     if (user.bot) return; // Ignore bot reactions
-    if (env == 'DEV' && reaction.message.channel.id == id.channels["bunker-bot-commands"]) {
+    if (env == 'DEV' && reaction.message.channel.id == id.channels["submissions-review"]) {
         client.commands.get('modmail').react(client, reaction, user);
     }
 });
