@@ -33,6 +33,7 @@ client.login(process.env.TOKEN);
 client.on('ready', async() => {
     const ts = new Date();
     console.log('[Krunker Bunker Bot] ready to roll!');
+
     if (env == 'PROD') {
         client.user.setActivity('DM JJ with bot suggestions', { type: "PLAYING" });
 
@@ -126,7 +127,7 @@ client.on('message', async(message) => {
 
 client.on('messageReactionAdd', async(reaction, user) => {
     if (user.bot) return; // Ignore bot reactions
-    if (reaction.message.channel.id == id.channels["bunker-bot-commands"]) {
+    if (env == 'DEV' && reaction.message.channel.id == id.channels["bunker-bot-commands"]) {
         client.commands.get('modmail').react(client, reaction, user);
     }
 });
