@@ -31,7 +31,6 @@ client.login(process.env.TOKEN);
 
 //Event Handlers
 client.on('ready', async() => {
-    const ts = new Date();
     console.log('[Krunker Bunker Bot] ready to roll!');
 
     if (env == 'PROD') {
@@ -127,7 +126,7 @@ client.on('message', async(message) => {
 
 client.on('messageReactionAdd', async(reaction, user) => {
     if (user.bot) return; // Ignore bot reactions
-    if (env == 'DEV' && reaction.message.channel.id == id.channels["submissions-review"]) {
+    if (reaction.message.channel.id == id.channels["submissions-review"]) {
         client.commands.get('modmail').react(client, reaction, user);
     }
 });
