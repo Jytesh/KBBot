@@ -1,5 +1,5 @@
 const id = require("../id.json"),
-    { MessageEmbed, Message } = require("discord.js"),
+    { MessageEmbed, MessageAttachment } = require("discord.js"),
     logger = require("../logger");
 
 const roles = [
@@ -55,6 +55,7 @@ module.exports.run = (client, message) => {
             });
 
             if (denyReasons == '') {
+                
                 eb.setTitle('Customisations submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
@@ -223,12 +224,21 @@ function autoDeny(message, denyReasons) {
     ).then(m => { m.delete({ timeout: 30000 }) });
 }
 
-function approvalRequest(client, message, embed) {
+async function approvalRequest(client, message, embed) {
+    if(embed.title == 'Customizations submission request'){ //Proxy
+       proxy = client.channels.resolve(id.channels.proxy)
+       attach = new MessageAttachment(embed.image.url)
+       proxiedMessage = await proxy.send(attach)
+       embed.setImage(proxiedMessage.attachments[0].url)
+    }
     message.reply(new MessageEmbed()
         .setTitle('Submission sent for review')
         .setColor('GREEN')
         .setDescription('To receive updates about your submission, please ensure that you do not have me blocked.')
-        .setTimestamp()).then(m => m.delete({ timeout: 10000 }));
+        .setTimestamp()).then(m => {
+            m.delete({ timeout: 10000 })
+        }
+            );
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
