@@ -34,7 +34,7 @@ module.exports.run = (client, message) => {
                 .setTimestamp();
         } else if (message.content.toUpperCase().includes('CLAN NAME')) {
             requirements["clan-board"].forEach(requirement => {
-                if (!message.content.toUpperCase().includes(requirement.toUpperCase())) denyReasons += `- Missing field: ***${requirement}*** \n`;
+                if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
             });
 
             if (!message.content.startsWith('```')) message.content = '```' + message.content;
@@ -51,7 +51,7 @@ module.exports.run = (client, message) => {
             if (message.attachments.size == 0) denyReasons += '- ***Missing attachment*** \n';
             else if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
             requirements["customizations"].forEach(requirement => {
-                if (!message.content.toUpperCase().includes(requirement.toUpperCase())) denyReasons += `- Missing field: ***${requirement}*** \n`;
+                if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
             });
 
             if (denyReasons == '') {
@@ -66,7 +66,7 @@ module.exports.run = (client, message) => {
         } else if (message.content.toUpperCase().includes('MAP NAME')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
             requirements["community-maps"].forEach(requirement => {
-                if (!message.content.toUpperCase().includes(requirement.toUpperCase())) denyReasons += `- Missing field: ***${requirement}*** \n`;
+                if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
             });
 
             if (denyReasons == '') {
@@ -80,7 +80,7 @@ module.exports.run = (client, message) => {
         } else if (message.content.toUpperCase().includes('MOD NAME')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
             requirements["community-mods"].forEach(requirement => {
-                if (!message.content.toUpperCase().includes(requirement.toUpperCase())) denyReasons += `- Missing field: ***${requirement}*** \n`;
+                if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
             });
 
             if (denyReasons == '') {
@@ -117,7 +117,7 @@ module.exports.run = (client, message) => {
         } else if (message.content.toUpperCase().includes('REPORT')) {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
             requirements["bug-reports"].forEach(requirement => {
-                if (!message.content.toUpperCase().includes(requirement.toUpperCase())) denyReasons += `- Missing field: ***${requirement}*** \n`;
+                if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
             });
 
             if (denyReasons == '') {
