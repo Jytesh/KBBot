@@ -56,7 +56,7 @@ module.exports.run = async(client, message) => {
 
             if (denyReasons == '') {
 
-                eb.setTitle('Customisations submission request')
+                eb.setTitle('Customizations submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(message.content)
@@ -174,8 +174,7 @@ module.exports.react = async(client, reaction, user) => {
                     sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(post);
                     break;
                 case 'Customizations submission request':
-                    //sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post.setImage(embed.image.url));
-                    sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post);
+                    sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post.setImage(embed.image.url));
                     break;
                 case 'Community maps submission request':
                     sentMsg = embed.image ? await client.channels.resolve(id.channels["community-maps"]).send(post.setImage(embed.image.url)) : await client.channels.resolve(id.channels["community-maps"]).send(post);
@@ -186,18 +185,26 @@ module.exports.react = async(client, reaction, user) => {
                     // case 'Bug reports submission request':
                     //     break;
             }
-            member.createDM(true).then(dm => {
-                dm.send(new MessageEmbed()
-                    .setColor('GREEN')
-                    .setTitle('Submission Posted')
-                    .setDescription(`Thank you for your submission. View your submission [here](${sentMsg.url}).`)
-                    .setFooter('Submission approved by: ' + user.username, user.displayAvatarURL())
+            if (sentMsg) {
+                member.createDM(true).then(dm => {
+                    dm.send(new MessageEmbed()
+                        .setColor('GREEN')
+                        .setTitle('Submission Posted')
+                        .setDescription(`Thank you for your submission. View your submission [here](${sentMsg.url}).`)
+                        .setFooter('Submission approved by: ' + user.username, user.displayAvatarURL())
+                        .setTimestamp());
+                });
+                embed.setColor('GREEN')
+                    .setTitle(embed.title.replace('request', 'approved'))
+                    .setFooter('Approved by ' + user.username, user.displayAvatarURL())
+                    .setTimestamp();
+            } else {
+                reaction.message.channel.send(new MessageEmbed()
+                    .setTitle('Error posting message')
+                    .setColor('RED')
+                    .setDescription('If this issue continues to persist, please contact JJ or Jytesh')
                     .setTimestamp());
-            });
-            embed.setColor('GREEN')
-                .setTitle(embed.title.replace('request', 'approved'))
-                .setFooter('Approved by ' + user.username, user.displayAvatarURL())
-                .setTimestamp();
+            }
             break;
         case id.emojis.no:
             const m = await reaction.message.channel.send(`<@${user.id}> Please provide a reason:`)
