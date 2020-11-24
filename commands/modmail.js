@@ -19,7 +19,7 @@ const requirements = {
     'bug-reports': ['Platform:', 'Operating System:', 'Report:', 'Reported by:', 'IGN:'],
 }
 
-module.exports.run = (client, message) => {
+module.exports.run = async (client, message) => {
     var canBypass = false;
     //if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
@@ -101,10 +101,10 @@ module.exports.run = (client, message) => {
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(message.content)
-                    .setImage(message.attachments.array()[0].url)
+                    .setImage((message.attachments.array()[0].url))
                     .setTimestamp();
 
-                client.channels.resolve(id.channels["skin-vote-submissions"]).send(eb);
+                client.channels.resolve(id.channels["skin-vote-submissions"]).send(await proxyEmbedImage(eb,client));
                 message.reply(new MessageEmbed()
                     .setTitle('Submission sent for review')
                     .setColor('GREEN')
@@ -225,11 +225,8 @@ function autoDeny(message, denyReasons) {
 }
 
 async function approvalRequest(client, message, embed) {
-    if(embed.title == 'Customizations submission request'){ //Proxy
-       proxy = client.channels.resolve(id.channels.proxy)
-       attach = new MessageAttachment(embed.image.url)
-       proxiedMessage = await proxy.send(attach)
-       embed.setImage(proxiedMessage.attachments[0].url)
+    if(embed.image){//Proxy
+        embed = await proxyEmbedImage(embed,client)
     }
     message.reply(new MessageEmbed()
         .setTitle('Submission sent for review')
@@ -263,7 +260,13 @@ function denyRequest(member, user, reason, embed) {
         .addField('Reason', reason)
         .setTimestamp();
 }
-
+async function proxyEmbedImage(embed,client){
+    proxy = client.channels.resolve(id.channels.proxy)
+    attach = new MessageAttachment(embed.image.url)
+    proxiedMessage = await proxy.send({files : [attach]})
+    embed.setImage(proxiedMessage.attachments.array()[0].url)
+    return embed
+}
 module.exports.config = {
     name: 'modmail',
 }
