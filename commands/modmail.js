@@ -19,7 +19,7 @@ const requirements = {
     'bug-reports': ['Platform:', 'Operating System:', 'Report:', 'Reported by:', 'IGN:'],
 }
 
-module.exports.run = async (client, message) => {
+module.exports.run = async(client, message) => {
     var canBypass = false;
     //if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
@@ -55,7 +55,7 @@ module.exports.run = async (client, message) => {
             });
 
             if (denyReasons == '') {
-                
+
                 eb.setTitle('Customisations submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
@@ -96,15 +96,18 @@ module.exports.run = async (client, message) => {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
 
             if (denyReasons == '') {
+                const proxy = await client.channels.resolve(id.channels.proxy).send({ files: [new MessageAttachment(message.attachments.array()[0].url)] });
+
                 const eb = new MessageEmbed()
                     .setTitle('Skin vote submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(message.content)
-                    .setImage((message.attachments.array()[0].url))
+                    .setImage(proxy.attachments.array()[0].url)
                     .setTimestamp();
 
-                client.channels.resolve(id.channels["skin-vote-submissions"]).send(await proxyEmbedImage(eb,client));
+                client.channels.resolve(id.channels["skin-vote-submissions"]).send(eb);
+
                 message.reply(new MessageEmbed()
                     .setTitle('Submission sent for review')
                     .setColor('GREEN')
@@ -140,9 +143,7 @@ module.exports.run = async (client, message) => {
 
         if (denyReasons == '') approvalRequest(client, message, eb);
         else autoDeny(message, denyReasons);
-        client.setTimeout(() => {
-            logger.messageDeleted(message, 'Modmail', 'NAVY');
-        }, 250);
+        logger.messageDeleted(message, 'Modmail', 'NAVY');
     }
 }
 
@@ -225,17 +226,15 @@ function autoDeny(message, denyReasons) {
 }
 
 async function approvalRequest(client, message, embed) {
-    if(embed.image){//Proxy
-        embed = await proxyEmbedImage(embed,client)
-    }
+    if (embed.image) embed = await proxyEmbedImage(client, embed);
+
     message.reply(new MessageEmbed()
         .setTitle('Submission sent for review')
         .setColor('GREEN')
         .setDescription('To receive updates about your submission, please ensure that you do not have me blocked.')
         .setTimestamp()).then(m => {
-            m.delete({ timeout: 10000 })
-        }
-            );
+        m.delete({ timeout: 10000 })
+    });
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
@@ -260,12 +259,9 @@ function denyRequest(member, user, reason, embed) {
         .addField('Reason', reason)
         .setTimestamp();
 }
-async function proxyEmbedImage(embed,client){
-    proxy = client.channels.resolve(id.channels.proxy)
-    attach = new MessageAttachment(embed.image.url)
-    proxiedMessage = await proxy.send({files : [attach]})
-    embed.setImage(proxiedMessage.attachments.array()[0].url)
-    return embed
+async function proxyEmbedImage(client, embed) {
+    const proxy = await client.channels.resolve(id.channels.proxy).send({ files: [new MessageAttachment(embed.image.url)] });
+    return embed.setImage(proxy.attachments.array()[0].url);
 }
 module.exports.config = {
     name: 'modmail',
