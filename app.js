@@ -50,7 +50,6 @@ client.on('ready', async() => {
             })
         });
     }
-
 });
 
 client.on('message', async(message) => {
@@ -102,12 +101,11 @@ client.on('message', async(message) => {
                     }
                     break;
                 case id.channels["submissions"]:
-                    env == 'DEV' ? client.commands.get('modmail').run(client, message) : null;
+                    client.commands.get('modmail').run(client, message);
                     break;
             }
-            if (env == 'DEV') return
-                //Disable stickers in KB
-            if (message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
+
+            if (env == 'PROD' && message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 const stickerRoles = [
                     id.roles.dev,
                     id.roles.yendis,
