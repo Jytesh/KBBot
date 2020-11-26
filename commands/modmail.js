@@ -96,7 +96,7 @@ module.exports.run = async(client, message) => {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
 
             if (denyReasons == '') {
-                const proxy = await client.channels.resolve(id.channels.proxy).send({ files: [new MessageAttachment(message.attachments.array()[0].url)] });
+                const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(message.attachments.array()[0].url)] });
 
                 const eb = new MessageEmbed()
                     .setTitle('Skin vote submission request')
@@ -267,7 +267,7 @@ function denyRequest(member, user, reason, embed) {
         .setTimestamp();
 }
 async function proxyEmbedImage(client, embed) {
-    const proxy = await client.channels.resolve(id.channels.proxy).send({ files: [new MessageAttachment(embed.image.url)] });
+    const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(embed.image.url)] });
     return embed.setImage(proxy.attachments.array()[0].url);
 }
 module.exports.config = {
