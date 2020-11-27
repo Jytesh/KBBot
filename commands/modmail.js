@@ -266,6 +266,7 @@ function denyRequest(member, user, reason, embed) {
         .addField('Reason', reason)
         .setTimestamp();
 }
+
 async function proxyEmbedImage(client, embed) {
     const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(embed.image.url)] });
     return embed.setImage(proxy.attachments.array()[0].url);
