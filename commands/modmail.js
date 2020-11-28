@@ -255,7 +255,7 @@ function denyRequest(member, user, reason, embed) {
         dm.send(new MessageEmbed()
             .setTitle('Submission request denied')
             .setColor('ORANGE')
-            .setDescription('Your submission request has been denied. For help, please check out the guide [here](https://discord.com/channels/448194623580667916/779620494328070144/779621435299725323). If you think this is a mistake, please contact ' + user.tag)
+            .setDescription('Your submission request has been denied. For help, please check out the guide [here](https://discord.com/channels/448194623580667916/779620494328070144/782073989681512449). If you think this is a mistake, please contact ' + user.tag)
             .addField('Reason:', reason)
             .setFooter('Submission denied by ' + member.username, member.displayAvatarURL())
             .setTimestamp());
