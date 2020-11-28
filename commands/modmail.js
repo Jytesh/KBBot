@@ -196,6 +196,7 @@ module.exports.react = async(client, reaction, user) => {
                 });
                 embed.setColor('GREEN')
                     .setTitle(embed.title.replace('request', 'approved'))
+                    .addField('Posted:', `[Here](${sentMsg.url})`)
                     .setFooter('Approved by ' + user.username, user.displayAvatarURL())
                     .setTimestamp();
             } else {
