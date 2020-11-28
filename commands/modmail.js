@@ -21,7 +21,7 @@ const requirements = {
 
 module.exports.run = async(client, message) => {
     var canBypass = false;
-    //if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+    if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
         let denyReasons = '';
         let eb = new MessageEmbed();
