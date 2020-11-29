@@ -27,11 +27,16 @@ module.exports.run = async(client, message) => {
         let eb = new MessageEmbed();
 
         if (message.content.toUpperCase().startsWith('SUGGEST')) {
-            eb.setTitle('Suggestions submission request')
-                .setColor('YELLOW')
-                .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                .setDescription(message.content.substring(message.content.indexOf(' ') + 1))
-                .setTimestamp();
+            if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
+
+            if (denyReasons == '') {
+                eb.setTitle('Suggestions submission request')
+                    .setColor('YELLOW')
+                    .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
+                    .setDescription(message.content.substring(message.content.indexOf(' ') + 1))
+                    .setTimestamp();
+                if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
+            }
         } else if (message.content.toUpperCase().includes('CLAN NAME')) {
             requirements["clan-board"].forEach(requirement => {
                 if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
