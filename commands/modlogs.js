@@ -3,7 +3,7 @@ const id = require("../id.json"),
     db = require('../app').db.moderator;
 
 module.exports.run = async(client, message) => {
-    const fetchUser = await db.get(message.author.id);
+    const fetchUser = await db.get(message.content.split(' ')[1]);
     if (fetchUser) {
         message.reply(new MessageEmbed()
             .setTitle('Modlogs for ' + message.author.username)
@@ -12,7 +12,7 @@ module.exports.run = async(client, message) => {
     } else {
         message.reply(new MessageEmbed()
             .setTitle('ERROR')
-            .setDescription('No modlogs exists for you')
+            .setDescription('No modlogs exists for specified user.')
             .setTimestamp());
     }
 }
