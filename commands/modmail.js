@@ -171,8 +171,9 @@ module.exports.react = async(client, reaction, user) => {
                 .setDescription(embed.description)
                 .setFooter('Go to #submissions to submit a request')
                 .setTimestamp();
-
-            switch (embed.title) {
+            title = embed.title.split(' ')
+            title.pop()
+            switch (title.join(' ')) {
                 case 'Suggestions submission request':
                     sentMsg = await client.channels.resolve(id.channels["suggestions"]).send(post.setColor('YELLOW'));
                     sentMsg.react("👍");
