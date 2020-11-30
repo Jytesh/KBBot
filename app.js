@@ -1,10 +1,21 @@
 // Load dependencies
+require("dotenv").config();
 const config = require("./config.json"),
     id = require('./id.json'),
     Discord = require('discord.js'),
     client = new Discord.Client({ fetchAllMembers: false, partials: ['GUILD_MEMBER', 'REACTION', 'USER', 'MESSAGE'] }),
     fs = require("fs"),
-    logger = require('./logger');
+    logger = require('./logger'),
+    Mongo = require('./mongo.js'),
+    db = {
+        moderator: moderator_db = new Mongo(process.env.DB_URL, { db: 'userConfigs', coll: 'moderators', init: true }),
+    };
+
+(async function init() {
+    Object.keys(db).forEach(async t => {
+        await db[t].connect().catch(console.log);
+    });
+})();
 
 let env;
 if (process.argv[2] == 'test' || !process.argv[2]) {
@@ -26,7 +37,6 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 //Login
-require("dotenv").config();
 client.login(process.env.TOKEN);
 
 //Event Handlers
@@ -128,4 +138,7 @@ client.on('messageReactionAdd', async(reaction, user) => {
         client.commands.get('modmail').react(client, reaction, user);
     }
 });
-module.exports.client = client;
+module.exports = {
+    client: client,
+    db: db
+}

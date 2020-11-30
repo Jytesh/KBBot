@@ -1,5 +1,6 @@
 const id = require("../id.json"),
     { MessageEmbed, MessageAttachment } = require("discord.js"),
+    db = require('../app').db.moderator,
     logger = require("../logger");
 
 const roles = [
@@ -156,7 +157,7 @@ module.exports.react = async(client, reaction, user) => {
     await reaction.fetch();
     await reaction.message.fetch();
     let embed = reaction.message.embeds[0];
-    if (!embed || embed.hexColor != id.colours["YELLOW"]) return
+    if (!embed) return
 
     const member = await client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true);
 
@@ -227,7 +228,19 @@ module.exports.react = async(client, reaction, user) => {
             break;
     }
 
-    reaction.message.edit(embed)
+    reaction.message.edit(embed);
+
+    //DB stuff
+    const fetchUser = await db.get(user.id);
+    const submissions = fetchUser ? fetchUser.submissions + 1 : 1;
+    const update = await db.set(user.id, { submissions: submissions });
+    if (!update) {
+        reaction.mesage.channel.send(new MessageEmbed()
+            .setTitle('Database Error')
+            .setColor('RED')
+            .setDescription('A database error has occured. Please contact JJ if he has not been contacted already. Your submission approval was not documented in your stats.')
+            .setTimestamp());
+    }
 }
 
 function autoDeny(message, denyReasons) {
