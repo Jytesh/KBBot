@@ -8,6 +8,7 @@ const config = require("./config.json"),
     logger = require('./logger'),
     Mongo = require('./mongo.js'),
     db = {
+        submissions: submissions_db = new Mongo(process.env.DB_URL, { db: 'serverConfigs', coll: 'submissions', init: true }),
         moderator: moderator_db = new Mongo(process.env.DB_URL, { db: 'userConfigs', coll: 'moderators', init: true }),
     };
 

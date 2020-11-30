@@ -1,6 +1,7 @@
 const id = require("../id.json"),
     { MessageEmbed, MessageAttachment } = require("discord.js"),
-    db = require('../app').db.moderator,
+    submissions_db = require('../app').db.submissions,
+    moderator_db = require('../app').db.moderator,
     logger = require("../logger");
 
 const roles = [
@@ -146,8 +147,11 @@ module.exports.run = async(client, message) => {
             return;
         }
 
-        if (denyReasons == '') approvalRequest(client, message, eb);
-        else autoDeny(message, denyReasons);
+        if (denyReasons == '') {
+            const fetchData = await submissions_db.get(message.guild.id);
+            approvalRequest(client, message, eb.setTitle(`${eb.title} #${fetchData.subID}`));
+            const updateData = await submissions_db.set(message.guild.id, { subID: fetchData.subID + 1 });
+        } else autoDeny(message, denyReasons);
         logger.messageDeleted(message, 'Modmail', 'NAVY');
     }
 }
@@ -229,9 +233,9 @@ module.exports.react = async(client, reaction, user) => {
     reaction.message.edit(embed);
 
     //DB stuff
-    const fetchUser = await db.get(user.id);
+    const fetchUser = await moderator_db.get(user.id);
     const submissions = fetchUser ? fetchUser.submissions + 1 : 1;
-    const update = await db.set(user.id, { submissions: submissions });
+    const update = await moderator_db.set(user.id, { submissions: submissions });
     if (!update) {
         reaction.mesage.channel.send(new MessageEmbed()
             .setTitle('Database Error')
@@ -248,16 +252,21 @@ function autoDeny(message, denyReasons) {
         .setDescription(denyReasons)
     ).then(m => { m.delete({ timeout: 30000 }) });
 }
+
 async function approvalRequest(client, message, embed) {
     if (embed.image) embed = await proxyEmbedImage(client, embed);
 
     message.reply(new MessageEmbed()
         .setTitle('Submission sent for review')
         .setColor('GREEN')
-        .setDescription('To receive updates about your submission, please ensure that you do not have me blocked.')
+        .setDescription('To receive updates about your submission, please ensure that you do not have me blocked. Check your DMs with me for you submission ID.')
         .setTimestamp()).then(m => {
         m.delete({ timeout: 10000 })
     });
+    message.author.createDM().then(dm => dm.send(new MessageEmbed()
+        .setTitle(`Submission ID: #${embed.title.split('#')[1]}`)
+        .setColor('YELLOW')
+        .setTimestamp()));
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
@@ -282,6 +291,7 @@ function denyRequest(member, user, reason, embed) {
         .addField('Reason', reason)
         .setTimestamp();
 }
+
 async function proxyEmbedImage(client, embed) {
     const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(embed.image.url)] });
     return embed.setImage(proxy.attachments.array()[0].url);
