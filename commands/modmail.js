@@ -10,7 +10,6 @@ const roles = [
     '638129127555072028', //Yendis
     '448198031041495040', //Dev
 ];
-
 const requirements = {
     'clan-board': ['Clan Name:', 'Clan Level:', 'Clan Info:', 'Invite Link:'],
     'customizations': ['Type:', 'Name:'],
@@ -152,12 +151,11 @@ module.exports.run = async(client, message) => {
         logger.messageDeleted(message, 'Modmail', 'NAVY');
     }
 }
-
 module.exports.react = async(client, reaction, user) => {
     await reaction.fetch();
     await reaction.message.fetch();
     let embed = reaction.message.embeds[0];
-    if (!embed) return
+    if (!embed || embed.hexColor != id.colours["YELLOW"]) return;
 
     const member = await client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true);
 
@@ -250,7 +248,6 @@ function autoDeny(message, denyReasons) {
         .setDescription(denyReasons)
     ).then(m => { m.delete({ timeout: 30000 }) });
 }
-
 async function approvalRequest(client, message, embed) {
     if (embed.image) embed = await proxyEmbedImage(client, embed);
 
@@ -285,11 +282,11 @@ function denyRequest(member, user, reason, embed) {
         .addField('Reason', reason)
         .setTimestamp();
 }
-
 async function proxyEmbedImage(client, embed) {
     const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(embed.image.url)] });
     return embed.setImage(proxy.attachments.array()[0].url);
 }
+
 module.exports.config = {
     name: 'modmail',
 }
