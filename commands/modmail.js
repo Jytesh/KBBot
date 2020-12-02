@@ -12,7 +12,7 @@ const roles = [
     '448198031041495040', //Dev
 ];
 const requirements = {
-    'clan-board': ['Clan Name:', 'Clan Level:', 'Clan Info:', 'Invite Link:'],
+    'clan-board': ['Clan Name:', 'Clan Level:', 'Clan Info:', 'discord.gg/'],
     'customizations': ['Type:', 'Name:'],
     'community-maps': ['Map Name:', 'Map Link:', 'Description:'],
     'community-mods': ['Mod Name:', 'Modifies:'],
