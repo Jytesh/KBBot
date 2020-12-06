@@ -114,7 +114,7 @@ client.on('message', async(message) => {
                     }
                     break;
                 case id.channels["submissions"]:
-                    client.commands.get('modmail').run(client, message);
+                    //client.commands.get('modmail').run(client, message);
                     break;
             }
 
