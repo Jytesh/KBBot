@@ -256,6 +256,7 @@ function autoDeny(message, denyReasons) {
 
 async function approvalRequest(client, message, embed) {
     if (embed.image) embed = await proxyEmbedImage(client, embed);
+    embed = AttachEmbedImages(embed)
 
     message.reply(new MessageEmbed()
         .setTitle('Submission sent for review')
@@ -268,6 +269,7 @@ async function approvalRequest(client, message, embed) {
         .setTitle(`Submission ID: #${embed.title.split('#')[1]}`)
         .setColor('YELLOW')
         .setTimestamp()));
+    
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
@@ -296,6 +298,28 @@ function denyRequest(member, user, reason, embed) {
 async function proxyEmbedImage(client, embed) {
     const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(embed.image.url)] });
     return embed.setImage(proxy.attachments.array()[0].url);
+}
+
+function AttachEmbedImages(embed){
+    const {MessageAttachment} = require('discord.js')
+    const array = embed.description.split(' ')
+    const links = new Array()
+    let description = new Array()
+    array.forEach(t=>{
+        if(t.startsWith('https://') & (t.endsWith('.png') || t.endsWith('.gif') || t.endsWith('mp4') || t.endsWith('jpeg') || t.endsWith('jpg'))){
+            const re = /(https:\/\/)[\w\-~]+(\.[\w\-~]+)+(\/[\w\-~@:%]*)*(#[\w\-]*)?(\?[^\s]* )?/gi
+            const match = t.match(re)
+            if(match != null){
+                links.push(new MessageAttachment(t))
+            }
+        }
+        else{
+            description.push(t)
+        }
+    })
+    embed.description = description.join(' ')
+    embed.attachFiles(links)
+    return embed
 }
 
 module.exports.config = {
