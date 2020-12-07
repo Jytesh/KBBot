@@ -40,6 +40,24 @@ fs.readdir("./commands/", (err, files) => {
 //Login
 client.login(process.env.TOKEN);
 
+//Constants
+const stickerRoles = [
+    id.roles.dev,
+    id.roles.yendis,
+    id.roles.cm,
+    id.roles.mod,
+    id.roles.tmod,
+    id.roles.devoted,
+];
+const randomRoles = [
+    id.roles.dev,
+    id.roles.yendis,
+    id.roles.cm,
+    id.roles.mod,
+    id.roles.tmod,
+    id.roles.active,
+];
+
 //Event Handlers
 client.on('ready', async() => {
     console.log('[Krunker Bunker Bot] ready to roll!');
@@ -99,14 +117,6 @@ client.on('message', async(message) => {
                     client.commands.get('reporthackers').run(client, message);
                     break;
                 case id.channels["random-chat"]:
-                    const randomRoles = [
-                        id.roles.dev,
-                        id.roles.yendis,
-                        id.roles.cm,
-                        id.roles.mod,
-                        id.roles.tmod,
-                        id.roles.active,
-                    ];
                     if (message.content.includes('http')) {
                         var canBypass = false;
                         if (!canBypass) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
@@ -114,19 +124,11 @@ client.on('message', async(message) => {
                     }
                     break;
                 case id.channels["submissions"]:
-                    client.commands.get('modmail').run(client, message);
+                    //client.commands.get('modmail').run(client, message);
                     break;
             }
 
             if (env == 'PROD' && message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
-                const stickerRoles = [
-                    id.roles.dev,
-                    id.roles.yendis,
-                    id.roles.cm,
-                    id.roles.mod,
-                    id.roles.tmod,
-                    id.roles.devoted,
-                ];
                 var canBypass = false;
                 if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
                 if (!canBypass) logger.messageDeleted(message, 'Sticker/Invite', 'BLURPLE');
