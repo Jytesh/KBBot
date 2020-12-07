@@ -309,18 +309,24 @@ async function proxyEmbedImage(client, embed) {
 }
 
 function AttachEmbedImages(embed) {
-    const array = embed.description.replace(/\r?\n|\r/g, ' ').split(' ');
+    const array = embed.description.split(' '); //.replace(/\r?\n|\r/g, ' ')
     const links = new Array();
     let description = new Array();
     array.forEach(t => {
-        if (t.startsWith('https://')) {
-            if ((t.endsWith('.png') || t.endsWith('.gif') || t.endsWith('.mp4') || t.endsWith('.mov') || t.endsWith('.jpeg')) || t.endsWith('.jpg')) {
-                links.push(new MessageAttachment(t));
-            } else if (t.includes('discord.gg')) description.push(t);
-        } else description.push(t);
+        if(t.includes('https://')){
+            let tempArr = t.split(/\r\n|\r|\n/g)
+            tempArr.forEach(temp=>{
+                if (temp.startsWith('https://')) {
+                    if ((temp.endsWith('.png') || temp.endsWith('.gif') || temp.endsWith('.mp4') || temp.endsWith('.mov') || temp.endsWith('.jpeg')) || temp.endsWith('.jpg')) {
+                        links.push(new MessageAttachment(temp));
+                    }else description.push(`${temp}\n`);
+                }else description.push(`${temp}\n`);
+            })
+        }else description.push(t)
     });
     if (description.length > 0) embed.description = description.join(' ');
-    return embed.attachFiles(links);
+    if (links.length > 0 ) embed.attachFiles(links)
+    return embed;
 }
 
 module.exports.config = {
