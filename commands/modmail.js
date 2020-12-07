@@ -22,7 +22,7 @@ const requirements = {
 
 module.exports.run = async(client, message) => {
     var canBypass = false;
-    //if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+    if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
         let denyReasons = '';
         let eb = new MessageEmbed();
@@ -159,7 +159,7 @@ module.exports.react = async(client, reaction, user) => {
     await reaction.fetch();
     await reaction.message.fetch();
     let embed = reaction.message.embeds[0];
-    //if (!embed || embed.hexColor != id.colours["YELLOW"]) return;
+    if (!embed || embed.hexColor != id.colours["YELLOW"]) return;
 
     const member = await client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true);
 
