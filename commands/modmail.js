@@ -22,7 +22,7 @@ const requirements = {
 
 module.exports.run = async(client, message) => {
     var canBypass = false;
-    if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+    //if (!canBypass) roles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
     if (!canBypass) {
         let denyReasons = '';
         let eb = new MessageEmbed();
@@ -159,7 +159,7 @@ module.exports.react = async(client, reaction, user) => {
     await reaction.fetch();
     await reaction.message.fetch();
     let embed = reaction.message.embeds[0];
-    if (!embed || embed.hexColor != id.colours["YELLOW"]) return;
+    //if (!embed || embed.hexColor != id.colours["YELLOW"]) return;
 
     const member = await client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true);
 
@@ -171,8 +171,10 @@ module.exports.react = async(client, reaction, user) => {
                 .setDescription(embed.description)
                 .setFooter('Go to #submissions to submit a request')
                 .setTimestamp();
-            title = embed.title.split(' ')
-            title.pop()
+            if (embed.image) post.setImage(embed.image.url);
+            if (reaction.message.attachments.size > 0) post.attachFiles(reaction.message.attachments.array());
+            let title = embed.title.split(' ');
+            title.pop();
             switch (title.join(' ')) {
                 case 'Suggestions submission request':
                     sentMsg = await client.channels.resolve(id.channels["suggestions"]).send(post.setColor('YELLOW'));
@@ -186,10 +188,10 @@ module.exports.react = async(client, reaction, user) => {
                     sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post.setImage(embed.image.url));
                     break;
                 case 'Community maps submission request':
-                    sentMsg = embed.image ? await client.channels.resolve(id.channels["community-maps"]).send(post.setImage(embed.image.url)) : await client.channels.resolve(id.channels["community-maps"]).send(post);
+                    sentMsg = await client.channels.resolve(id.channels["community-maps"]).send(post);
                     break;
                 case 'Community mods submission request':
-                    sentMsg = embed.image ? await client.channels.resolve(id.channels["community-mods"]).send(post.setImage(embed.image.url)) : await client.channels.resolve(id.channels["community-mods"]).send(post);
+                    sentMsg = await client.channels.resolve(id.channels["community-mods"]).send(post);
                     break;
                     // case 'Bug reports submission request':
                     //     break;
@@ -217,8 +219,8 @@ module.exports.react = async(client, reaction, user) => {
             }
             break;
         case id.emojis.no:
-            const m = await reaction.message.channel.send(`<@${user.id}> Please provide a reason:`)
-            const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go decline it again."));
+            const m = await reaction.message.channel.send(`<@${user.id}> Please provide a reason:`);
+            const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
             embed = denyRequest(member, user, messages.first().content, embed);
             m.delete();
             messages.first().delete();
@@ -229,6 +231,11 @@ module.exports.react = async(client, reaction, user) => {
         case id.emojis.missing:
             embed = denyRequest(member, user, 'Missing information.', embed);
             break;
+        case id.emojis.script:
+            //const m = await reaction.message.channel.send(`<@${user.id}> Please provide an edited version:`);
+            //const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
+        default:
+            return;
     }
 
     reaction.message.edit(embed);
@@ -269,12 +276,13 @@ async function approvalRequest(client, message, embed) {
         .setTitle(`Submission ID: #${embed.title.split('#')[1]}`)
         .setColor('YELLOW')
         .setTimestamp()));
-    
+
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
         m.react(client.emojis.cache.get(id.emojis.formatting));
         m.react(client.emojis.cache.get(id.emojis.missing));
+        m.react(client.emojis.cache.get(id.emojis.script));
     });
 }
 
@@ -300,26 +308,19 @@ async function proxyEmbedImage(client, embed) {
     return embed.setImage(proxy.attachments.array()[0].url);
 }
 
-function AttachEmbedImages(embed){
-    const {MessageAttachment} = require('discord.js')
-    const array = embed.description.split(' ')
-    const links = new Array()
-    let description = new Array()
-    array.forEach(t=>{
-        if(t.startsWith('https://') & (t.endsWith('.png') || t.endsWith('.gif') || t.endsWith('mp4') || t.endsWith('jpeg') || t.endsWith('jpg'))){
-            const re = /(https:\/\/)[\w\-~]+(\.[\w\-~]+)+(\/[\w\-~@:%]*)*(#[\w\-]*)?(\?[^\s]* )?/gi
-            const match = t.match(re)
-            if(match != null){
-                links.push(new MessageAttachment(t))
-            }
-        }
-        else{
-            description.push(t)
-        }
-    })
-    embed.description = description.join(' ')
-    embed.attachFiles(links)
-    return embed
+function AttachEmbedImages(embed) {
+    const array = embed.description.replace(/\r?\n|\r/g, ' ').split(' ');
+    const links = new Array();
+    let description = new Array();
+    array.forEach(t => {
+        if (t.startsWith('https://')) {
+            if ((t.endsWith('.png') || t.endsWith('.gif') || t.endsWith('.mp4') || t.endsWith('.mov') || t.endsWith('.jpeg')) || t.endsWith('.jpg')) {
+                links.push(new MessageAttachment(t));
+            } else if (t.includes('discord.gg')) description.push(t);
+        } else description.push(t);
+    });
+    if (description.length > 0) embed.description = description.join(' ');
+    return embed.attachFiles(links);
 }
 
 module.exports.config = {
