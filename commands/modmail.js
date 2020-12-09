@@ -263,7 +263,7 @@ function autoDeny(message, denyReasons) {
 
 async function approvalRequest(client, message, embed) {
     if (embed.image) embed = await proxyEmbedImage(client, embed);
-    embed = AttachEmbedImages(embed)
+    if (embed.description.includes('https://')) embed = AttachEmbedImages(embed);
 
     message.reply(new MessageEmbed()
         .setTitle('Submission sent for review')
@@ -309,23 +309,26 @@ async function proxyEmbedImage(client, embed) {
 }
 
 function AttachEmbedImages(embed) {
-    const array = embed.description.split(' '); //.replace(/\r?\n|\r/g, ' ')
     const links = new Array();
-    let description = new Array();
-    array.forEach(t => {
-        if(t.includes('https://')){
-            let tempArr = t.split(/\r\n|\r|\n/g)
-            tempArr.forEach(temp=>{
+    const description = new Array();
+    embed.description.split(' ').forEach(t => {
+        if (t.includes('https://')) {
+            t.split(/\r\n|\r|\n/g).forEach(temp => {
                 if (temp.startsWith('https://')) {
-                    if ((temp.endsWith('.png') || temp.endsWith('.gif') || temp.endsWith('.mp4') || temp.endsWith('.mov') || temp.endsWith('.jpeg')) || temp.endsWith('.jpg')) {
-                        links.push(new MessageAttachment(temp));
-                    }else description.push(`${temp}\n`);
-                }else description.push(`${temp}\n`);
+                    let endIndex = null;
+                    if (temp.includes('.png')) endIndex = temp.indexOf('.png') + 4;
+                    else if (temp.includes('.gif')) endIndex = temp.indexOf('.gif') + 4;
+                    else if (temp.includes('.mp4')) endIndex = temp.indexOf('.mp4') + 4;
+                    else if (temp.includes('.mov')) endIndex = temp.indexOf('.mov') + 4;
+                    else if (temp.includes('.jpeg')) endIndex = temp.indexOf('.jpeg') + 5;
+                    else if (temp.includes('.jpg')) endIndex = temp.indexOf('.jpg') + 4;
+                    if (endIndex != null) links.push(new MessageAttachment(temp.substring(0, endIndex)));
+                } else description.push(`${temp}\n`);
             })
-        }else description.push(t)
+        } else description.push(t)
     });
     if (description.length > 0) embed.description = description.join(' ');
-    if (links.length > 0 ) embed.attachFiles(links)
+    if (links.length > 0) embed.attachFiles(links)
     return embed;
 }
 
