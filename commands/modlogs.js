@@ -3,7 +3,7 @@ const id = require("../id.json"),
     db = require('../app').db.moderator;
 
 module.exports.run = async(client, message) => {
-    const fetchUser = await db.get(message.content.split(' ')[1]);
+    const fetchUser = await db.get(message.content.replace('<@!', '').replace('>', '').split(' ')[1]);
     if (fetchUser) {
         message.reply(new MessageEmbed()
             .setTitle('Modlogs for ' + fetchUser.username)
