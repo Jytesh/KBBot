@@ -261,7 +261,7 @@ async function approveRequest(client, reaction, user, member, embed) {
             sentMsg.react("👎");
             break;
         case 'Clan boards submission request':
-            sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(post);
+            sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(`${post.description.substring(post.description.indexOf('discord.gg/')).split(' ')[0].split('`')[0]}`, post);
             break;
         case 'Customizations submission request':
             sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post.setImage(embed.image.url));
