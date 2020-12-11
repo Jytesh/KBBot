@@ -165,65 +165,14 @@ module.exports.react = async(client, reaction, user) => {
 
     switch (reaction.emoji.id) {
         case id.emojis.yes:
-            let sentMsg;
-            const post = new MessageEmbed()
-                .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
-                .setDescription(embed.description)
-                .setFooter('Go to #submissions to submit a request')
-                .setTimestamp();
-            if (embed.image) post.setImage(embed.image.url);
-            if (reaction.message.attachments.size > 0) post.attachFiles(reaction.message.attachments.array());
-            let title = embed.title.split(' ');
-            title.pop();
-            switch (title.join(' ')) {
-                case 'Suggestions submission request':
-                    sentMsg = await client.channels.resolve(id.channels["suggestions"]).send(post.setColor('YELLOW'));
-                    sentMsg.react("👍");
-                    sentMsg.react("👎");
-                    break;
-                case 'Clan boards submission request':
-                    sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(post);
-                    break;
-                case 'Customizations submission request':
-                    sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post.setImage(embed.image.url));
-                    break;
-                case 'Community maps submission request':
-                    sentMsg = await client.channels.resolve(id.channels["community-maps"]).send(post);
-                    break;
-                case 'Community mods submission request':
-                    sentMsg = await client.channels.resolve(id.channels["community-mods"]).send(post);
-                    break;
-                    // case 'Bug reports submission request':
-                    //     break;
-            }
-            if (sentMsg) {
-                member.createDM(true).then(dm => {
-                    dm.send(new MessageEmbed()
-                        .setColor('GREEN')
-                        .setTitle('Submission Posted')
-                        .setDescription(`Thank you for your submission. View your submission [here](${sentMsg.url}).`)
-                        .setFooter('Submission approved by: ' + user.username, user.displayAvatarURL())
-                        .setTimestamp());
-                });
-                embed.setColor('GREEN')
-                    .setTitle(embed.title.replace('request', 'approved'))
-                    .addField('Posted:', `[Here](${sentMsg.url})`)
-                    .setFooter('Approved by ' + user.username, user.displayAvatarURL())
-                    .setTimestamp();
-            } else {
-                reaction.message.channel.send(new MessageEmbed()
-                    .setTitle('Error posting message')
-                    .setColor('RED')
-                    .setDescription('If this issue continues to persist, please contact JJ or Jytesh')
-                    .setTimestamp());
-            }
+            cembed = await approveRequest(client, reaction, user, member, embed);
             break;
         case id.emojis.no:
-            const m = await reaction.message.channel.send(`<@${user.id}> Please provide a reason:`);
-            const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
-            embed = denyRequest(member, user, messages.first().content, embed);
-            m.delete();
-            messages.first().delete();
+            const reasonMessage = await reaction.message.channel.send(`<@${user.id}> Please provide a reason:`);
+            const reasonMessages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
+            embed = denyRequest(member, user, reasonMessages.first().content, embed);
+            reasonMessage.delete();
+            reasonMessages.first().delete();
             break;
         case id.emojis.formatting:
             embed = denyRequest(member, user, 'Incorrect formatting.', embed);
@@ -232,8 +181,15 @@ module.exports.react = async(client, reaction, user) => {
             embed = denyRequest(member, user, 'Missing information.', embed);
             break;
         case id.emojis.script:
-            //const m = await reaction.message.channel.send(`<@${user.id}> Please provide an edited version:`);
-            //const messages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
+            const editedMessage = await reaction.message.channel.send(`<@${user.id}> Please provide an edited version:`);
+            const editedMessages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
+            embed.addField('Original', embed.description)
+                .setDescription(editedMessages.first().content);
+            embed = await approveRequest(client, reaction, user, member, embed);
+            console.log(embed.title)
+            editedMessage.delete();
+            editedMessages.first().delete();
+            break;
         default:
             return;
     }
@@ -242,8 +198,9 @@ module.exports.react = async(client, reaction, user) => {
 
     //DB stuff
     const fetchUser = await moderator_db.get(user.id);
+    const discordUser = await client.users.fetch(user.id);
     const submissions = fetchUser ? fetchUser.submissions + 1 : 1;
-    const update = await moderator_db.set(user.id, { submissions: submissions });
+    const update = await moderator_db.set(user.id, { username: discordUser.username, submissions: submissions });
     if (!update) {
         reaction.mesage.channel.send(new MessageEmbed()
             .setTitle('Database Error')
@@ -286,6 +243,61 @@ async function approvalRequest(client, message, embed) {
     });
 }
 
+async function approveRequest(client, reaction, user, member, embed) {
+    let sentMsg;
+    const post = new MessageEmbed()
+        .setAuthor(`${member.tag} (${member.id})`, member.displayAvatarURL())
+        .setDescription(embed.description)
+        .setFooter('Go to #submissions to submit a request')
+        .setTimestamp();
+    if (embed.image) post.setImage(embed.image.url);
+    if (reaction.message.attachments.size > 0) post.attachFiles(reaction.message.attachments.array());
+    let title = embed.title.split(' ');
+    title.pop();
+    switch (title.join(' ')) {
+        case 'Suggestions submission request':
+            sentMsg = await client.channels.resolve(id.channels["suggestions"]).send(post.setColor('YELLOW'));
+            sentMsg.react("👍");
+            sentMsg.react("👎");
+            break;
+        case 'Clan boards submission request':
+            sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(post);
+            break;
+        case 'Customizations submission request':
+            sentMsg = await client.channels.resolve(id.channels["customizations"]).send(post.setImage(embed.image.url));
+            break;
+        case 'Community maps submission request':
+            sentMsg = await client.channels.resolve(id.channels["community-maps"]).send(post);
+            break;
+        case 'Community mods submission request':
+            sentMsg = await client.channels.resolve(id.channels["community-mods"]).send(post);
+            break;
+            // case 'Bug reports submission request':
+            //     break;
+    }
+    if (sentMsg) {
+        member.createDM(true).then(dm => {
+            dm.send(new MessageEmbed()
+                .setColor('GREEN')
+                .setTitle('Submission Posted')
+                .setDescription(`Thank you for your submission. View your submission [here](${sentMsg.url}).`)
+                .setFooter('Submission approved by: ' + user.username, user.displayAvatarURL())
+                .setTimestamp());
+        });
+        return embed.setColor('GREEN')
+            .setTitle(embed.title.replace('request', 'approved'))
+            .addField('Posted:', `[Here](${sentMsg.url})`)
+            .setFooter('Approved by ' + user.username, user.displayAvatarURL())
+            .setTimestamp();
+    } else {
+        reaction.message.channel.send(new MessageEmbed()
+            .setTitle('Error posting message')
+            .setColor('RED')
+            .setDescription('If this issue continues to persist, please contact JJ or Jytesh')
+            .setTimestamp());
+    }
+}
+
 function denyRequest(member, user, reason, embed) {
     member.createDM().then(dm => {
         dm.send(new MessageEmbed()
@@ -314,7 +326,7 @@ function AttachEmbedImages(embed) {
     embed.description.split(' ').forEach(t => {
         if (t.includes('https://')) {
             t.split(/\r\n|\r|\n/g).forEach(temp => {
-                if (temp.startsWith('https://')) {
+                if (temp.startsWith('https://') && !temp.includes('discord.gg')) {
                     let endIndex = null;
                     if (temp.includes('.png')) endIndex = temp.indexOf('.png') + 4;
                     else if (temp.includes('.gif')) endIndex = temp.indexOf('.gif') + 4;

@@ -6,7 +6,8 @@ module.exports.run = async(client, message) => {
     const fetchUser = await db.get(message.content.split(' ')[1]);
     if (fetchUser) {
         message.reply(new MessageEmbed()
-            .setTitle('Modlogs for ' + message.author.username)
+            .setTitle('Modlogs for ' + fetchUser.username)
+            .setColor('BLURPLE')
             .setDescription('Submissions: ' + fetchUser.submissions)
             .setTimestamp());
     } else {
