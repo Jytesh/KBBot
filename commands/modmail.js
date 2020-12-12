@@ -151,8 +151,13 @@ module.exports.run = async(client, message) => {
             const fetchData = await submissions_db.get(message.guild.id);
             approvalRequest(client, message, eb.setTitle(`${eb.title} #${fetchData.subID}`));
             const updateData = await submissions_db.set(message.guild.id, { subID: fetchData.subID + 1 });
-        } else autoDeny(message, denyReasons);
-        logger.messageDeleted(message, 'Modmail', 'NAVY');
+            logger.messageDeleted(message, 'Modmail', 'NAVY');
+        } else {
+            autoDeny(message, denyReasons);
+            client.setTimeout(() => {
+                logger.messageDeleted(message, 'Modmail', 'NAVY');
+            }, 10000);
+        }
     }
 }
 module.exports.react = async(client, reaction, user) => {
@@ -169,7 +174,11 @@ module.exports.react = async(client, reaction, user) => {
             break;
         case id.emojis.no:
             const reasonMessage = await reaction.message.channel.send(`<@${user.id}> Please provide a reason:`);
-            const reasonMessages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
+            const reasonMessages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => {
+                reaction.message.channel.send(`<@${user.id}> Timeout. Please go react again.`).then(m => m.delete({ timeout: 7000 }));
+                reasonMessage.delete();
+                return;
+            });
             embed = denyRequest(member, user, reasonMessages.first().content, embed);
             reasonMessage.delete();
             reasonMessages.first().delete();
@@ -182,7 +191,11 @@ module.exports.react = async(client, reaction, user) => {
             break;
         case id.emojis.script:
             const editedMessage = await reaction.message.channel.send(`<@${user.id}> Please provide an edited version:`);
-            const editedMessages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => reaction.message.channel.send("Timeout. Please go react again."));
+            const editedMessages = await reaction.message.channel.awaitMessages(m => m.author.id == user.id, { max: 1, time: 60000, errors: ['time'] }).catch(e => {
+                reaction.message.channel.send(`<@${user.id}> Timeout. Please go react again.`).then(m => m.delete({ timeout: 7000 }));
+                editedMessage.delete();
+                return;
+            });
             embed.addField('Original', embed.description)
                 .setDescription(editedMessages.first().content);
             embed = await approveRequest(client, reaction, user, member, embed);
