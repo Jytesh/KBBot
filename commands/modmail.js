@@ -339,7 +339,7 @@ function AttachEmbedImages(embed) {
     embed.description.split(' ').forEach(t => {
         if (t.includes('https://')) {
             t.split(/\r\n|\r|\n/g).forEach(temp => {
-                if (temp.startsWith('https://') && !temp.includes('discord.gg')) {
+                if (temp.startsWith('https://') && !temp.includes('discord.gg/') && !temp.includes('krunker.io/')) {
                     let endIndex = null;
                     if (temp.includes('.png')) endIndex = temp.indexOf('.png') + 4;
                     else if (temp.includes('.gif')) endIndex = temp.indexOf('.gif') + 4;
