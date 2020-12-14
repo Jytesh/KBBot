@@ -338,7 +338,7 @@ function AttachEmbedImages(embed) {
     const description = new Array();
     embed.description.split(' ').forEach(t => {
         if (t.includes('https://')) {
-            t.split(/\r\n|\r|\n/g).forEach(temp => {
+            t.split(/\r\n|\r|\n/g).forEach((temp, index, array) => {
                 if (temp.startsWith('https://') && !temp.includes('discord.gg/') && !temp.includes('krunker.io/')) {
                     let endIndex = null;
                     if (temp.includes('.png')) endIndex = temp.indexOf('.png') + 4;
@@ -348,8 +348,8 @@ function AttachEmbedImages(embed) {
                     else if (temp.includes('.jpeg')) endIndex = temp.indexOf('.jpeg') + 5;
                     else if (temp.includes('.jpg')) endIndex = temp.indexOf('.jpg') + 4;
                     if (endIndex != null) links.push(new MessageAttachment(temp.substring(0, endIndex)));
-                } else description.push(`${temp}\n`);
-            })
+                } else index == array.length - 1 ? description.push(`${temp}`) : description.push(`${temp}\n`);
+            });
         } else description.push(t)
     });
     if (description.length > 0) embed.description = description.join(' ');
