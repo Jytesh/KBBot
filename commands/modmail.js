@@ -102,25 +102,12 @@ module.exports.run = async(client, message) => {
             if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
 
             if (denyReasons == '') {
-                const proxy = await client.channels.resolve(id.channels["submissions-extra"]).send({ files: [new MessageAttachment(message.attachments.array()[0].url)] });
-
-                const eb = new MessageEmbed()
-                    .setTitle('Skin vote submission request')
+                eb.setTitle('Skin vote submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(message.content)
-                    .setImage(proxy.attachments.array()[0].url)
+                    .setImage(message.attachments.array()[0].url)
                     .setTimestamp();
-
-                client.channels.resolve(id.channels["skin-vote-submissions"]).send(eb);
-
-                message.reply(new MessageEmbed()
-                    .setTitle('Submission sent for review')
-                    .setColor('GREEN')
-                    .setDescription('To receive updates about your submission, please ensure that you do not have me blocked.')
-                    .setTimestamp()).then(m => m.delete({ timeout: 10000 }));
-            } else {
-                autoDeny(message, denyReasons);
             }
             return logger.messageDeleted(message, 'Modmail', 'NAVY');
         } else if (message.content.toUpperCase().includes('REPORT')) {
@@ -284,6 +271,9 @@ async function approveRequest(client, reaction, user, member, embed) {
             break;
         case 'Community mods submission request':
             sentMsg = await client.channels.resolve(id.channels["community-mods"]).send(post);
+            break;
+        case 'Skin vote submission request':
+            sentMsg = await client.channels.resolve(id.channels["skin-vote-submissions"]).send(post);
             break;
             // case 'Bug reports submission request':
             //     break;
