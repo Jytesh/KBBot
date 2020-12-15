@@ -86,7 +86,15 @@ client.on('message', async(message) => {
         if (!message.deleted) {
             if (message.author.bot) return; // This will prevent bots from using the bot. Lovely!
 
-            if (!message.guild) return; // This will prevent the bot from responding to DMs. Lovely!
+            if (!message.guild) {
+                message.reply(new Discord.MessageEmbed()
+                    .setTitle('‼ Heads Up ‼')
+                    .setColor('BLURPLE')
+                    .setDescription(`Please message <#${id.channels.submissions}> if you would like to submit a request for a suggestion, clan board, etc.`)
+                    .addField('Issues?', `If you are experiencing problems or issues with me, please contact JJ_G4M3R#2155 or Jytesh#3241`)
+                    .setFooter('Krunker Bunker Bot by JJ_G4M3R & Jytesh')
+                    .setTimestamp);
+            }
 
             switch (message.channel.id) {
                 case id.channels["looking-for-game"]:
