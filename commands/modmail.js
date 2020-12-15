@@ -111,19 +111,19 @@ module.exports.run = async(client, message) => {
             }
             return logger.messageDeleted(message, 'Modmail', 'NAVY');
         } else if (message.content.toUpperCase().includes('REPORT')) {
-            if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
-            requirements["bug-reports"].forEach(requirement => {
-                if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
-            });
+            // if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
+            // requirements["bug-reports"].forEach(requirement => {
+            //     if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
+            // });
 
-            if (denyReasons == '') {
-                eb.setTitle('Bug reports submission request')
-                    .setColor('YELLOW')
-                    .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(message.content)
-                    .setTimestamp();
-                if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
-            }
+            // if (denyReasons == '') {
+            //     eb.setTitle('Bug reports submission request')
+            //         .setColor('YELLOW')
+            //         .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
+            //         .setDescription(message.content)
+            //         .setTimestamp();
+            //     if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
+            // }
         } else {
             message.reply(new MessageEmbed()
                 .setTitle('INVALID INPUT')
