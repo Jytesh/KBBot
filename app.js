@@ -93,7 +93,7 @@ client.on('message', async(message) => {
                     .setDescription(`Please message <#${id.channels.submissions}> if you would like to submit a request for a suggestion, clan board, etc.`)
                     .addField('Issues?', `If you are experiencing problems or issues with me, please contact JJ_G4M3R#2155 or Jytesh#3241`)
                     .setFooter('Krunker Bunker Bot by JJ_G4M3R & Jytesh')
-                    .setTimestamp);
+                    .setTimestamp());
             }
 
             switch (message.channel.id) {
