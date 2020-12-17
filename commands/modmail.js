@@ -215,7 +215,7 @@ function autoDeny(message, denyReasons) {
         .setTitle('Missing info')
         .setColor('RED')
         .setDescription(denyReasons)
-    ).then(m => { m.delete({ timeout: 30000 }) });
+    ).then(m => { m.delete({ timeout: 60000 }) });
 }
 
 async function approvalRequest(client, message, embed) {
@@ -226,9 +226,8 @@ async function approvalRequest(client, message, embed) {
         .setTitle('Submission sent for review')
         .setColor('GREEN')
         .setDescription('To receive updates about your submission, please ensure that you do not have me blocked. Check your DMs with me for you submission ID.')
-        .setTimestamp()).then(m => {
-        m.delete({ timeout: 10000 })
-    });
+        .setTimestamp()
+    ).then(m => { m.delete({ timeout: 30000 }) });
     message.author.createDM().then(dm => dm.send(new MessageEmbed()
         .setTitle(`Submission ID: #${embed.title.split('#')[1]}`)
         .setColor('YELLOW')
