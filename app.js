@@ -55,7 +55,7 @@ const randomRoles = [
     id.roles.cm,
     id.roles.mod,
     id.roles.tmod,
-    id.roles.active,
+    id.roles.novice,
 ];
 
 //Event Handlers
