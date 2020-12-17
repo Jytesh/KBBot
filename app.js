@@ -118,9 +118,6 @@ client.on('message', async(message) => {
                 case id.channels["krunker-art"]:
                     client.commands.get('art').run(client, message);
                     break;
-                case id.channels["suggestions"]:
-                    client.commands.get('suggestions').run(client, message);
-                    break;
                 case id.channels["report-hackers"]:
                     client.commands.get('reporthackers').run(client, message);
                     break;
