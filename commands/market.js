@@ -124,7 +124,7 @@ function advise(client, message) {
 // Public Functions
 function stonks(client, message) {
     if (message.attachments.size == 0) { // Checks if message lacks an attachment
-        message.reply("please include **cropped** image displaying the trade in question.").then(msg => { msg.delete({ timeout: 6000 }) }).catch(console.error);
+        message.channel.send(`<@${message.author.id}>, please include **cropped** image displaying the trade in question.`).then(msg => { msg.delete({ timeout: 6000 }) }).catch(console.error);
         logger.messageDeleted(message, 'Invalid use of stonks command', 'PURPLE');
     }
     message.react(client.emojis.cache.get(id.emojis.yes));

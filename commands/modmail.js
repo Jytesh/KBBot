@@ -125,7 +125,7 @@ module.exports.run = async(client, message) => {
             //     if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
             // }
         } else {
-            message.reply(new MessageEmbed()
+            message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
                 .setTitle('INVALID INPUT')
                 .setColor('RED')
                 .setDescription('Invalid input. Please read the pinned message on how to use this channel.')
@@ -211,7 +211,7 @@ module.exports.react = async(client, reaction, user) => {
 }
 
 function autoDeny(message, denyReasons) {
-    message.reply(new MessageEmbed()
+    message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
         .setTitle('Missing info')
         .setColor('RED')
         .setDescription(denyReasons)
@@ -222,7 +222,7 @@ async function approvalRequest(client, message, embed) {
     if (embed.image) embed = await proxyEmbedImage(client, embed);
     if (embed.description.includes('https://')) embed = AttachEmbedImages(embed);
 
-    message.reply(new MessageEmbed()
+    message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
         .setTitle('Submission sent for review')
         .setColor('GREEN')
         .setDescription('To receive updates about your submission, please ensure that you do not have me blocked. Check your DMs with me for you submission ID.')
@@ -232,7 +232,6 @@ async function approvalRequest(client, message, embed) {
         .setTitle(`Submission ID: #${embed.title.split('#')[1]}`)
         .setColor('YELLOW')
         .setTimestamp()));
-
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
