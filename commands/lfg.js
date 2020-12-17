@@ -38,16 +38,17 @@ module.exports.run = async(client, message) => {
             const game = await getLinkInfo(link).catch(console.log);
             if (game) {
                 const map = await getMapInfo(game.map).catch(console.log);
-                if(map)if (map.thumbnail) eb.setImage(map.thumbnail);
+                if (map)
+                    if (map.thumbnail) eb.setImage(map.thumbnail);
                 eb.setColor(regions[game.region])
                     .addField('Players', game.players, true)
                     .addField('Map', game.map, true)
                     .addField('Game Mode', game.mode, true)
 
-                message.reply(eb).then(msg => { msg.delete({ timeout: 600000 }) }).catch(console.error);
+                message.channel.send(`<@${message.author.id}>,`, eb).then(msg => { msg.delete({ timeout: 600000 }) }).catch(console.error);
                 autodel(message);
             } else {
-                message.reply(new MessageEmbed()
+                message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
                     .setColor('RED')
                     .setTitle('Error')
                     .setDescription('Invalid game link.')
@@ -57,7 +58,7 @@ module.exports.run = async(client, message) => {
             }
         } else if (link.indexOf('https://krunker.io/?party=') == 0 && link.split('=')[1].length == 6) {
             eb.setColor('BLACK')
-            message.reply(eb).then(msg => { msg.delete({ timeout: 300000 }) }).catch(console.error);
+            message.channel.send(`<@${message.author.id}>,`, eb).then(msg => { msg.delete({ timeout: 300000 }) }).catch(console.error);
             autodel(message);
         } else {
             error(message)
@@ -69,7 +70,7 @@ module.exports.run = async(client, message) => {
 }
 
 function error(message) {
-    message.reply(new MessageEmbed()
+    message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
         .setColor('RED')
         .setTitle('Error')
         .setDescription('Misuse of <#688434522072809500>. Please only send game links with an optional description afterwards.')
@@ -134,7 +135,7 @@ function getMapInfo(name) {
         if (!json) reject(new Error('JSON', error));
         if (!json.error) {
             const map = json.data[0];
-            if(!map) reject(new Error('Map Not Found',json))
+            if (!map) reject(new Error('Map Not Found', json))
             resolve({
                 id: map.map_id,
                 name: map.map_name,

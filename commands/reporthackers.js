@@ -37,7 +37,7 @@ module.exports.run = (client, message) => {
         if (socials.every(domain => !message.content.includes(domain))) rulesBroken += `► ${rules.social} \n`;
         if (videos.every(domain => !message.content.includes(domain))) rulesBroken += `► ${rules.video}`;
         if (rulesBroken != '') {
-            message.reply(new MessageEmbed()
+            message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
                 .setTitle('Please make sure you read the rules about submitting a report')
                 .setColor('ORANGE')
                 .setDescription('Your report has broken the following rule(s): \n' + rulesBroken)
@@ -45,7 +45,7 @@ module.exports.run = (client, message) => {
             ).then(msg => { msg.delete({ timeout: 90000 }) }).catch(console.error);
             logger.messageDeleted(message, 'Hacker Report - Missing required info', 'RED');
         } else {
-            message.reply(new MessageEmbed()
+            message.channel.send(`<@${message.author.id}>,`, new MessageEmbed()
                 .setTitle('Thank you')
                 .setColor('GREEN')
                 .setDescription('Your report has been submitted for review. Thank you for the report.')
