@@ -152,7 +152,7 @@ module.exports.react = async(client, reaction, user) => {
     await reaction.message.fetch();
     let embed = reaction.message.embeds[0];
     if (!embed || embed.hexColor != id.colours["YELLOW"]) return;
-    reaction.messsage.edit(embed.setColor('ORANGE'));
+    reaction.message.edit(embed.setColor('BLACK'));
 
     const member = await client.users.fetch(embed.author.name.match(/\((\d{17,19})\)/)[1], true, true);
 
