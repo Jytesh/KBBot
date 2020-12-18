@@ -87,6 +87,7 @@ function pins(message) {
         'No wagers, this is market chat, not wager chat',
         'No begging',
         'No excessive off-topic usage of the `$stonks` command',
+        '10) No coin flipping, go gamble elsewhere',
     ];
 
     const args = message.content.split(' ');
