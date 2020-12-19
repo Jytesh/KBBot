@@ -13,9 +13,7 @@ const config = require("./config.json"),
     };
 
 (async function init() {
-    Object.keys(db).forEach(async t => {
-        await db[t].connect().catch(console.log);
-    });
+    Object.keys(db).forEach(async t => await db[t].connect().catch(console.log));
 })();
 
 let env;
@@ -48,7 +46,7 @@ const stickerRoles = [
     id.roles.mod,
     id.roles.tmod,
     id.roles.socials,
-    id.roles.legendary,
+    id.roles.devoted,
 ];
 const randomRoles = [
     id.roles.dev,
@@ -137,6 +135,7 @@ client.on('message', async(message) => {
             if (env == 'PROD' && message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 var canBypass = false;
                 if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+                if (message.author.id == '633436577770766336') canBypass = false;
                 if (!canBypass) logger.messageDeleted(message, 'Sticker/Invite', 'BLURPLE');
             }
         }
