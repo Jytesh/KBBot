@@ -47,7 +47,7 @@ const stickerRoles = [
     id.roles.cm,
     id.roles.mod,
     id.roles.tmod,
-    id.roles.devoted,
+    id.roles.legendary,
 ];
 const randomRoles = [
     id.roles.dev,
