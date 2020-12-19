@@ -47,6 +47,7 @@ const stickerRoles = [
     id.roles.cm,
     id.roles.mod,
     id.roles.tmod,
+    id.roles.socials,
     id.roles.legendary,
 ];
 const randomRoles = [
@@ -87,7 +88,7 @@ client.on('message', async(message) => {
             if (message.author.bot) return; // This will prevent bots from using the bot. Lovely!
 
             if (!message.guild) {
-                message.reply(new Discord.MessageEmbed()
+                return message.reply(new Discord.MessageEmbed()
                     .setTitle('‼ Heads Up ‼')
                     .setColor('BLURPLE')
                     .setDescription(`Please message <#${id.channels.submissions}> if you would like to submit a request for a suggestion, clan board, etc.`)
