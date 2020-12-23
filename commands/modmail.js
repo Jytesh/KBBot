@@ -107,6 +107,7 @@ module.exports.run = async(client, message) => {
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(message.content)
                     .setTimestamp();
+                if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
                 
             }
         } else if (message.content.toUpperCase().includes('REPORT')) {
