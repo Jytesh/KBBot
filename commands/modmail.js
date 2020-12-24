@@ -106,10 +106,10 @@ module.exports.run = async(client, message) => {
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
                     .setDescription(message.content)
-                    .setImage(message.attachments.array()[0].url)
                     .setTimestamp();
+                if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
+                
             }
-            return logger.messageDeleted(message, 'Modmail', 'NAVY');
         } else if (message.content.toUpperCase().includes('REPORT')) {
             // if (message.attachments.size > 1) denyReasons += '- ***Too many attachments*** \n';
             // requirements["bug-reports"].forEach(requirement => {
@@ -233,7 +233,7 @@ async function approvalRequest(client, message, embed) {
     message.author.createDM().then(dm => dm.send(new MessageEmbed()
         .setTitle(`Submission ID: #${embed.title.split('#')[1]}`)
         .setColor('YELLOW')
-        .setTimestamp()));
+        .setTimestamp()).catch(logger.error));
     client.channels.resolve(id.channels["submissions-review"]).send(embed).then(m => {
         m.react(client.emojis.cache.get(id.emojis.yes));
         m.react(client.emojis.cache.get(id.emojis.no));
