@@ -62,7 +62,7 @@ client.on('ready', async() => {
     console.log('[Krunker Bunker Bot] ready to roll!');
 
     if (env == 'PROD') {
-        client.user.setActivity('DM JJ with bot suggestions', { type: "PLAYING" });
+        client.user.setActivity('#submissions', { type: "WATCHING" });
 
         client.channels.resolve(id.channels["bunker-bot-commands"]).send(config.version);
 
