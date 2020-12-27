@@ -135,7 +135,6 @@ client.on('message', async(message) => {
             if (env == 'PROD' && message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 var canBypass = false;
                 if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
-                if (message.author.id == '633436577770766336') canBypass = false;
                 if (!canBypass) logger.messageDeleted(message, 'Sticker/Invite', 'BLURPLE');
             }
         }
