@@ -25,6 +25,7 @@ const advisors = [
     id.users.uchi,
     id.users.ks,
     id.users.king,
+    id.users.naev,
 ];
 
 module.exports.run = (client, message) => {
