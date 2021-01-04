@@ -107,8 +107,6 @@ function advisorsCmd(message) {
         .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
         .setTimestamp();
     message.channel.send(eb);
-
-    logger.messageDeleted(message, 'Market command', 'PURPLE');
 }
 
 function advise(client, message) {
