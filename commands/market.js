@@ -97,20 +97,17 @@ function pins(message) {
 
 //Advisor Functions
 function advisorsCmd(message) {
-    var canAccess = users.includes(message.author.id) || advisors.includes(message.author.id);
-    if (!canAccess) roles.forEach(role => { if (message.member.roles.cache.has(role)) canAccess = true; return });
-    if (canAccess) {
-        var advisorsInString = '';
-        advisors.forEach((id) => { advisorsInString += `- <@${id}> \n` });
-        const eb = new MessageEmbed()
-            .setTitle('Advisors')
-            .setDescription('This is a list of people who are known to give proper advice.')
-            .setColor('GREEN')
-            .addField('Current Advisors:', advisorsInString)
-            .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
-            .setTimestamp();
-        message.channel.send(eb);
-    }
+    var advisorsInString = '';
+    advisors.forEach((id) => { advisorsInString += `- <@${id}> \n` });
+    const eb = new MessageEmbed()
+        .setTitle('Advisors')
+        .setDescription('This is a list of people who are known to give proper advice.')
+        .setColor('GREEN')
+        .addField('Current Advisors:', advisorsInString)
+        .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
+        .setTimestamp();
+    message.channel.send(eb);
+
     logger.messageDeleted(message, 'Market command', 'PURPLE');
 }
 
