@@ -15,7 +15,10 @@ module.exports.run = async(client, message) => {
         return msg.attachments.size > 0},{max:1,time:30000,errors:['time']})
         .catch(e=>{
             console.error('API MESSAGE NOT RECEIVED',e)
-            if(!send)message.reply('Time out, Bot API is down!')
+            if(!send){
+                send=1; 
+                message.reply('Time out, Bot API is down!')
+            }
         })
     if(messages && messages.size == 1){
         send = true
@@ -23,7 +26,10 @@ module.exports.run = async(client, message) => {
         message.reply({files:[attachment]})
     }else{
         console.error('API MESSAGE NOT RECEIVED','messages.size != 1')
-            if(!send)message.reply('Time out, Bot API is down!')
+            if(!send){
+                send=1;
+                message.reply('Time out, Bot API is down!');
+            }
     }
 }
 
