@@ -1,27 +1,26 @@
 // Load dependencies
-require("dotenv").config();
-const config = require("./config.json"),
+require('dotenv').config();
+const config = require('./config.json'),
     id = require('./id.json'),
     Discord = require('discord.js'),
     client = new Discord.Client({ fetchAllMembers: false, partials: ['GUILD_MEMBER', 'REACTION', 'USER', 'MESSAGE'] }),
-    fs = require("fs"),
+    fs = require('fs'),
     logger = require('./logger'),
     Mongo = require('./mongo.js'),
     db = {
         submissions: submissions_db = new Mongo(process.env.DB_URL, { db: 'serverConfigs', coll: 'submissions', init: true }),
         moderator: moderator_db = new Mongo(process.env.DB_URL, { db: 'userConfigs', coll: 'moderators', init: true }),
-    };
+    },
+    staffRoles = [id.roles.dev, id.roles.yendis, id.roles.cm, id.roles.mod, id.roles.tmod],
+    stickerRoles = staffRoles.concat([id.roles.socials, id.roles.devoted]),
+    randomRoles = staffRoles.concat([id.roles.novice]);
 
-(async function init() {
-    Object.keys(db).forEach(async t => await db[t].connect().catch(console.log));
-})();
+(async function init() { Object.keys(db).forEach(async t => await db[t].connect().catch(console.log)); })();
 
 let env;
-if (process.argv[2] == 'test' || !process.argv[2]) {
-    env = 'DEV'
-} else {
-    env = 'PROD'
-}
+if (process.argv[2] == 'test' || !process.argv[2]) env = 'DEV';
+else env = 'PROD';
+
 //Loading commands from /commands directory, to client
 client.commands = new Discord.Collection();
 
@@ -37,25 +36,6 @@ fs.readdir("./commands/", (err, files) => {
 
 //Login
 client.login(process.env.TOKEN);
-
-//Constants
-const stickerRoles = [
-    id.roles.dev,
-    id.roles.yendis,
-    id.roles.cm,
-    id.roles.mod,
-    id.roles.tmod,
-    id.roles.socials,
-    id.roles.devoted,
-];
-const randomRoles = [
-    id.roles.dev,
-    id.roles.yendis,
-    id.roles.cm,
-    id.roles.mod,
-    id.roles.tmod,
-    id.roles.novice,
-];
 
 //Event Handlers
 client.on('ready', async() => {
@@ -75,7 +55,7 @@ client.on('ready', async() => {
             messages.array().forEach(m => {
                 if (m.author.id == id.users.kbbot) m.delete({ timeout: 20000 });
                 else if (m.author.id != id.users.vortx && m.author.id != id.users.jj) client.commands.get('reporthackers').run(client, m);
-            })
+            });
         });
     }
 });
@@ -100,15 +80,10 @@ client.on('message', async(message) => {
                     client.commands.get('lfg').run(client, message);
                     break;
                 case id.channels["bunker-bot-commands"] || id.channels["dev"]:
-                    if (message.content.indexOf(`${config.prefix}info`) == 0) {
-                        client.commands.get('info').run(client, message);
-                    } else if (message.content.indexOf(`${config.prefix}lfg`) == 0) {
-                        client.commands.get('lfg').run(client, message);
-                    } else if (message.content.indexOf(`${config.prefix}modlogs`) == 0) {
-                        client.commands.get('modlogs').run(client, message);
-                    } else if (message.content.indexOf(`${config.prefix}p`)==0){
-                        client.commands.get('player').run(client,message)
-                    }
+                    if (message.content.indexOf(`${config.prefix}info`) == 0) client.commands.get('info').run(client, message);
+                    else if (message.content.indexOf(`${config.prefix}lfg`) == 0) client.commands.get('lfg').run(client, message);
+                    else if (message.content.indexOf(`${config.prefix}modlogs`) == 0) client.commands.get('modlogs').run(client, message);
+                    else if (message.content.indexOf(`${config.prefix}p`) == 0) client.commands.get('player').run(client, message);
                     break;
                 case id.channels["trading-board"]:
                     client.commands.get('trading').run(client, message);
@@ -145,11 +120,11 @@ client.on('message', async(message) => {
 
 client.on('messageReactionAdd', async(reaction, user) => {
     if (user.bot) return; // Ignore bot reactions
-    if (reaction.message.channel.id == id.channels["submissions-review"]) {
-        client.commands.get('modmail').react(client, reaction, user);
-    }
+    if (reaction.message.channel.id == id.channels["submissions-review"]) client.commands.get('modmail').react(client, reaction, user);
 });
+
 module.exports = {
     client: client,
-    db: db
+    db: db,
+    staffRoles: staffRoles,
 }
