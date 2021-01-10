@@ -106,6 +106,8 @@ client.on('message', async(message) => {
                         client.commands.get('lfg').run(client, message);
                     } else if (message.content.indexOf(`${config.prefix}modlogs`) == 0) {
                         client.commands.get('modlogs').run(client, message);
+                    } else if (message.content.indexOf(`${config.prefix}p`)==0){
+                        client.commands.get('player').run(client,message)
                     }
                     break;
                 case id.channels["trading-board"]:
