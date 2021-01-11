@@ -108,10 +108,10 @@ function getLinkInfo(link) {
             if (!json) reject(new Error('JSON', error));
             if (!json.error) {
                 resolve({
-                    region: json[0].split(":")[0],
+                    region: json[0].split(":"),
                     players: `${json[2]}/${json[3]}`,
-                    mode: json[4].i.split('_')[0],
-                    map: json[4].i.split("_")[1],
+                    mode: ['FFA','TDM','CTF','POINT'][json[4].g] || 'Unknown',
+                    map: json[4].i,
                 });
             } else {
                 reject(new Error('404', json));
