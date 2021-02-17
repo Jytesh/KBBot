@@ -80,10 +80,25 @@ client.on('message', async(message) => {
                     client.commands.get('lfg').run(client, message);
                     break;
                 case id.channels["bunker-bot-commands"] || id.channels["dev"]:
-                    if (message.content.indexOf(`${config.prefix}info`) == 0) client.commands.get('info').run(client, message);
-                    else if (message.content.indexOf(`${config.prefix}lfg`) == 0) client.commands.get('lfg').run(client, message);
-                    else if (message.content.indexOf(`${config.prefix}modlogs`) == 0) client.commands.get('modlogs').run(client, message);
-                    else if (message.content.indexOf(`${config.prefix}p`) == 0) client.commands.get('player').run(client, message);
+                    var cmdToRun = '';
+                    switch (message.content.split(' ')[0]) {
+                        case `${config.prefix}info`:
+                            cmdToRun = 'info';
+                            break;
+                        case `${config.prefix}lfg`:
+                            cmdToRun = 'lfg';
+                            break;
+                        case `${config.prefix}modlogs`:
+                            cmdToRun = 'modlogs';
+                            break;
+                        case `${config.prefix}p`:
+                            cmdToRun = 'player';
+                            break;
+                        case `${config.prefix}socials`:
+                            if (message.member.roles.cache.has(id.roles.socials) || message.author.id == id.users.jj) cmdToRun = 'socials';
+                            break;
+                    }
+                    if (cmdToRun != '') client.commands.get(`${cmdToRun}`).run(client, message);
                     break;
                 case id.channels["trading-board"]:
                     client.commands.get('trading').run(client, message);
@@ -100,7 +115,7 @@ client.on('message', async(message) => {
                 case id.channels["random-chat"]:
                     if (message.content.includes('http')) {
                         var canBypass = false;
-                        if (!canBypass) randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+                        randomRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
                         if (!canBypass) logger.messageDeleted(message, 'Random Chat Link', 'BLURPLE');
                     }
                     break;
@@ -111,7 +126,7 @@ client.on('message', async(message) => {
 
             if (env == 'PROD' && message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 var canBypass = false;
-                if (!canBypass) stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
+                stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
                 if (!canBypass) logger.messageDeleted(message, 'Sticker/Invite', 'BLURPLE');
             }
         }
