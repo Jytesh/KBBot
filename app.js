@@ -62,7 +62,7 @@ client.on('ready', async() => {
 
 client.on('message', async(message) => {
     client.setTimeout(async() => {
-        if (!message.deleted) {
+        if (!message.deleted && env == 'PROD') {
             if (message.author.bot) return; // This will prevent bots from using the bot. Lovely!
 
             if (!message.guild) {
@@ -124,7 +124,7 @@ client.on('message', async(message) => {
                     break;
             }
 
-            if (env == 'PROD' && message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
+            if (message.guild.id == id.guilds.kb && message.content == '' && message.embeds.length == 0 && message.attachments.keyArray().length == 0) {
                 var canBypass = false;
                 stickerRoles.forEach(role => { if (message.member.roles.cache.has(role)) canBypass = true; return });
                 if (!canBypass) logger.messageDeleted(message, 'Sticker/Invite', 'BLURPLE');
@@ -134,8 +134,10 @@ client.on('message', async(message) => {
 });
 
 client.on('messageReactionAdd', async(reaction, user) => {
-    if (user.bot) return; // Ignore bot reactions
-    if (reaction.message.channel.id == id.channels["submissions-review"]) client.commands.get('modmail').react(client, reaction, user);
+    if (env == 'PROD') {
+        if (user.bot) return; // Ignore bot reactions
+        else if (reaction.message.channel.id == id.channels["submissions-review"]) client.commands.get('modmail').react(client, reaction, user);
+    }
 });
 
 module.exports = {
