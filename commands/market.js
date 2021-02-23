@@ -7,18 +7,16 @@ const config = require('../config.json'),
     users = [
         id.users.math,
         id.users.redeagle,
-        id.users.spartan,
         id.users.jj,
         id.users.ks,
         id.users.mooon,
         id.users.uchi,
     ],
     advisors = [
-        id.users.math,
-        id.users.uchi,
         id.users.ks,
-        id.users.king,
-        id.users.naev,
+        id.users.math,
+        id.users.qord,
+        id.users.jake,
     ];
 
 module.exports.run = (client, message) => {
@@ -86,7 +84,7 @@ function advisorsCmd(message) {
     advisors.forEach((id) => { advisorsInString += `- <@${id}> \n` });
     const eb = new MessageEmbed()
         .setTitle('Advisors')
-        .setDescription('This is a list of people who are known to give proper advice.')
+        .setDescription('Here is a list of users who are known to be knowledgeable about the Krunker market. This list of users is provided for your convenience. Krunker Bunker as a server have no responsibility for the advice or actions of these advisors. However, if you wish to file a complaint against any of these users for their actions as an advisor, you may contact @JJ_G4M3R#2155.')
         .setColor('GREEN')
         .addField('Current Advisors:', advisorsInString)
         .setFooter('Krunker Bunker Bot • Designed by JJ_G4M3R and Jytesh')
