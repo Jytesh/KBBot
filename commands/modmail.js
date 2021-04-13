@@ -50,10 +50,10 @@ module.exports.run = async(client, message) => {
             if (videos.every(domain => !message.content.includes(domain))) denyReasons += `► submissions must include a **YouTube** video, a **Streamable** video, a **Medal** video, or a **Twitch** clip`;
             if (message.attachments.size) denyReasons += '- ***Too many attachments*** \n';
             if (denyReasons == '') {
-                eb.setTitle('Suggestions submission request')
+                eb.setTitle('Clips of the week submission request')
                     .setColor('YELLOW')
                     .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
-                    .setDescription(message.content.substring('clip:'.length).split(" "))
+                    .setDescription(message.content.substring('clip:'.length).trim().split(" ").join(" "))
                     .setTimestamp();
             }
 
@@ -280,7 +280,7 @@ async function approveRequest(client, reaction, user, member, embed) {
             sentMsg.react("👎");
             break;
         case 'Clips of the week submission request':
-            sentMsg = await client.channels.resolve(id.channels["clips-of-the-week"]).send(post);
+            sentMsg = await client.channels.resolve(id.channels["clips-of-the-week"]).send(embed.description);
             break;
         case 'Clan boards submission request':
             sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(`${post.description.substring(post.description.indexOf('discord.gg/')).split(' ')[0].split('`')[0]}`, post);
