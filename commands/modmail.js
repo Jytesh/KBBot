@@ -38,7 +38,26 @@ module.exports.run = async(client, message) => {
                     .setTimestamp();
                 if (message.attachments.size != 0) eb.setImage(message.attachments.array()[0].url);
             }
-        } else if (message.content.toUpperCase().includes('CLAN NAME')) {
+        } else if (message.content.toUpperCase().startsWith('CLIP:')){
+            const videos = [
+                'https://www.youtube.com/watch?v=',
+                'https://youtu.be/',
+                'https://streamable.com/',
+                'https://medal.tv/',
+                'https://clips.twitch.tv/',
+                'https://www.twitch.tv/',
+            ];
+            if (videos.every(domain => !message.content.includes(domain))) denyReasons += `► submissions must include a **YouTube** video, a **Streamable** video, a **Medal** video, or a **Twitch** clip`;
+            if (message.attachments.size) denyReasons += '- ***Too many attachments*** \n';
+            if (denyReasons == '') {
+                eb.setTitle('Suggestions submission request')
+                    .setColor('YELLOW')
+                    .setAuthor(`${message.author.tag} (${message.author.id})`, message.author.displayAvatarURL())
+                    .setDescription(message.content.substring('clip:'.length).split(" "))
+                    .setTimestamp();
+            }
+
+        }else if (message.content.toUpperCase().includes('CLAN NAME')) {
             requirements["clan-board"].forEach(requirement => {
                 if (!message.content.toUpperCase().split(" ").join("").includes(requirement.toUpperCase().split(" ").join(""))) denyReasons += `- Missing field: ***${requirement}*** \n`;
             });
@@ -259,6 +278,9 @@ async function approveRequest(client, reaction, user, member, embed) {
             sentMsg = await client.channels.resolve(id.channels["suggestions"]).send(post.setColor('YELLOW'));
             sentMsg.react("👍");
             sentMsg.react("👎");
+            break;
+        case 'Clips of the week submission request':
+            sentMsg = await client.channels.resolve(id.channels["clips-of-the-week"]).send(post);
             break;
         case 'Clan boards submission request':
             sentMsg = await client.channels.resolve(id.channels["clan-boards"]).send(`${post.description.substring(post.description.indexOf('discord.gg/')).split(' ')[0].split('`')[0]}`, post);
