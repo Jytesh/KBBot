@@ -1,7 +1,7 @@
 {
-    "name": "krunkerlfgbot",
+    "name": "krunker-bunker-bot",
     "version": "0.3.0",
-    "description": "KrunkerLFG is an LFG bot desgined for the online FPS game, krunker.io.",
+    "description": "The helper bot for Krunker Bunker, does LFG, modmail and more.",
     "main": "app.js",
     "scripts": {
         "test": "node app.js test",
@@ -17,13 +17,13 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/JJ-G4M3R/KrunkerLFG.git"
+        "url": "git+https://github.com/BunkerBots/KBBot.git"
     },
     "bugs": {
-        "url": "https://github.com/JJ-G4M3R/KrunkerLFG/issues"
+        "url": "https://github.com/BunkerBots/KBBot/issues"
     },
     "engines": {
         "node": "12.16.1"
     },
-    "homepage": "https://github.com/JJ-G4M3R/KrunkerLFG#readme"
+    "homepage": "https://github.com/BunkerBots/KBBot#readme"
 }
